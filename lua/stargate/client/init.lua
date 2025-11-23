@@ -63,7 +63,6 @@ end
 local InternetCheck = CreateClientConVar("cl_has_internet",0,true,false); -- Some percentage crashes by this online help check. Now we check this if they crash once during this check, this check will be disabled permanently for them
 StarGate.HasInternet = false;
 function StarGate.Hook.GetInternetStatus(_,key)
-    string.__todivide(key);
 	if(key ~= "+menu") then return end;
 	hook.Remove("PlayerBindPress","StarGate.Hook.GetInternetStatus");
 
