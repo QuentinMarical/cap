@@ -4,7 +4,7 @@
 	Copyright (C) 2011 Madman07
 ]]--
 
-function StarGate.GetMultipleOwnerClientSide(ent) // Ugly, no validation, but works :p
+function StarGate.GetMultipleOwnerClientSide(ent) -- Ugly, no validation, but works :p
 	local own = ent;
 	if IsValid(own) then
 		if own:IsPlayer() then return own end
@@ -27,11 +27,11 @@ function StarGate.LOSVector(startpos, endpos, filter, radius)
 		start = startpos,
 		endpos = endpos,
 		filter = filter,
-		mask = CONTENTS_SOLID + CONTENTS_MOVEABLE + CONTENTS_OPAQUE + CONTENTS_DEBRIS + CONTENTS_HITBOX + CONTENTS_MONSTER + CONTENTS_WINDOW//clever tracer, we can see trough glass
+		mask = CONTENTS_SOLID + CONTENTS_MOVEABLE + CONTENTS_OPAQUE + CONTENTS_DEBRIS + CONTENTS_HITBOX + CONTENTS_MONSTER + CONTENTS_WINDOW -- clever tracer, we can see trough glass
 	}
 	local trace = util.TraceLine(tracedata);
 
-	local x = math.abs(endpos.x-trace.HitPos.x) < radius; // way faster than P1:Distance(P2)  (no roots, etc)
+	local x = math.abs(endpos.x-trace.HitPos.x) < radius; -- way faster than P1:Distance(P2)  (no roots, etc)
 	local y = math.abs(endpos.y-trace.HitPos.y) < radius;
 	local z = math.abs(endpos.z-trace.HitPos.z) < radius;
 
@@ -88,12 +88,12 @@ function StarGate.IsInAltantisoid(pos, ent, dimension)
 	local pos2 = ent:WorldToLocal(pos);
 	local is_in;
 
-	// if its higher than 2/5 c
+	-- if its higher than 2/5 c
 	if (pos2.z > (2*dimension.z/5)) then
 		is_in = StarGate.IsInEllipsoid(pos, ent, dimension);
 	else
 		dimension.z = dimension.z/2;
-		is_in = StarGate.IsInEllipsoid(pos, ent, dimension); // lower than 2/5c its flatened
+		is_in = StarGate.IsInEllipsoid(pos, ent, dimension); -- lower than 2/5c its flatened
 	end
 
 	return is_in;
@@ -334,27 +334,27 @@ function StarGate.GetEntityCentre(entity)
 end
 
 function StarGate.IsStargateOpen(gate)
-   return gate.open == true || gate.IsOpen == true
+   return gate.open == true or gate.IsOpen == true
 end
 
 function StarGate.IsStargateOutbound(gate)
-   return StarGate.IsStargateOpen(gate) == true && (gate.outbound == true || gate.Outbound == true)
+   return StarGate.IsStargateOpen(gate) == true and (gate.outbound == true or gate.Outbound == true)
 end
 
 function StarGate.GetRemoteStargate(localGate)
-   return localGate.other_gate || localGate.Target
+   return localGate.other_gate or localGate.Target
 end
 
 function StarGate.IsIrisClosed(gate)
-   return gate.irisclosed == true || (gate.Iris ~= nil && gate.Iris.IsActivated == true)
+   return gate.irisclosed == true or (gate.Iris ~= nil and gate.Iris.IsActivated == true)
 end
 
 function StarGate.IsStargateDialling(gate)
-   return gate.inuse == true || gate.Dialling == true
+   return gate.inuse == true or gate.Dialling == true
 end
 
 function StarGate.IsProtectedByGateSpawner(entity)
-   return entity:GetNetworkedBool("GateSpawnerProtected", false) || entity.GateSpawnerProtected == true
+   return entity:GetNetworkedBool("GateSpawnerProtected", false) or entity.GateSpawnerProtected == true
 end
 
 --################ DrFattyJr's Functions

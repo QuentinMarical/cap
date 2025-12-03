@@ -117,7 +117,7 @@ function StarGate.Load()
 	else
 		MsgN("Initializing git version");
 	end
-	if (ver==0) then
+	if (StarGate.CapVer==0) then
 		MsgN("CAP Version: ERROR");
 	else
 		MsgN("CAP Version: "..StarGate.CapVer);
