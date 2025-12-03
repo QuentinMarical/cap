@@ -137,13 +137,13 @@ concommand.Add("stargate_reset_menu",function(ply)
 end)
 
 -- ################# Closes the dialling Dialoge @aVoN
-usermessage.Hook("StarGate.DialMenuDHDClose",
+
 if CLIENT then
-    net.Receive("StarGate.DialMenuDHDClose", function()
-        if (VGUI and VGUI:IsValid()) then
-            VGUI:SetVisible(false);
-        end
-    end)
+	net.Receive("StarGate.DialMenuDHDClose", function()
+		if (VGUI and VGUI:IsValid()) then
+			VGUI:SetVisible(false)
+		end
+	end)
 end
 
 -- ################# Screen clicking code @aVoN

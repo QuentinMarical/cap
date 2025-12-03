@@ -137,9 +137,9 @@ net.Receive("StarGate.CalcView.TeleportEffectStart",
 
 --########### All this handle's model clipping @RononDex
 net.Receive("StarGate.EventHorizon.ClipStart", function()
-	local dir = um:ReadShort();
-	local e = um:ReadEntity();
-	local target = um:ReadEntity();
+	local dir = net.ReadInt(16);
+	local e = net.ReadEntity();
+	local target = net.ReadEntity();
 	if(not(IsValid(e) and IsValid(target))) then return end;
 	local norm = target:GetForward()*dir;
 	e.dir = dir;
@@ -148,14 +148,14 @@ net.Receive("StarGate.EventHorizon.ClipStart", function()
 end)
 
 net.Receive( "StarGate.EventHorizon.ClipStop", function()
-	local e = um:ReadEntity();
+	local e = net.ReadEntity();
 	if(not(IsValid(e))) then return end;
 	e.dir = nil;
 	e:SetRenderClipPlaneEnabled(false);
 end)
 
 net.Receive( "StarGate.EventHorizon.PlayerKill", function()
-	local e = um:ReadEntity();
+	local e = net.ReadEntity();
 	if(not(IsValid(e))) then return end;
 	GAMEMODE:AddDeathNotice("#event_horizon",-1,"event_horizon",e:Name(),e:Team());
 end)

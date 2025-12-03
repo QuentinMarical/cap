@@ -81,7 +81,7 @@ function ENT:SpawnFunction(pl, tr)
 	//e:SpawnOpenedDoor();
 	e.Owner = pl;
 
-    pl:AddCount("CAP_ships",e)
+	pl:AddCount("CAP_ships",e)
 	pl:Give("weapon_jumper_remote");
 	pl:SelectWeapon("weapon_jumper_remote")
 	return e;
@@ -172,6 +172,7 @@ function ENT:Initialize(ply)
 		phys:Wake()
 		phys:SetMass(100000)
 	end
+	end -- Ferme le bloc if SERVER then
 end
 
 function ENT:OnRemove()   --######### @ RononDex

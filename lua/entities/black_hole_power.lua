@@ -163,11 +163,14 @@ function ENT:StartTouch(ent)
 				end
 			end
 
-			self.blackHoleMass = self.blackHoleMass + mass;
+		self.blackHoleMass = self.blackHoleMass + mass;
 
-			local size = self.blackHoleMass/1000;
-			self.Entity:SetCollisionBounds(Vector(-size,-size,-size),Vector(size,size,size))
+		local size = self.blackHoleMass/1000;
+		self.Entity:SetCollisionBounds(Vector(-size,-size,-size),Vector(size,size,size))
 
+		-- Différer la réinitialisation de la physique pour éviter l'erreur "Cannot destroy physics in a physics callback"
+		timer.Simple(0, function()
+			if not IsValid(self.Entity) then return end
 			self.Entity:PhysicsInitSphere(size, "metal_bouncy" )
 			local phys = self.Entity:GetPhysicsObject()
 			if (phys:IsValid()) then
@@ -176,6 +179,7 @@ function ENT:StartTouch(ent)
 				phys:EnableDrag(false)
 				phys:EnableCollisions(false)
 			end
+		end)
 		end
 	end
 end
