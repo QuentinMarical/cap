@@ -22,7 +22,7 @@ function ENT:Initialize()
     self.Emitter = ParticleEmitter(Vector(0,0,0))
 	self.Emitter2 = ParticleEmitter(Vector(0,0,0))
 	self.IdleSound = self.IdleSound or CreateSound(self.Entity,self.Sounds.Idle);
-	self.Entity:SetNetworkedInt("Advance",0);
+	self.Entity:SetNWInt("Advance",0);
 	self.KillTime = 0;
 	self.RefractSize = 80;
 	self.KillTime = CurTime() + 1.35;
@@ -51,7 +51,7 @@ function ENT:Draw()
             surface.SetFont("center")
 			local percent = 0;
 			if(IsValid(self.Entity))then
-	            percent = self.Entity:GetNetworkedInt("Advance",0);
+				percent = self.Entity:GetNWInt("Advance",0);
 			end
 			if(percent>0)then
                 percent = string.format("%G",percent);

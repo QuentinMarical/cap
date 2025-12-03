@@ -11,7 +11,7 @@ function EFFECT:Init(data)
     if (not IsValid(ent)) then return end
 	self.Status = data:GetMagnitude();
 
-	self.Siz = ent:GetNetworkedVector("Size", Vector(100,100,100)) - Vector(10,10,10);
+	self.Siz = ent:GetNWVector("Size", Vector(100,100,100)) - Vector(10,10,10);
 	self.Siz = self.Siz/512;
 	self.Mod = ent:GetNWString("Mod");
 	self.Ang = ent:GetNWAngle("Ang", Angle(0,0,0));

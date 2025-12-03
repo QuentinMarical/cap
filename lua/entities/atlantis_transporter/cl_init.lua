@@ -21,7 +21,7 @@ hook.Add("HUDPaint","AtlantisTransporterHUDPaint",
 	end
 );
 
-usermessage.Hook("AtlantisTransporterTele",
+net.Receive("AtlantisTransporterTele",
 	function (data)
 		go = data:ReadBool()
 		start = CurTime();
@@ -174,7 +174,10 @@ local function RingTransporterShowWindow(um)
 	Window:SetEntity(ent)
 	Window:UpdateList()
 end
-usermessage.Hook("AtlantisTransporterShowWindow", RingTransporterShowWindow)
+net.Receive("AtlantisTransporterShowWindow", function()
+	local ent = net.ReadEntity()
+	RingTransporterShowWindow(ent)
+end)
 
 local PANEL = {}
 
@@ -290,4 +293,11 @@ local function RingTransporterEditWindow(um)
 	Window:SetEntity(ent)
 	Window:SetVal(um:ReadString(),um:ReadBool(),um:ReadString(),um:ReadBool())
 end
-usermessage.Hook("AtlantisTransporterEditWindow", RingTransporterEditWindow)
+net.Receive("AtlantisTransporterEditWindow", function()
+	local ent = net.ReadEntity()
+	local name = net.ReadString()
+	local priv = net.ReadBool()
+	local group = net.ReadString()
+	local localFlag = net.ReadBool()
+	RingTransporterEditWindow(ent, name, priv, group, localFlag)
+end)

@@ -124,6 +124,9 @@ function ENT:Initialize(ply)
 	self.door = false;
 	self.BulkHead = false;
 
+	if SERVER then
+		util.AddNetworkString("jumperData")
+		util.AddNetworkString("JumperCloakData")
 
 	--############## Standard Crap
 	self:SetModel("models/Iziraider/jumper/jumper.mdl"); -- Hooray Izi's model
@@ -216,7 +219,9 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 	end
 	--####### This sends necessary information to the client
 	if(IsValid(self.Pilot)) then
-		umsg.Start("jumperData", self.Pilot)
+		-- TODO Phase 2: migrate to net.Start/net.Send
+		net.Start("jumperData")
+		if IsValid(self.Pilot) then net.Send(self.Pilot) end
 			umsg.Entity(self)
 			umsg.Short(self.DroneCount)
 			umsg.Bool(self.epodo)
@@ -231,7 +236,8 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 	end
 	
 	if(self.Cloaked) then
-		umsg.Start("JumperCloakData",self.Owner)
+		net.Start("JumperCloakData")
+		if IsValid(self.Owner) then net.Send(self.Owner) end
 			umsg.Entity(self);
 			umsg.Bool(self.CloakPods);
 			umsg.Bool(self.door);
@@ -543,7 +549,7 @@ end
 
 --####### Avoids the annoying bug that i've had since the start. When a player suicides the jumper now blows up @RononDex
 hook.Add( "PlayerDeath","JumperPlayerDeath", function(p)
-	local Jumper = p:GetNetworkedEntity("jumper");
+	local Jumper = p:GetNWEntity("jumper");
 	if(IsValid(Jumper) and Jumper.Inflight) then
 		if(Jumper.Pilot==p) then
 			Jumper:ExitJumper();
@@ -555,7 +561,7 @@ hook.Add( "PlayerDeath","JumperPlayerDeath", function(p)
 end);
 
 hook.Add( "PlayerSilentDeath","JumperPlayerDeath", function(p)
-	local Jumper = p:GetNetworkedEntity("jumper");
+	local Jumper = p:GetNWEntity("jumper");
 	if(IsValid(Jumper) and Jumper.Inflight) then
 		if(Jumper.Pilot==p) then
 			Jumper:ExitJumper();
@@ -571,8 +577,8 @@ hook.Add("PlayerLeaveVehicle", "PuddleJumperSeatExit", function(p,v)
 		if(v.IsJumperSeat) then
 			local Jumper = v.Jumper;
             v:SetThirdPersonMode(false);
-			p:SetNetworkedBool("JumperPassenger",false);
-			p:SetNetworkedEntity("JumperSeat",NULL);
+			p:SetNWBool("JumperPassenger",false);
+			p:SetNWEntity("JumperSeat",NULL);
 			p:SetPos(Jumper:GetPos()+Jumper:GetUp()*-30+Jumper:GetForward()*-100);
 			if(v.FrontSeat) then
 				v:GetParent().FrontPassenger = NULL;
@@ -585,9 +591,9 @@ hook.Add("PlayerEnteredVehicle","PuddleJumperSeatEnter", function(p,v)
 	if(IsValid(v)) then
 		if(IsValid(p)) then
 			if(v.IsJumperSeat) then
-				p:SetNetworkedEntity("JumperSeat",v);
-				p:SetNetworkedEntity("JumperPassenger",v:GetParent());
-				p:SetNetworkedBool("JumperPassenger",true);
+				p:SetNWEntity("JumperSeat",v);
+				p:SetNWEntity("JumperPassenger",v:GetParent());
+				p:SetNWBool("JumperPassenger",true);
 				if(v.FrontSeat) then
 					v:GetParent().FrontPassenger = p;
 				end

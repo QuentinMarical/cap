@@ -57,9 +57,9 @@ function ENT:Initialize()
 
 	if self.HaveRD3 then -- Make us a node!
 		self.netid = CAF.GetAddon("Resource Distribution").CreateNetwork(self);
-		self:SetNetworkedInt( "netid", self.netid );
+		self:SetNWInt( "netid", self.netid );
 		self.range = 2048;
-		self:SetNetworkedInt( "range", self.range );
+		self.SetNWInt( "range", self.range );
 
 		self.RDEnt = CAF.GetAddon("Resource Distribution");
 	elseif ( RES_DISTRIB == 2 ) then
@@ -267,14 +267,14 @@ function ENT:Think()
 
 	timer.Simple(0.1,function()
 	    if(IsValid(self.Entity))then
-		    self.Entity:SetNetworkedInt("Percents",percent);
+			self.Entity:SetNWInt("Percents",percent);
 		end
 	end);
     self:SetWire("Active",self.Active);
     self:SetWire("ZPM Hub Energy",math.floor(ZPH));
 	self:Output(percent,ZPH);
 
-	self.Entity:SetNetworkedEntity("ZPM",self.ZPM.Ent);
+	self.Entity:SetNWEntity("ZPM",self.ZPM.Ent);
 
 	self.Entity:NextThink(CurTime()+0.01);
 	return true;
@@ -555,7 +555,7 @@ ENT.Zpm_hud = surface.GetTextureID("VGUI/resources_hud/asuran_hub");
 
 function ENT:Initialize()
 	self.DAmt=0
-	self.Entity:SetNetworkedString("add","Inactive");
+	self.Entity:SetNWString("add","Inactive");
 	self.Entity:SetNWString("perc",0);
 	self.Entity:SetNWString("eng",0);
 	self.Entity:SetNWString("zpm1",0);
@@ -571,7 +571,7 @@ function ENT:Think()
 end
 
 function ENT:Draw()
-	if(self.Entity:GetNetworkedBool("DrawText"))then
+	if(self.Entity:GetNWBool("DrawText"))then
 		self.DAmt=math.Clamp(self.DAmt+0.1,0,1)
 	else
 		self.DAmt=math.Clamp(self.DAmt-0.05,0,1)
@@ -658,23 +658,23 @@ function ENT:Draw()
 	local alpha1 = self.Entity:GetNWInt("zpm1yellowlightalpha");
 	local col1 = Color(255,165,0,alpha1);
 
-	if(self.Entity:GetNetworkedEntity("ZPMA")==NULL)then return end;
+	if(self.Entity:GetNWEntity("ZPMA")==NULL)then return end;
 	for i=1,5 do
-	    render.DrawSprite(self.Entity:GetNetworkedEntity("ZPMA"):LocalToWorld(self.SpritePositions[i]),10,10,col1);
+		render.DrawSprite(self.Entity:GetNWEntity("ZPMA"):LocalToWorld(self.SpritePositions[i]),10,10,col1);
 	end
 
 	local alpha = self.Entity:GetNWInt("zpm2yellowlightalpha");
 	local col = Color(255,165,0,alpha);
-	if(self.Entity:GetNetworkedEntity("ZPMB")==NULL)then return end;
+	if(self.Entity:GetNWEntity("ZPMB")==NULL)then return end;
 	for i=1,5 do
-	    render.DrawSprite(self.Entity:GetNetworkedEntity("ZPMB"):LocalToWorld(self.SpritePositions[i]),10,10,col);
+		render.DrawSprite(self.Entity:GetNWEntity("ZPMB"):LocalToWorld(self.SpritePositions[i]),10,10,col);
 	end
 
 	local alpha = self.Entity:GetNWInt("zpm3yellowlightalpha");
 	local col = Color(255,165,0,alpha);
-	if(self.Entity:GetNetworkedEntity("ZPMC")==NULL)then return end;
+	if(self.Entity:GetNWEntity("ZPMC")==NULL)then return end;
 	for i=1,5 do
-	    render.DrawSprite(self.Entity:GetNetworkedEntity("ZPMC"):LocalToWorld(self.SpritePositions[i]),10,10,col);
+		render.DrawSprite(self.Entity:GetNWEntity("ZPMC"):LocalToWorld(self.SpritePositions[i]),10,10,col);
 	end
 end
 

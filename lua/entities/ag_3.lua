@@ -94,7 +94,7 @@ function ENT:FindSatellites(ent)
 
 				table.insert(v.Satellite, ent);
 
-				if (table.getn(v.Satellite) == 1) then v:SetNetworkedEntity("Sat1", ent);
+				if (table.getn(v.Satellite) == 1) then v:SetNWEntity("Sat1", ent);
 				elseif (table.getn(v.Satellite) == 2) then v:SetNWEntity("Sat2", ent);
 				elseif (table.getn(v.Satellite) == 3) then v:SetNWEntity("Sat3", ent);
 				elseif (table.getn(v.Satellite) == 4) then v:SetNWEntity("Sat4", ent);

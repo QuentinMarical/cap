@@ -67,8 +67,8 @@ function ENT:Initialize()
 	self.DialAdress = {};
 	self.Password = ""
 
-	self.Entity:SetNetworkedString("pass","")
-	self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialAdress));
+	self.Entity:SetNWString("pass","")
+	self.Entity:SetNWString("ADDRESS",string.Implode(",",self.DialAdress));
 
 end
 
@@ -111,9 +111,10 @@ function ENT:Use(ply)
 				if button == "PASS" then
 					if ply == self.Owner then
 						self.Entity:EmitSound(self.Sounds[2]);
-						umsg.Start("ObeliskShowPassWindow",ply)
-						umsg.Entity(self.Entity);
-						umsg.End()
+						util.AddNetworkString("ObeliskShowPassWindow")
+						net.Start("ObeliskShowPassWindow")
+						net.WriteEntity(self.Entity)
+						net.Send(ply)
 						ply.ObeliskNameEnt=self
 					end
 				else
@@ -134,7 +135,7 @@ function ENT:PressButton(button, ply)
 	if table.HasValue(self.DialAdress, button ) then return end
 
 	table.insert(self.DialAdress, button)
-	self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialAdress));
+	self.Entity:SetNWString("ADDRESS",string.Implode(",",self.DialAdress));
 
 	local adr = string.Implode("",self.DialAdress)
 
@@ -147,7 +148,7 @@ function ENT:PressButton(button, ply)
 				self.DialAdress = nil;
 				self.DialAdress = {};
 				self.CantDial = false;
-				self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialAdress));
+				self.Entity:SetNWString("ADDRESS",string.Implode(",",self.DialAdress));
 			end
 		end )
 
@@ -163,7 +164,7 @@ function ENT:PressButton(button, ply)
 					self.DialAdress = nil;
 					self.DialAdress = {};
 					self.CantDial = false;
-					self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialAdress));
+					self.Entity:SetNWString("ADDRESS",string.Implode(",",self.DialAdress));
 				end
 			end )
 		else
@@ -173,7 +174,7 @@ function ENT:PressButton(button, ply)
 					self.DialAdress = nil;
 					self.DialAdress = {};
 					self.CantDial = false;
-					self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialAdress));
+					self.Entity:SetNWString("ADDRESS",string.Implode(",",self.DialAdress));
 				end
 			end )
 		end
@@ -208,10 +209,10 @@ function SetObeliskPassword(ply,cmd,args)
 	if ply.ObeliskNameEnt and ply.ObeliskNameEnt~=NULL then
 		if args[1] then
 			ply.ObeliskNameEnt.Password=args[1]
-			ply.ObeliskNameEnt:SetNetworkedString("pass",args[1])
+			ply.ObeliskNameEnt:SetNWString("pass",args[1])
 			if ply.ObeliskNameEnt.Paired and IsValid(ply.ObeliskNameEnt.Target) then
 				ply.ObeliskNameEnt.Target.Password=args[1]
-				ply.ObeliskNameEnt.Target:SetNetworkedString("pass",args[1])
+				ply.ObeliskNameEnt.Target:SetNWString("pass",args[1])
 			end
 		end
 		ply.ObeliskNameEnt=nil
@@ -338,7 +339,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		self.Target.Paired = true;
 	end
 
-	self.Entity:SetNetworkedString("pass",self.Password)
+	self.Entity:SetNWString("pass",self.Password)
 
 	if (IsValid(ply)) then
 		self.Owner = ply;
@@ -373,7 +374,7 @@ ENT.ButtonPos = {
 function ENT:Draw()
 	self.Entity:DrawModel();
 
-	local address = self.Entity:GetNetworkedString("ADDRESS"):TrimExplode(",");
+	local address = self.Entity:GetNWString("ADDRESS"):TrimExplode(",");
 	local eye = self.Entity:WorldToLocal(LocalPlayer():GetEyeTrace().HitPos)
 	local len = (eye - Vector(22.53, -3.98, 69.45)):Length()
 
@@ -471,16 +472,18 @@ end
 
 vgui.Register( "ObeliskPassEntry", PANEL, "DFrame" )
 
-function ObeliskShowPassWindow(um)
-	local Window = vgui.Create( "ObeliskPassEntry" )
-	Window:SetKeyBoardInputEnabled( true )
-	Window:SetMouseInputEnabled( true )
-	Window:SetPos( (ScrW()/2 - 350) / 2, ScrH()/2 - 75 )
-	Window:SetVisible( true )
-	local e = um:ReadEntity();
-	if(not IsValid(e)) then return end;
-	Window.TextEntry:SetText(e:GetNWString("pass"));
+if CLIENT then
+	local function ObeliskShowPassWindowReceive()
+		local Window = vgui.Create( "ObeliskPassEntry" )
+		Window:SetKeyBoardInputEnabled( true )
+		Window:SetMouseInputEnabled( true )
+		Window:SetPos( (ScrW()/2 - 350) / 2, ScrH()/2 - 75 )
+		Window:SetVisible( true )
+		local e = net.ReadEntity()
+		if(not IsValid(e)) then return end
+		Window.TextEntry:SetText(e:GetNWString("pass"))
+	end
+	net.Receive("ObeliskShowPassWindow", ObeliskShowPassWindowReceive)
 end
-usermessage.Hook("ObeliskShowPassWindow", ObeliskShowPassWindow)
 
 end

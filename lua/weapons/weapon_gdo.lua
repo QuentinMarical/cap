@@ -3,6 +3,7 @@ if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("base
 if SERVER then
 
 AddCSLuaFile()
+util.AddNetworkString("gdo_openpanel")
 
 SWEP.Weight = 5
 SWEP.AutoSwitchTo = false
@@ -76,13 +77,13 @@ local function SendCode(EntTable)
 		local answ = iris_comp.GDOText;
 		if answer == 1 then
 			if (answ and answ!="") then
-				EntTable:SetNetworkedString("gdo_textdisplay", answ);
+				EntTable:SetNWString("gdo_textdisplay", answ);
 			else
-				EntTable:SetNetworkedString("gdo_textdisplay", "OPEN");
+				EntTable:SetNWString("gdo_textdisplay", "OPEN");
 			end
 		elseif answer == 0 then
 			if (answ and answ!="") then
-				EntTable:SetNetworkedString("gdo_textdisplay", answ);
+				EntTable:SetNWString("gdo_textdisplay", answ);
 			else
 				EntTable:SetNWString("gdo_textdisplay", "WRONG");
 			end
@@ -92,7 +93,7 @@ local function SendCode(EntTable)
 			EntTable:SetNWString("gdo_textdisplay", "ERROR");
 		else
 			if (answ and answ!="") then
-				EntTable:SetNetworkedString("gdo_textdisplay", answ);
+				EntTable:SetNWString("gdo_textdisplay", answ);
 			else
 				EntTable:SetNWString("gdo_textdisplay", "STAND-BY");
 			end
@@ -183,7 +184,7 @@ function SWEP:Think()
 end
 
 function SWEP:PrimaryAttack()
-	if(CLIENT || not IsValid(self.Owner) || self:GetNetworkedString("gdo_textdisplay","GDO")!="GDO") then return end
+	if(CLIENT || not IsValid(self.Owner) || self:GetNWString("gdo_textdisplay","GDO")!="GDO") then return end
 	local pos = self.Owner:GetPos()
 	self.gate = self:FindEnt(pos, false)
 	if(self.gate and self.gate.IsOpen) then
@@ -198,8 +199,9 @@ end
 
 function SWEP:SecondaryAttack()
 	if(CLIENT) then return end
-	umsg.Start("gdo_openpanel", self.Owner)
-	umsg.End()
+	if not IsValid(self.Owner) then return end
+	net.Start("gdo_openpanel")
+	net.Send(self.Owner)
 end
 
 function SWEP:FindEnt(pos, find_pc) -- modified from avon's dhd function
@@ -265,7 +267,7 @@ function SWEP:RenderScreen()
 
 		surface.SetFont( "Quiver" )
 
-		local gdo_answer = self:GetNetworkedString("gdo_textdisplay", "")
+		local gdo_answer = self:GetNWString("gdo_textdisplay", "")
 
 		local w, h = surface.GetTextSize(gdo_answer)
 		local x = (256-w)/2;
@@ -356,14 +358,11 @@ function VGUI:Init()
 end
 vgui.Register( "ShowIrisMenu", VGUI )
 
-function gdo_menuhook(um)
+net.Receive("gdo_openpanel", function()
 	local Window = vgui.Create( "ShowIrisMenu" )
 	Window:SetMouseInputEnabled( true )
 	Window:SetVisible( true )
-	e = um:ReadEntity();
-	if(not IsValid(e)) then return end;
-end
-usermessage.Hook("gdo_openpanel", gdo_menuhook)
+end)
 
 end
 

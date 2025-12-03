@@ -35,7 +35,7 @@ function EFFECT:Init(data)
 	self.Grow = true;
 	self.Multiply = 0;
 	self.Created = CurTime();
-	self.Color = self.Parent:GetNetworkedVector("DoorColor");
+	self.Color = self.Parent:GetNWVector("DoorColor");
 	self.DoorModel = self.Parent:GetNWString("DoorModel")
 	self.Entity:SetModel(Model(self.DoorModel));
 	self.Entity:SetPos(e:GetPos());

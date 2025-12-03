@@ -28,7 +28,7 @@ ENT.AdminSpawnable = false
 
 --################# Gets the beam normal @aVoN
 function ENT:GetBeamNormal()
-	if(self.Entity:GetNetworkedBool("always_down",false)) then
+	if(self.Entity:GetNWBool("always_down",false)) then
 		return Vector(0,0,-1000);
 	end
 	return self.Entity:GetUp()*1000;
@@ -56,7 +56,7 @@ function ENT:Initialize()
 	self.Entity:PhysicsInit(SOLID_VPHYSICS);
 	self.Entity:SetMoveType(MOVETYPE_VPHYSICS);
 	self.Entity:SetSolid(SOLID_VPHYSICS);
-	self.Entity:SetNetworkedBool("on",false);
+	self.Entity:SetNWBool("on",false);
 	-- Use the StarGate Pack's config @aVoN
 	self.MaxEnts = StarGate.CFG:Get("harvester","max_ents",5);
 	self.AllowConstrained = StarGate.CFG:Get("harvester","allow_constrained",false);
@@ -128,10 +128,10 @@ end
 
 --################# Turns on or off @aVoN
 function ENT:TurnOn(b)
-	local state = self.Entity:GetNetworkedBool("on");
+	local state = self.Entity:GetNWBool("on");
 	if(b and not state) then
 		if(self:GetResource("energy",self.ConsumeEnergy) < self.ConsumeEnergy) then return end;
-		self.Entity:SetNetworkedBool("on",true);
+		self.Entity:SetNWBool("on",true);
 		self.Sound:Play();
 		self.Sound:SetSoundLevel(85);
 		--self.Sound:ChangeVolume(100,1);
@@ -276,7 +276,7 @@ function ENT:Think()
 	if(self.Entity:GetNWBool("on") and table.Count(self.Ents) < self.MaxEnts) then
 		if(self:GetResource("energy",self.ConsumeEnergy) < self.ConsumeEnergy) then
 			self:ShowOutput(false);
-			self.Entity:SetNetworkedBool("on",false);
+			self.Entity:SetNWBool("on",false);
 			self.Sound:Stop();
 			return;
 		end
@@ -379,7 +379,7 @@ ENT.PixVis = util.GetPixelVisibleHandle(); -- Visibility handler
 
 --################# Think @Catdaemon
 function ENT:Think()
-	if(self.Entity:GetNetworkedBool("on",false)) then
+	if(self.Entity:GetNWBool("on",false)) then
 		if(not StarGate.VisualsMisc("cl_harvester_dynlights")) then return end;
 		if((self.NextLight or 0) < CurTime()) then -- Fixes a crashing bug, which spawns more and more lights all over the time until the clientside "overflowed blubb" message appears
 			self.NextLight = CurTime()+0.001;

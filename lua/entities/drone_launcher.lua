@@ -195,7 +195,7 @@ function ENT:Think()
 						if(v ~= self.Entity.Owner and v:Alive()) then
 							local p_pos = v:GetPos();
 							-- Fix for people in a shuttle
-							if(v:GetNetworkedBool("isDriveShuttle",false)) then
+							if(v:GetNWBool("isDriveShuttle",false)) then
 								local shuttle = v:GetNWEntity("Shuttle",nil);
 								if(IsValid(shuttle)) then
 									p_pos = shuttle:GetPos();

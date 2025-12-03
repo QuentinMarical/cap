@@ -31,7 +31,7 @@ local HEALTH=1000
 local DESTROYABLE=true
 
 function ENT:Initialize()   --############ @  Llapp
-    self:SetNetworkedInt("health",HEALTH);
+	self:SetNWInt("health",HEALTH);
     if (WireAddon) then
     	self.Inputs = WireLib.CreateInputs( self.Entity, {"Active", "AsuranShield","HyperDrive","Vector [VECTOR]","X","Y","Z","Entity [ENTITY]"}); -- "Iris",
     end
@@ -88,7 +88,7 @@ function ENT:SpawnShield()  --############ @ Madman07
 	e:SetColor(Color(230, 230, 230, 255));
 	e:SetParent(self.Entity);
 	e:Spawn();
-	e:SetNetworkedBool("containment",false);
+	e:SetNWBool("containment",false);
 	e:DrawBubbleEffect();
 	e:SetTrigger(true);
 	self.Entity:EmitSound("tech/shield_goauld_engage.mp3",90,math.random(90,110));
@@ -276,8 +276,8 @@ end
 
 function ENT:OnTakeDamage(dmg)
 	if(DESTROYABLE)then
-		local health=self:GetNetworkedInt("health");
-		self:SetNetworkedInt("health",health-dmg:GetDamage());
+		local health=self:GetNWInt("health");
+		self:SetNWInt("health",health-dmg:GetDamage());
 		if(health<=1)then
 			self:DoKill();
 		end
@@ -452,11 +452,11 @@ function ENT:LowPriorityThink()  --############ @ Madman07 and Llapp
 			end
 			if (self.APCply:KeyDown( IN_ATTACK )) then
 				--[[if (not self.Iris.IsActivated and self.Pressed == false ) then
-				    self.Entity:SetNetworkedEntity("beamsound",false)
+					self.Entity:SetNWEntity("beamsound",false)
 				    self.Iris:Toggle();
 					self.Pressed = true;
 				elseif (self.Iris.IsActivated  and self.Pressed == false) then
-				    self.Entity:SetNetworkedEntity("beamsound",true)
+					self.Entity:SetNWEntity("beamsound",true)
     				self.Iris:Toggle();
 					self.Pressed = true;
 				end ]]--
@@ -484,16 +484,16 @@ function ENT:LowPriorityThink()  --############ @ Madman07 and Llapp
 	end
 --[[	if(self.WireIris==1)then
 	    if((not self.Iris.IsActivated and self.Gate.Active) and self.InRange==0)then
-		    self.Entity:SetNetworkedEntity("beamsound",false)
+			self.Entity:SetNWEntity("beamsound",false)
 		    self.Iris:Toggle();
 	    end
 		if((self.Iris.IsActivated and self.Gate.Active) and self.InRange==1)then
-		    self.Entity:SetNetworkedEntity("beamsound",true)
+			self.Entity:SetNWEntity("beamsound",true)
 			self.Iris:Toggle();
 		end
 	end
 	if(self.Gate.IsOpen and self.OutBeam == false and not self.Gate.Outbound)then
-	    self.Entity:SetNetworkedEntity("beamsound",true)
+		self.Entity:SetNWEntity("beamsound",true)
 	    timer.Simple(3.2,function()
 	        if(IsValid(self.Entity))then
 	            self:Beam();
@@ -502,7 +502,7 @@ function ENT:LowPriorityThink()  --############ @ Madman07 and Llapp
 	    self.OutBeam=true;
 	end
 	if(not self.Gate.IsOpen)then
-	    self.Entity:SetNetworkedEntity("beamsound",false)
+		self.Entity:SetNWEntity("beamsound",false)
 	    self.OutBeam=false;
 	end]]--
 	--if(self.Gate.Active and not self.Iris.IsActivated)then self.Iris:Toggle(); end
@@ -531,7 +531,7 @@ end
 		self.APCply = ply;
 		self.APCply:SetPos(self.Entity:GetPos());
 		--self.APCply:SetScriptedVehicle(self);
-		self.APCply:SetNetworkedEntity( "ScriptedVehicle", self )
+		self.APCply:SetNWEntity( "ScriptedVehicle", self )
 		self.APCply:SetViewEntity( self )
 		-- Garry broke this function
 		/*if(not(game.SinglePlayer())) then
@@ -542,7 +542,7 @@ end
 		self.APCply:DrawWorldModel(false);
 		self.APCply:CrosshairEnable();
 		self.APCply:Spectate( OBS_MODE_CHASE );
-		self.APCply:SetNetworkedEntity("Asuran",self);
+		self.APCply:SetNWEntity("Asuran",self);
 	end
 	self.Entity:NextThink( CurTime() + 0.5 );
 end
@@ -557,13 +557,13 @@ function ENT:ExitViewMode(ply)  --############ @  Llapp
 	self.APCply:Spawn();
 	self.APCply:SetPos(self.APCply:GetPos());
 	--self.APCply:SetScriptedVehicle(NULL);
-	self.APCply:SetNetworkedEntity( "ScriptedVehicle", NULL )
+	self.APCply:SetNWEntity( "ScriptedVehicle", NULL )
 	self.APCply:SetViewEntity( NULL )
 	-- Garry broke this function
 	/*if(not(game.SinglePlayer())) then
 		self.APCply:SetClientsideVehicle(NULL);
 	end*/
-	self.APCply:SetNetworkedEntity("Asuran",NULL);
+	self.APCply:SetNWEntity("Asuran",NULL);
 	self.APCply = NULL;
 end]]--
 
@@ -647,7 +647,7 @@ function ENT:Initialize()
 	self.BeamSound = self.BeamSound or CreateSound(self.Entity,self.Sounds.Beam);
 	self.BeamSoundOn = false;
 	self:StartClientsideSound()
-	self.Entity:GetNetworkedEntity("beamsound",false)
+	self.Entity:GetNWEntity("beamsound",false)
 end
 
 function ENT:OnRemove()
@@ -669,7 +669,7 @@ function ENT:Think()
 	doppler = velo:Dot(dir)/(160*dir:Length());
 
 
-	if(self.Entity:GetNetworkedEntity("beamsound",true)) then
+	if(self.Entity:GetNWEntity("beamsound",true)) then
 		self.BeamSound:ChangePitch(math.Clamp(150 + pitch,150,150) + doppler,0);
 	end
 end]]--

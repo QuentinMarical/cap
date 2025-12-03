@@ -11,7 +11,7 @@ function ENT:Draw()
 end
 
 function ENT:GetRingAddress()
-	return self:GetNetworkedString("address","");
+	return self:GetNWString("address","");
 end
 
 --################# Show the addresse of a ring when set @aVoN, madman07
@@ -97,17 +97,17 @@ end
 
 vgui.Register( "RingNameEntryCap", PANEL, "DFrame" )
 
-function RingTransporterShowNameWindow(um)
+local function RingTransporterShowNameWindow()
 	local Window = vgui.Create( "RingNameEntryCap" )
 	Window:SetKeyBoardInputEnabled( true )
 	Window:SetMouseInputEnabled( true )
 	Window:SetPos( (ScrW()/2 - 350) / 2, ScrH()/2 - 75 )
 	Window:SetVisible( true )
-	local e = um:ReadEntity();
+	local e = net.ReadEntity();
 	if(not IsValid(e)) then return end;
 	Window.TextEntry:SetText(e:GetNWString("address"));
 end
-usermessage.Hook("RingTransporterShowNameWindowCap", RingTransporterShowNameWindow)
+net.Receive("RingTransporterShowNameWindowCap", RingTransporterShowNameWindow)
 
 -- Old method I don't like
 --[[
@@ -174,10 +174,8 @@ hook.Add("HUDPaint","RingTransporterHUDPaint",
 	end
 );
 
-usermessage.Hook("RingTransporterTele",
-	function (data)
-		go = data:ReadBool()
+net.Receive("RingTransporterTele", function()
+		go = net.ReadBool()
 		start = CurTime();
 		if(go) then timer.Create("RingTeleSafeTimer",5,1,function() start = nil end) end;
-	end
-);
+end)

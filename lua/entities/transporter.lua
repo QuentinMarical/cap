@@ -339,7 +339,7 @@ end
 local function GetGPS()
 	local gps = {}
 	for k,v in pairs(ents.FindByClass("gmod_wire_gps")) do
-		local name = v:GetNetworkedString("WireName",v:GetClass());
+		local name = v:GetNWString("WireName",v:GetClass());
 		if (name=="") then name = v:GetClass() end
 		table.insert(gps,{v:EntIndex(),"["..v:EntIndex().."] "..name});
 	end

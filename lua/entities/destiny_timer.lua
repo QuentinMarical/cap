@@ -246,7 +246,7 @@ function ENT:Think(ply)
 		self:SetWire("Minutes",self.Minutes);
 
 		local time = self.Minutes*60 + self.Seconds;
-		self.Entity:SetNetworkedInt("time",time);
+		self.Entity:SetNWInt("time",time);
 
 		local maxtime = self.WireMinutes*60 + self.WireSeconds;
 		if (self.CountUp) then
@@ -463,8 +463,8 @@ function ENT:Draw()
 	ang:RotateAroundAxis(ang:Up(), -90);
 	ang:RotateAroundAxis(ang:Up(), 180);
 
-	local Time = self.Entity:GetNetworkedInt("time",0);
-	local maxtime = self.Entity:GetNetworkedInt("maxtime",0);
+	local Time = self.Entity:GetNWInt("time",0);
+	local maxtime = self.Entity:GetNWInt("maxtime",0);
 
 	local Col = Color(200,230,255,255);
 	if (Time < 11 and maxtime==0) then Col = Color(225,50,50,255)

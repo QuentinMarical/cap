@@ -119,8 +119,8 @@ end
 function ENT:Enter(p) --####### Get in @RononDex
 
 	if(not(self.Inflight) and self.CanUse) then
-		p:SetNetworkedEntity(self.Vehicle,self); --Set a networked entity as the name of the vehicle
-		p:SetNetworkedBool("Flying"..self.Vehicle,true); --Set a bool on the player
+		p:SetNWEntity(self.Vehicle,self); --Set a networked entity as the name of the vehicle
+		p:SetNWBool("Flying"..self.Vehicle,true); --Set a bool on the player
 		p:Spectate(OBS_MODE_CHASE); --Spectate the vehicle
 		p:DrawWorldModel(false);
 		p:DrawViewModel(false);
@@ -135,7 +135,7 @@ function ENT:Enter(p) --####### Get in @RononDex
 			p:Flashlight(false); --Turn the player's flashlight off when Flying
 		end
 		--p:SetScriptedVehicle(self);
-		p:SetNetworkedEntity("ScriptedVehicle", self)
+		p:SetNWEntity("ScriptedVehicle", self)
 		p:SetViewEntity(self)
 		self:GetPhysicsObject():Wake();
 		self:GetPhysicsObject():EnableMotion(true); --UnFreeze us
@@ -159,7 +159,7 @@ function ENT:Exit(kill) --####### Get out @RononDex
 		self.Pilot:DrawViewModel(true);
 		self.Pilot:DrawWorldModel(true);
 		self.Pilot:Spawn();
-		self.Pilot:SetNetworkedBool("Flying"..self.Vehicle,false);
+		self.Pilot:SetNWBool("Flying"..self.Vehicle,false);
 		self.Pilot:SetPos(self.ExitPos or self:GetPos());
 		self.Pilot:SetParent();
 		self.Pilot:SetMoveType(MOVETYPE_WALK);
@@ -169,10 +169,10 @@ function ENT:Exit(kill) --####### Get out @RononDex
 		self:Rotorwash(false);
 	end
 	self.Inflight = false;
-	self:SetNetworkedEntity(self.Vehicle,nil);
+	self:SetNWEntity(self.Vehicle,nil);
 	if (IsValid(self.Pilot)) then
 		--self.Pilot:SetScriptedVehicle(NULL);
-		self.Pilot:SetNetworkedEntity( "ScriptedVehicle", NULL )
+		self.Pilot:SetNWEntity( "ScriptedVehicle", NULL )
 		self.Pilot:SetViewEntity( NULL )
 		self.Pilot:SetHealth(self.PlayerHealth);
         self.Pilot:SetColor(Color(255,255,255,255));
@@ -401,8 +401,8 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 end
 
 function playerDies( victim, weapon, killer )
-	if (IsValid(victim:GetNetworkedEntity("ScriptedVehicle", NULL))) then
-          local veh = victim:GetNetworkedEntity("ScriptedVehicle", NULL);
+	if (IsValid(victim:GetNWEntity("ScriptedVehicle", NULL))) then
+		  local veh = victim:GetNWEntity("ScriptedVehicle", NULL);
           if (veh:GetClass()!="puddle_jumper" and veh:GetClass()!="sg_vehicle_daedalus" and veh.Bang) then
 			veh:Bang();
           end
@@ -427,7 +427,7 @@ end
 function SGVehBaseCalcView(Player, Origin, Angles, FieldOfView)
 	local view = {}
 	local p = Player
-	local self = p:GetNetworkedEntity("ScriptedVehicle", NULL)
+	local self = p:GetNWEntity("ScriptedVehicle", NULL)
 
 	if((self)and(self:IsValid()) and self.IsSGVehicle and not self.IsSGVehicleCustomView) then
 		local pos = self:GetPos()+self:GetUp()*self.UDist+LocalPlayer():GetAimVector():GetNormal()*self.Dist
@@ -452,7 +452,7 @@ end
 function ENT:Think()
 
 	local p = LocalPlayer()
-	local IsDriver = (p:GetNetworkedEntity(self.Vehicle,NULL) == self.Entity);
+	local IsDriver = (p:GetNWEntity(self.Vehicle,NULL) == self.Entity);
 	local IsFlying = p:GetNWBool("Flying"..self.Vehicle,false);
 
 	--######### Handle engine sound

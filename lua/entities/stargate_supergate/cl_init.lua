@@ -13,7 +13,7 @@ function ENT:Think()
 	if((self.NextLight or 0) < CurTime()) then
 		self.NextLight = CurTime()+0.001;
 		for i=1,72 do
-			if(self.Entity:GetNetworkedBool("chevron"..i,false)) then
+			if(self.Entity:GetNWBool("chevron"..i,false)) then
 				-- Clientside lights, yeah! Can be toggled by clients this causes much less lag when deactivated. Method below is from Catdaemon's harvester
 				local dlight = DynamicLight(self:EntIndex()..i);
 				if(dlight) then

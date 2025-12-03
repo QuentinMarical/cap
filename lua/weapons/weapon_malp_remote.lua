@@ -65,10 +65,12 @@ function SWEP:FindMALP()
 end
 
 function SWEP:Think()
-
-	umsg.Start("MALPSWEPDATA",self.Owner)
-		umsg.Short(self.MalpNum)
-	umsg.End()
+	if SERVER then
+		util.AddNetworkString("MALPSWEPDATA")
+		net.Start("MALPSWEPDATA")
+			net.WriteInt(self.MalpNum or 0, 16)
+		net.Send(self.Owner)
+	end
 end
 
 --########### Loose control of the MALP @RononDex

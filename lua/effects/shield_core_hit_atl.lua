@@ -28,7 +28,7 @@ function EFFECT:Init(data)
 	self.Normal = data:GetNormal();
 	local e = data:GetEntity();
 	if not IsValid(e) then return end;
-	local col = e:GetNetworkedVector("Col", Vector(170,185,255));
+	local col = e:GetNWVector("Col", Vector(170,185,255));
 	self.Col = Color(col.x,col.y,col.z);
 
 	local pos = data:GetOrigin();

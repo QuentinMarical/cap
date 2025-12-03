@@ -57,22 +57,20 @@ function StarGate.LifeSupportAndWire(ENT)
 
 				if delay then
 					timer.Simple(0.1, function()
-						umsg.Start("Env_SetNodeOnEnt")
-							--umsg.Entity(self)
-							--umsg.Entity(ent)
-							umsg.Short(self:EntIndex())
-							umsg.Short(ent:EntIndex())
-						umsg.End()
+						util.AddNetworkString("Env_SetNodeOnEnt")
+						net.Start("Env_SetNodeOnEnt")
+							net.WriteUInt(self:EntIndex(), 16)
+							net.WriteUInt(ent:EntIndex(), 16)
+						net.Broadcast()
 					end)
 				else
-					umsg.Start("Env_SetNodeOnEnt")
-						--umsg.Entity(self)
-						--umsg.Entity(ent)
-						umsg.Short(self:EntIndex())
-						umsg.Short(ent:EntIndex())
-					umsg.End()
+					util.AddNetworkString("Env_SetNodeOnEnt")
+					net.Start("Env_SetNodeOnEnt")
+						net.WriteUInt(self:EntIndex(), 16)
+						net.WriteUInt(ent:EntIndex(), 16)
+					net.Broadcast()
 				end
-				--self:SetNetworkedEntity("node", ent)
+				--self:SetNWEntity("node", ent)
 			end
 		end
 		ENT.GetResourceAmount = function(self,resource)
@@ -109,12 +107,11 @@ function StarGate.LifeSupportAndWire(ENT)
 				self.node = nil
 				self.client_updated = false
 
-				umsg.Start("Env_SetNodeOnEnt")
-					--umsg.Entity(self)
-					--umsg.Entity(NullEntity())
-					umsg.Short(self:EntIndex())
-					umsg.Short(0)
-				umsg.End()
+				util.AddNetworkString("Env_SetNodeOnEnt")
+				net.Start("Env_SetNodeOnEnt")
+					net.WriteUInt(self:EntIndex(), 16)
+					net.WriteUInt(0, 16)
+				net.Broadcast()
 			end
 		end
 	end

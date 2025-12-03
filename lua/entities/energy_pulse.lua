@@ -265,7 +265,7 @@ function ENT:PrepareBullet(dir, rand, spd, size, ignore)
 	self.Random = rand;
 	self.Speed = spd;
 	self.Size = size;
-	self.Entity:SetNetworkedInt("Size", size);
+	self.Entity:SetNWInt("Size", size);
 	self.Ignore = ignore or {};
 end
 
@@ -334,7 +334,7 @@ function ENT:Initialize()
 		table.insert(snd,v);
 	end
 	self.Sounds = snd;
-	local size = self.Entity:GetNetworkedInt("Size", 0);
+	local size = self.Entity:GetNWInt("Size", 0);
 	self.Sizes={20+size*3,20+size*3,180+size*10}; -- X,Y and shaft-leght!
 end
 

@@ -109,7 +109,7 @@ function ENT:Detonate()
 	self.Detonated = false; -- reset old value
 	self.Charging = true;
 	self.Disabled = true;
-	self:SetNetworkedVector("shield_color",Vector(0.69,0.93,0.93))
+	self:SetNWVector("shield_color",Vector(0.69,0.93,0.93))
 	local e = self.Entity;
 	timer.Simple(self.Timer, function()
 		self.Detonated = true;
@@ -335,7 +335,7 @@ function ENT:Draw() self:DrawModel() end;
 --Calculate the player's view when they are stunned.
 local function CalcView( ply, pos, angles, fov )
 	if ply.Stunned then
-		local Ragdoll = ply:GetNetworkedEntity( "StunRagdoll" )
+		local Ragdoll = ply:GetNWEntity( "StunRagdoll" )
 		if IsValid( Ragdoll ) then
 			local EyesID = Ragdoll:LookupAttachment( "eyes" )
 			local Eyes = Ragdoll:GetAttachment( EyesID )

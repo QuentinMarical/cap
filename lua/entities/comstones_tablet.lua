@@ -31,7 +31,7 @@ function ENT:Draw()
 	        surface.DrawTexturedRect(ScrW()/2-3, ScrH()/2-112, 100, 100);
 
 			local chann = 1;
-			if IsValid(self.Entity) then chann = self.Entity:GetNetworkedInt("Chann", 1); end
+			if IsValid(self.Entity) then chann = self.Entity:GetNWInt("Chann", 1); end
 			local act = 0;
 			if IsValid(self.Entity) then act = self.Entity:GetNWInt("Active", 0); end
 
@@ -181,7 +181,7 @@ end
 function ENT:Think(ply)
 	concommand.Add("Chan"..self:EntIndex(),function(ply,cmd,args)
 		self.Channel = tonumber(args[1]);
-		self.Entity:SetNetworkedInt("Chann", self.Channel);
+		self.Entity:SetNWInt("Chann", self.Channel);
     end);
 end
 

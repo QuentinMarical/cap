@@ -30,7 +30,7 @@ function ENT:Draw()
 	        surface.DrawTexturedRect(ScrW()/2-3, ScrH()/2-112, 100, 100);
 
 			local name = "---";
-			if IsValid(self.Entity) then name = self.Entity:GetNetworkedString("Name", "---"); end
+			if IsValid(self.Entity) then name = self.Entity:GetNWString("Name", "---"); end
 
             draw.DrawText("Stone", "header", ScrW()/2+27, ScrH()/2-103, Color(0,255,255,255), 0)
             draw.DrawText("Finger print:", "center2", ScrW()/2+10, ScrH()/2-77, Color(209,238,238,255),0);
@@ -86,7 +86,7 @@ function ENT:Use(ply)
 	if(IsValid(ply) and ply:IsPlayer()) then
 		if (self.Ply == ply) then
 			self.Ply = NULL;
-			self.Entity:SetNetworkedString("Name", "---");
+			self.Entity:SetNWString("Name", "---");
 			if IsValid(self.Tablet) then self.Tablet:Disconnect(self); end
 		else
 			self.Ply = ply;

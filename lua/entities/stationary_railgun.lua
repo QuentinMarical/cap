@@ -67,7 +67,7 @@ function ENT:Initialize()
 	self.WireReload = nil;
 	self.WireEnt = nil;
 
-	self:SetNetworkedEntity("Cann",self.Cann);
+	self:SetNWEntity("Cann",self.Cann);
 	self:SetNWEntity("Turn",self.Turn);
 	self:SetNWEntity("Stand",self.Stand);
 end
@@ -301,7 +301,7 @@ function ENT:Enter(ply)
 
 	self.Active = true;
 	--ply:SetScriptedVehicle(self);
-	ply:SetNetworkedEntity( "ScriptedVehicle", self )
+	ply:SetNWEntity( "ScriptedVehicle", self )
 	ply:SetViewEntity( self )
 	-- Garry broke this function
 	/*if(not(game.SinglePlayer())) then
@@ -336,7 +336,7 @@ function ENT:Exit()
 	self.Driver:SetPos(self.Stand:GetPos() - self.Stand:GetForward() * 100 - self.Stand:GetRight() * 100);
 	self.Driver:SetParent();
 	--self.Driver:SetScriptedVehicle(NULL);
-	self.Driver:SetNetworkedEntity( "ScriptedVehicle", NULL )
+	self.Driver:SetNWEntity( "ScriptedVehicle", NULL )
 	self.Driver:SetViewEntity( NULL )
 	-- Garry broke this function
 	/*if(not(game.SinglePlayer())) then
@@ -577,7 +577,7 @@ function ENT:Draw()
 end
 
 function ENT:Think()
-	if not IsValid(self.Stand) then self.Stand = self:GetNetworkedEntity("Stand"); end
+	if not IsValid(self.Stand) then self.Stand = self:GetNWEntity("Stand"); end
 	if not IsValid(self.Turn) then self.Turn = self:GetNWEntity("Turn"); end
 	if not IsValid(self.Cann) then self.Cann = self:GetNWEntity("Cann"); end
 	self.Ammo = self.Entity:GetNWInt("ammo",1000);
@@ -604,7 +604,7 @@ hook.Add( "HUDPaint", "HUDPaint", HUDPaint )
 function StatRailGCalcView(Player, Origin, Angles, FieldOfView)
 	local view = {}
 	local p = LocalPlayer()
-	local self = p:GetNetworkedEntity("ScriptedVehicle", NULL)
+	local self = p:GetNWEntity("ScriptedVehicle", NULL)
 
 	if (self and self:IsValid() and self:GetClass()=="stationary_railgun") then
 

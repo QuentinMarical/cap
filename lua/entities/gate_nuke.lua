@@ -52,10 +52,11 @@ function ENT:Initialize()
 	local rp = RecipientFilter()
 		rp:AddAllPlayers()
 
-	umsg.Start("NukeSunBeamsInfoXD", rp)
-		umsg.Vector(self.SplodePos)
-		umsg.Float(self.Scale)
-	umsg.End()
+	util.AddNetworkString("NukeSunBeamsInfoXD")
+	net.Start("NukeSunBeamsInfoXD")
+	net.WriteVector(self.SplodePos)
+	net.WriteFloat(self.Scale)
+	net.Broadcast()
 
 	util.PrecacheModel("models/player/charple.mdl")
 
@@ -330,13 +331,12 @@ function ENT:NukeSunBeams() -- All Credits for this goes to Jinto :}) -- Moustac
 	return true
 end
 
-local function NukeSunBeamInfo(Info) -- I could just do this with network varibles but there sent the same way soo... meh.
-	local pos = Info:ReadVector()
-	local scale = Info:ReadFloat()
+local function NukeSunBeamInfo()
+	local pos = net.ReadVector()
+	local scale = net.ReadFloat()
 	info = {Pos = pos, Scale = scale}
 end
-
-usermessage.Hook("NukeSunBeamsInfoXD", NukeSunBeamInfo)
+net.Receive("NukeSunBeamsInfoXD", NukeSunBeamInfo)
 
 --###################### EVERYTHING BELOW IS TETABONITA'S
 

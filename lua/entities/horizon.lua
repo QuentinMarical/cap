@@ -69,7 +69,7 @@ function ENT:Initialize()
 	self.RemovedCovers = false;
 	self.Fired = false;
 
-	self.Entity:SetNetworkedBool("DrawEngines", false);
+	self.Entity:SetNWBool("DrawEngines", false);
 
 	--self.Entity:SpawnCovers()
 	--self.Entity:SpawnMissiles()
@@ -365,7 +365,7 @@ end
 
 --################### Think: Play sounds! @aVoN
 function ENT:Think()
-	self.Flying = self.Entity:GetNetworkedBool("DrawEngines", false);
+	self.Flying = self.Entity:GetNWBool("DrawEngines", false);
 	local time = CurTime();
 	-- ######################## Flyby-noise and screenshake!
 	if((time-self.Created >= 0.1) and time-(self.Last or 0) > 0.3) then

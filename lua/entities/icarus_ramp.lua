@@ -26,7 +26,7 @@ function ENT:Initialize()
 	self.Entity:PhysicsInit( SOLID_VPHYSICS ) ;
 	self.Entity:SetMoveType( MOVETYPE_VPHYSICS );
 	self.Entity:SetSolid( SOLID_VPHYSICS );
-	self.Entity:SetNetworkedBool("icarus_smoke",false);
+	self.Entity:SetNWBool("icarus_smoke",false);
 	local phys = self.Entity:GetPhysicsObject();
 	if (phys:IsValid()) then
 	    phys:EnableMotion(false)
@@ -305,7 +305,7 @@ function ENT:Think()
 	start = math.random(0,2);
 	alph = math.random(3,5);
     rantime = math.random(0,2); --
-	if(self.Entity:GetNetworkedBool("icarus_smoke",false) and IsValid(self.Entity))then
+	if(self.Entity:GetNWBool("icarus_smoke",false) and IsValid(self.Entity))then
 		timer.Simple( rantime, function()
 		    if(IsValid(self.Entity))then
                 self:SmokeTopRight();

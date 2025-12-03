@@ -17,7 +17,7 @@ if (StarGate==nil or StarGate.Trace==nil) then return end
 
 StarGate.Trace:Add("shield_core_buble",
 	function(e,values,trace,in_box)
-		if(not e:GetNetworkedBool("depleted",false) and e:GetNWBool("Enabled",false)) then
+		if(not e:GetNWBool("depleted",false) and e:GetNWBool("Enabled",false)) then
 			-- local own = e;
 			-- if (type(values[3]) == "table") then
 				-- own = values[3][1]:GetNWEntity("SC_Owner", e); // readed from serverside
@@ -27,7 +27,7 @@ StarGate.Trace:Add("shield_core_buble",
 			-- if not (IsValid(own) and own:IsPlayer()) then return true end
 
 			-- local nocollide = string.Explode(" ", e:GetNWString("NoCollideID", ""));
-			-- if (table.HasValue(nocollide, own:EntIndex()) or (e:GetNWBool("Immunity",false) and e:SetNetworkedEntity("Own",e) == own)) then
+			-- if (table.HasValue(nocollide, own:EntIndex()) or (e:GetNWBool("Immunity",false) and e:SetNWEntity("Own",e) == own)) then
 				-- return false
 			-- else
 				-- return true

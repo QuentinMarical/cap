@@ -86,13 +86,13 @@ hook.Add("PlayerBindPress","StarGate.Hook.ResetDynamicLights",StarGate.Hook.Rese
 
 spawnmenu.AddContentType( "cap_npc", function( container, obj )
 
-	if ( !obj.material ) then return end
-	if ( !obj.nicename ) then return end
-	if ( !obj.spawnname ) then return end
+	if ( not obj.material ) then return end
+	if ( not obj.nicename ) then return end
+	if ( not obj.spawnname ) then return end
 
 	local gmod_npcweapon = GetConVar("gmod_npcweapon") or CreateConVar( "gmod_npcweapon", "", { FCVAR_ARCHIVE } );
 
-	if ( !obj.weapon ) then obj.weapon = gmod_npcweapon:GetString() end
+	if ( not obj.weapon ) then obj.weapon = gmod_npcweapon:GetString() end
 
 	local icon = vgui.Create( "ContentIcon", container )
 		icon:SetContentType( "npc" )
@@ -197,8 +197,8 @@ end )
 spawnmenu.AddContentType( "cap_weapon", function( container, obj )
 
 	if ( !obj.material ) then return end
-	if ( !obj.nicename ) then return end
-	if ( !obj.spawnname ) then return end
+	if ( not obj.nicename ) then return end
+	if ( not obj.spawnname ) then return end
 
 	local icon = vgui.Create( "ContentIcon", container )
 		icon:SetContentType( "weapon" )
@@ -217,7 +217,7 @@ spawnmenu.AddContentType( "cap_weapon", function( container, obj )
 		icon:SetAdminOnly( obj.admin )
 		local Tooltip =  Format( "%s", obj.nicename )
         if ( obj.author ) then Tooltip = Format( "%s\n"..SGLanguage.GetMessage("cap_menu_author")..": %s", Tooltip, obj.author ) end
-        if ( obj.info and obj.info!="" ) then Tooltip = Format( "%s\n\n%s", Tooltip, obj.info ) end
+        if ( obj.info and obj.info~="" ) then Tooltip = Format( "%s\n\n%s", Tooltip, obj.info ) end
 		icon:SetTooltip(Tooltip);
 		icon:SetColor( Color( 135, 206, 250, 255 ) )
 		icon.DoClick = function()

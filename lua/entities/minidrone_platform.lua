@@ -68,7 +68,7 @@ end
 function ENT:Use(ply)
 	if (self.Owner == ply) then
 		ply.MiniDronePlatform = self;
-		ply:SetNetworkedEntity("DronePlatform", self);
+		ply:SetNWEntity("DronePlatform", self);
 		ply:Give("minidrone_key");
 		ply:SelectWeapon("minidrone_key");
 	end

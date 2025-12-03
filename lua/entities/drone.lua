@@ -80,7 +80,7 @@ end
 --################# Removes the trail @aVoN
 function ENT:RemoveTrail(unparent)
 	if(self.Trail and self.Trail:IsValid()) then
-		self.Entity:SetNetworkedInt("turn_off",CurTime());
+		self.Entity:SetNWInt("turn_off",CurTime());
 		-- Only do this when we are in SinglePlayer. In MultiPlayer i have seen the trails gowing into the sky near map-origin which was really ugly
 		if(unparent) then
 			if(game.SinglePlayer()) then
@@ -304,7 +304,7 @@ function ENT:Draw()
 	local pos = self.Entity:GetPos();
 	self.Size = self.Size or 60;
 	self.Alpha = self.Alpha or 255;
-	local time = self.Entity:GetNetworkedInt("turn_off",false);
+	local time = self.Entity:GetNWInt("turn_off",false);
 	if(time) then
 		-- Drone turns off (But only, when the Trail has been removed before)
 		if(time+1 < CurTime()) then

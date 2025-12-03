@@ -26,7 +26,7 @@ function ENT:Initialize()
 	self.Entity:PhysicsInit( SOLID_VPHYSICS ) ;
 	self.Entity:SetMoveType( MOVETYPE_VPHYSICS );
 	self.Entity:SetSolid( SOLID_VPHYSICS );
-	self.Entity:SetNetworkedBool("sgc_smoke",false);
+	self.Entity:SetNWBool("sgc_smoke",false);
 	local phys = self.Entity:GetPhysicsObject();
 	if (phys:IsValid()) then
 	    phys:EnableMotion(false)
@@ -168,7 +168,7 @@ function ENT:Think()
 	start = math.random(0,2);
 	alph = math.random(0,5);
     rantime = math.random(0,2); --
-	if(self.Entity:GetNetworkedBool("sgc_smoke",true) and IsValid(self.Entity))then
+	if(self.Entity:GetNWBool("sgc_smoke",true) and IsValid(self.Entity))then
 		timer.Simple( rantime, function()
 		    if(IsValid(self.Entity))then
                 self:SmokeTopRight();

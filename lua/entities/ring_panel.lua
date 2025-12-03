@@ -57,7 +57,7 @@ function ENT:Initialize()
 	self.RingBase = self.Entity;
 	self.Range = 500;
 
-	self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialAdress));
+	self.Entity:SetNWString("ADDRESS",string.Implode(",",self.DialAdress));
 
 	self.AllowMenu = StarGate.CFG:Get("ring_panel","menu",true);
 
@@ -77,7 +77,7 @@ function ENT:Think(ply)
 					self.DialAdress = nil;
 					self.DialAdress = {};
 					self.CantDial = false;
-					self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialAdress));
+					self.Entity:SetNWString("ADDRESS",string.Implode(",",self.DialAdress));
 				end
 			end )
 
@@ -233,7 +233,7 @@ function ENT:Draw()
 	if (not IsValid(self.Entity)) then return end
 	self.Entity:DrawModel();
 
-	local address = self.Entity:GetNetworkedString("ADDRESS"):TrimExplode(",");
+	local address = self.Entity:GetNWString("ADDRESS"):TrimExplode(",");
 	local eye = self.Entity:WorldToLocal(LocalPlayer():GetEyeTrace().HitPos)
 	local len = (eye - self.Middle):Length()
 
@@ -332,13 +332,13 @@ end
 
 vgui.Register( "RingDestinationEntryCap", PANEL, "DFrame" )
 local Window
-function RingTransporterShowWindow(um)
+local function RingTransporterShowWindow()
 	Window = vgui.Create( "RingDestinationEntryCap" )
 	Window:SetKeyBoardInputEnabled( true )
 	Window:SetMouseInputEnabled( true )
 	Window:SetPos( (ScrW()/2 - 250) / 2, ScrH()/2 - 75 )
 	Window:SetVisible( true )
 end
-usermessage.Hook("RingTransporterShowWindowCap", RingTransporterShowWindow)
+net.Receive("RingTransporterShowWindowCap", RingTransporterShowWindow)
 
 end

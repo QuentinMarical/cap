@@ -15,7 +15,7 @@ end
 --################# Think @aVoN
 function ENT:Think()
 	--###### Update the clientside self.Target (Necessary for the ENT:GetTeleportedVector function, if used clientside)
-	self.Target = self.Entity:GetNetworkedEntity("Target",self.Entity);
+	self.Target = self.Entity:GetNWEntity("Target",self.Entity);
 	--###### Clientside lights, yeah! Can be toggled by clients this causes much less lag when deactivated. Method below is from Catdaemon's harvester
 	if(not StarGate.VisualsMisc("cl_stargate_dynlights")) then return end;
 	if(not self.Entity:GetNWBool("activate_lights",false)) then return end;
@@ -128,7 +128,7 @@ hook.Add("HUDPaint","StarGate.HUDPaint.TeleportEffect",
 );
 
 --################# Start the FOV changed @aVoN
-usermessage.Hook("StarGate.CalcView.TeleportEffectStart",
+net.Receive("StarGate.CalcView.TeleportEffectStart",
 	function()
 		started = CurTime();
 	end
@@ -136,7 +136,7 @@ usermessage.Hook("StarGate.CalcView.TeleportEffectStart",
 
 
 --########### All this handle's model clipping @RononDex
-usermessage.Hook("StarGate.EventHorizon.ClipStart", function(um)
+net.Receive("StarGate.EventHorizon.ClipStart", function()
 	local dir = um:ReadShort();
 	local e = um:ReadEntity();
 	local target = um:ReadEntity();
@@ -147,14 +147,14 @@ usermessage.Hook("StarGate.EventHorizon.ClipStart", function(um)
 	e:SetRenderClipPlane(norm, norm:Dot(target:GetPos()));
 end)
 
-usermessage.Hook( "StarGate.EventHorizon.ClipStop", function(um)
+net.Receive( "StarGate.EventHorizon.ClipStop", function()
 	local e = um:ReadEntity();
 	if(not(IsValid(e))) then return end;
 	e.dir = nil;
 	e:SetRenderClipPlaneEnabled(false);
 end)
 
-usermessage.Hook( "StarGate.EventHorizon.PlayerKill", function(um)
+net.Receive( "StarGate.EventHorizon.PlayerKill", function()
 	local e = um:ReadEntity();
 	if(not(IsValid(e))) then return end;
 	GAMEMODE:AddDeathNotice("#event_horizon",-1,"event_horizon",e:Name(),e:Team());
@@ -163,7 +163,7 @@ end)
 local mat_Overlay = {}
 local mats = {"effects/tp_eyefx/3tpeyefx_.vtf","effects/tp_eyefx/2tpeyefx_.vtf","effects/tp_eyefx/tpeyefx_.vtf"}
 
-usermessage.Hook( "StarGate.EventHorizon.SecretStart", function(um)
+net.Receive( "StarGate.EventHorizon.SecretStart", function()
 	started = CurTime();
 	local e = LocalPlayer();
 	e:EmitSound( "stargate/travel.mp3" )
@@ -207,7 +207,7 @@ usermessage.Hook( "StarGate.EventHorizon.SecretStart", function(um)
 	--end)
 end)
 
-usermessage.Hook( "StarGate.EventHorizon.SecretReset", function(um)
+net.Receive( "StarGate.EventHorizon.SecretReset", function()
 	local e = LocalPlayer();
 	hook.Remove("PostRender","Stargate.EH.Secret");
 	hook.Remove("EntityEmitSound","Stargate.EH.Secret");
@@ -217,7 +217,7 @@ usermessage.Hook( "StarGate.EventHorizon.SecretReset", function(um)
 	started = CurTime();
 end)
 
-usermessage.Hook( "StarGate.EventHorizon.SecretOut", function(um)
+net.Receive( "StarGate.EventHorizon.SecretOut", function()
 	local e = LocalPlayer();
 	hook.Remove("PostRender","Stargate.EH.Secret");
 	hook.Remove("EntityEmitSound","Stargate.EH.Secret");
@@ -269,7 +269,7 @@ usermessage.Hook( "StarGate.EventHorizon.SecretOut", function(um)
 	end
 end)
 
-usermessage.Hook( "StarGate.EventHorizon.SecretStop", function(um)
+net.Receive( "StarGate.EventHorizon.SecretStop", function()
 	local e = LocalPlayer();
 	hook.Remove("PostRender","Stargate.EH.Secret");
 	hook.Remove("EntityEmitSound","Stargate.EH.Secret");

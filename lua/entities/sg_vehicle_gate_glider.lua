@@ -50,7 +50,7 @@ function ENT:SpawnFunction(ply, tr) --######## Pretty useless unless we can spaw
 	e:SetPos(tr.HitPos + Vector(0,0,80))
 	e:Spawn()
 	e:Activate()
-	e:SetWire("Health",e:GetNetworkedInt("health"));
+	e:SetWire("Health",e:GetNWInt("health"));
 	ply:AddCount("CAP_ships", e)
 	return e
 end
@@ -63,7 +63,7 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 	self.EntHealth = 300
-	self:SetNetworkedInt("health",self.EntHealth)
+	self:SetNWInt("health",self.EntHealth)
 	self:SetUseType(SIMPLE_USE)
 	self:StartMotionController()
 
@@ -138,8 +138,8 @@ function ENT:OnRemove()	self.BaseClass.OnRemove(self) end
 
 function ENT:OnTakeDamage(dmg) --########## Gliders aren't invincible are they? @RononDex
 
-	local health=self:GetNetworkedInt("health")
-	self:SetNetworkedInt("health",health-dmg:GetDamage()) -- Sets heath(Takes away damage from health)
+	local health=self:GetNWInt("health")
+	self:SetNWInt("health",health-dmg:GetDamage()) -- Sets heath(Takes away damage from health)
 	self:SetWire("Health",health-dmg:GetDamage());
 
 	if((health-dmg:GetDamage())<=0) then
@@ -255,7 +255,7 @@ function SGGGCalcView(Player, Origin, Angles, FieldOfView)
 	local view = {}
 	--self.BaseClass.CalcView(self,Player, Origin, Angles, FieldOfView)
 	local p = LocalPlayer()
-	local self = p:GetNetworkedEntity("ScriptedVehicle", NULL)
+	local self = p:GetNWEntity("ScriptedVehicle", NULL)
 
 	if(IsValid(self) and self:GetClass()=="sg_vehicle_gate_glider") then
 		if(self.FirstPerson) then
@@ -283,7 +283,7 @@ function ENT:Think()
 	self.BaseClass.Think(self)
 
 	local p = LocalPlayer()
-	local GateGlider = p:GetNetworkedEntity("ScriptedVehicle", NULL)
+	local GateGlider = p:GetNWEntity("ScriptedVehicle", NULL)
 
 	if((GateGlider)and((GateGlider)==self)and(GateGlider:IsValid())) then
 		self.KBD:SetActive(true)

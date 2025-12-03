@@ -229,7 +229,7 @@ function ENT:Setup(source, Start, Damage, beamSpeed, beamColour, effectName, rad
    self.Start.Entity = startEnt
    self.Start.offset = Start.offset or Vector(0,0,0)
    self.Start.angle = Start.angle or Angle(0,0,0)
-   self.Entity:SetNetworkedEntity("startEnt", startEnt)
+   self.Entity:SetNWEntity("startEnt", startEnt)
 
    self.forward = self.Start:GetForward()
 
@@ -365,7 +365,7 @@ function ENT:UpdateStartPos()
         self.Laser:SetPos(newStartPos)
       end
 
-      self.Entity:SetNetworkedVector("start", newStartPos)
+      self.Entity:SetNWVector("start", newStartPos)
       self:SendPosToClient()
    end
 
@@ -396,7 +396,7 @@ function ENT:SetEndPos(pos)
    if(pos ~= self.End.Entity:GetPos()) then
       self.End.Entity:SetPos(pos)
 
-      self.Entity:SetNetworkedVector("end", pos)
+      self.Entity:SetNWVector("end", pos)
       self:SendPosToClient()
    end
 
@@ -602,7 +602,7 @@ function ENT:Shrink()
 
    self.Laser:SetParent(nil)
    self.Laser:SetPos(newStartPos)
-   self.Entity:SetNetworkedVector("start", newStartPos)
+   self.Entity:SetNWVector("start", newStartPos)
 
    local newLength = self:GetLength()
 
@@ -632,15 +632,15 @@ language.Add("energy_beam", SGLanguage.GetMessage("energy_beam_kill"))
 end
 
 function ENT:GetStartEntity()
-   return self.Entity:GetNetworkedEntity("startEnt", nil)
+   return self.Entity:GetNWEntity("startEnt", nil)
 end
 
 function ENT:GetStartPos()
-   return self.Entity:GetNetworkedVector("start", self.Entity:GetPos())
+   return self.Entity:GetNWVector("start", self.Entity:GetPos())
 end
 
 function ENT:GetEndPos()
-   return self.Entity:GetNetworkedVector("end", self:GetStartPos())
+   return self.Entity:GetNWVector("end", self:GetStartPos())
 end
 
 end

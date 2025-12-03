@@ -78,14 +78,14 @@ function ENT:Initialize()
 
 	self.ResTransferClasses = {};
 	local classes = StarGate.CFG:Get("stargate","res_classes","");
-	if (classes!="") then
+	if (classes~="") then
 		for _,v in pairs(classes:TrimExplode(",")) do
 			self.ResTransferClasses[v:lower()] = true;
 		end
 	end
 
 	self.WormHoleJumpDMG = 0;
-	self:SetNetworkedInt("DHDRange",self.DHDRange);
+	self:SetNWInt("DHDRange",self.DHDRange);
 	--################# General defines and inits
 	self:RegisterSequenceTable(); -- Register a "Copy" of the self.Sequence table, so out sequence won't be mixed between Atlantis/SG1 gates
 	self.GatePrivat = self.GatePrivat or false; -- Is the gate Private?
@@ -139,7 +139,7 @@ function ENT:Initialize()
 	-- Energy support
 	if (self.HasRD) then
 		self:AddResource("energy",1);
-		self:SetNetworkedBool("HAS_RD",true);
+		self:SetNWBool("HAS_RD",true);
 	end
 	self.EnergyConsume = 10;
 	self.ConnectionSGU = false;
@@ -151,7 +151,7 @@ function ENT:Initialize()
 	local oldSetWire = self.SetWire;
 	self.SetWire = function(self,k,v,i)
 		if (k=="Dialing Address" and self.Outbound) then
-			self.Entity:SetNetworkedString("DialledAddress",v);
+			self.Entity:SetNWString("DialledAddress",v);
 		end
 		oldSetWire(self,k,v,i);
 	end
@@ -173,7 +173,7 @@ function ENT:Initialize()
 		StarGate.UpdateGateTemperatures(self);
 	end
 
-	self:SetNetworkedBool("SG_GROUP_SYSTEM",GetConVar("stargate_group_system"):GetBool());
+	self:SetNWBool("SG_GROUP_SYSTEM",GetConVar("stargate_group_system"):GetBool());
 	timer.Create("ConvarsThink"..self:EntIndex(), 5.0, 0, function() if IsValid(self) then self:ConvarsThink() end end);
 	self:ConvarsThink();
 	self.DisAutoClose = false;
@@ -251,8 +251,8 @@ function ENT:LowPriorityThink()
 	if not self.IsOpen and self.WormHoleJumpDMG>0 then self.WormHoleJumpDMG = 0; end
 	if (self.HasRD) then
 		local energy = self.Entity:GetResource("energy");
-		if (self.Entity:GetNetworkedInt("RD_ENERGY",0) != energy) then
-			self.Entity:SetNetworkedInt("RD_ENERGY",energy);
+		if (self.Entity:GetNWInt("RD_ENERGY",0) != energy) then
+			self.Entity:SetNWInt("RD_ENERGY",energy);
 		end
 	end
 end
@@ -262,55 +262,55 @@ function ENT:ConvarsThink(send)
 	if (not IsValid(self)) then return end;
 
 	local convar = GetConVar("stargate_candial_groups_dhd"):GetInt()
-	if (send or convar != self.Entity:GetNetworkedInt("CANDIAL_GROUP_DHD")) then
-		if (send) then self.Entity:SetNetworkedInt("CANDIAL_GROUP_DHD",0); end
-		self.Entity:SetNetworkedInt("CANDIAL_GROUP_DHD",convar);
+	if (send or convar != self.Entity:GetNWInt("CANDIAL_GROUP_DHD")) then
+		if (send) then self.Entity:SetNWInt("CANDIAL_GROUP_DHD",0); end
+		self.Entity:SetNWInt("CANDIAL_GROUP_DHD",convar);
 	end
 	convar = GetConVar("stargate_candial_groups_menu"):GetInt()
-	if (send or convar != self.Entity:GetNetworkedInt("CANDIAL_GROUP_MENU")) then
-		if (send) then self.Entity:SetNetworkedInt("CANDIAL_GROUP_MENU",0); end
-		self.Entity:SetNetworkedInt("CANDIAL_GROUP_MENU",convar);
+	if (send or convar != self.Entity:GetNWInt("CANDIAL_GROUP_MENU")) then
+		if (send) then self.Entity:SetNWInt("CANDIAL_GROUP_MENU",0); end
+		self.Entity:SetNWInt("CANDIAL_GROUP_MENU",convar);
 	end
 	convar = GetConVar("stargate_sgu_find_range"):GetInt()
-	if (send or convar != self.Entity:GetNetworkedInt("SGU_FIND_RANDE")) then
-		if (send) then self.Entity:SetNetworkedInt("SGU_FIND_RANDE",0); end
-		self.Entity:SetNetworkedInt("SGU_FIND_RANDE",convar);
+	if (send or convar != self.Entity:GetNWInt("SGU_FIND_RANDE")) then
+		if (send) then self.Entity:SetNWInt("SGU_FIND_RANDE",0); end
+		self.Entity:SetNWInt("SGU_FIND_RANDE",convar);
 	end
 	convar = GetConVar("stargate_group_system"):GetBool()
-	if (send or convar != self.Entity:GetNetworkedBool("SG_GROUP_SYSTEM")) then
-		if (send) then self.Entity:SetNetworkedInt("SG_GROUP_SYSTEM",0); end
-		self.Entity:SetNetworkedBool("SG_GROUP_SYSTEM",convar);
+	if (send or convar != self.Entity:GetNWBool("SG_GROUP_SYSTEM")) then
+		if (send) then self.Entity:SetNWInt("SG_GROUP_SYSTEM",0); end
+		self.Entity:SetNWBool("SG_GROUP_SYSTEM",convar);
 		if (not send) then self.Entity:ChangeSystemType(convar,true); end -- reload
 	end
 	convar = GetConVar("stargate_block_address"):GetInt()
-	if (send or convar != self.Entity:GetNetworkedInt("SG_BLOCK_ADDRESS")) then
-		if (send) then self.Entity:SetNetworkedInt("SG_BLOCK_ADDRESS",0); end
-		self.Entity:SetNetworkedInt("SG_BLOCK_ADDRESS",convar);
+	if (send or convar != self.Entity:GetNWInt("SG_BLOCK_ADDRESS")) then
+		if (send) then self.Entity:SetNWInt("SG_BLOCK_ADDRESS",0); end
+		self.Entity:SetNWInt("SG_BLOCK_ADDRESS",convar);
 	end
 	convar = GetConVar("stargate_energy_dial"):GetInt()
-	if (send or convar != self.Entity:GetNetworkedInt("SG_ENERGY")) then
-		if (send) then self.Entity:SetNetworkedInt("SG_ENERGY",0); end
-		self.Entity:SetNetworkedInt("SG_ENERGY",convar);
+	if (send or convar != self.Entity:GetNWInt("SG_ENERGY")) then
+		if (send) then self.Entity:SetNWInt("SG_ENERGY",0); end
+		self.Entity:SetNWInt("SG_ENERGY",convar);
 	end
 	convar = GetConVar("stargate_energy_dial_spawner"):GetInt()
-	if (send or convar != self.Entity:GetNetworkedInt("SG_ENERGY_SP")) then
-		if (send) then self.Entity:SetNetworkedInt("SG_ENERGY_SP",0); end
-		self.Entity:SetNetworkedInt("SG_ENERGY_SP",convar);
+	if (send or convar != self.Entity:GetNWInt("SG_ENERGY_SP")) then
+		if (send) then self.Entity:SetNWInt("SG_ENERGY_SP",0); end
+		self.Entity:SetNWInt("SG_ENERGY_SP",convar);
 	end
 	convar = GetConVar("stargate_dhd_destroyed_energy"):GetInt()
-	if (send or convar != self.Entity:GetNetworkedInt("SG_ENERGY_DHD_K")) then
-		if (send) then self.Entity:SetNetworkedInt("SG_ENERGY_DHD_K",0); end
-		self.Entity:SetNetworkedInt("SG_ENERGY_DHD_K",convar);
+	if (send or convar != self.Entity:GetNWInt("SG_ENERGY_DHD_K")) then
+		if (send) then self.Entity:SetNWInt("SG_ENERGY_DHD_K",0); end
+		self.Entity:SetNWInt("SG_ENERGY_DHD_K",convar);
 	end
 	convar = GetConVar("stargate_vgui_glyphs"):GetInt()
-	if (send or convar != self.Entity:GetNetworkedInt("SG_VGUI_GLYPHS")) then
-		if (send) then self.Entity:SetNetworkedInt("SG_VGUI_GLYPHS",0); end
-		self.Entity:SetNetworkedInt("SG_VGUI_GLYPHS",convar);
+	if (send or convar != self.Entity:GetNWInt("SG_VGUI_GLYPHS")) then
+		if (send) then self.Entity:SetNWInt("SG_VGUI_GLYPHS",0); end
+		self.Entity:SetNWInt("SG_VGUI_GLYPHS",convar);
 	end
 	convar = GetConVar("stargate_atlantis_override"):GetInt()
-	if (send or convar != self.Entity:GetNetworkedInt("SG_ATL_OVERRIDE")) then
-		if (send) then self.Entity:SetNetworkedInt("SG_ATL_OVERRIDE",0); end
-		self.Entity:SetNetworkedInt("SG_ATL_OVERRIDE",convar);
+	if (send or convar != self.Entity:GetNWInt("SG_ATL_OVERRIDE")) then
+		if (send) then self.Entity:SetNWInt("SG_ATL_OVERRIDE",0); end
+		self.Entity:SetNWInt("SG_ATL_OVERRIDE",convar);
 	end
 	if (send or self.sendpos==nil or self.sendpos != self.Entity:GetPos()) then
 		self.sendpos = self.Entity:GetPos();
@@ -620,11 +620,11 @@ function ENT:TriggerInputDefault(k,v,mobile,mdhd)
 		end
 	elseif(k == "Set Point of Origin") then
 		if (v==1) then
-			self.Entity:SetNetworkedInt("Point_of_Origin",1);
+			self.Entity:SetNWInt("Point_of_Origin",1);
 		elseif (v>=2) then
-			self.Entity:SetNetworkedInt("Point_of_Origin",2);
+			self.Entity:SetNWInt("Point_of_Origin",2);
 		else
-			self.Entity:SetNetworkedInt("Point_of_Origin",0);
+			self.Entity:SetNWInt("Point_of_Origin",0);
 		end
 	elseif(k == "Transmit") then
 		if (self.IsOpen and IsValid(self.Target) and self.Target.IsStargate and self.Target.IsOpen) then
@@ -690,9 +690,9 @@ end
 function ENT:IsConceptDHD()
 	if(not (self and self.FindDHD)) then return false end;
 	if (self.Entity:GetClass()=="stargate_atlantis" or self.Entity:GetClass()=="stargate_universe") then return true end
-	if (self.Entity:GetNetworkedInt("Point_of_Origin",0)==1) then
+	if (self.Entity:GetNWInt("Point_of_Origin",0)==1) then
 		return true;
-	elseif (self.Entity:GetNetworkedInt("Point_of_Origin",0)>=2) then
+	elseif (self.Entity:GetNWInt("Point_of_Origin",0)>=2) then
 		return false;
 	end
 	for _,v in pairs(self:FindDHD()) do

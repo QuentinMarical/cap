@@ -725,12 +725,12 @@ function ENT:ActivateLights(active)
     if(IsValid(self.Entity))then
         if(active) then
 	        for i=1,18 do
-		        self.Entity:SetNetworkedEntity( "GateLights", self.Gate );
-		        self.Entity:SetNetworkedBool("chevron"..i,true);
+				self.Entity:SetNWEntity( "GateLights", self.Gate );
+				self.Entity:SetNWBool("chevron"..i,true);
 	        end
 	    else
 	       for i=1,18 do
-			    self.Entity:SetNetworkedEntity( "GateLights" );
+				self.Entity:SetNWEntity( "GateLights" );
 			    self.Entity:SetNWBool("chevron"..i,false);
 		    end
 	    end
@@ -739,10 +739,10 @@ end
 
 --############# Fix the Spin Bugs
 function ENT:FixSpin(number)
-    self.Entity:SetNetworkedEntity( "SpinNumber", number );
+	self.Entity:SetNWEntity( "SpinNumber", number );
 end
 function ENT:FixSpinOnChevron(bool)
-    self.Entity:SetNetworkedEntity( "ChevronBool", bool );
+	self.Entity:SetNWEntity( "ChevronBool", bool );
 end
 
 --############# Activates/Deactivates the Steam effect
@@ -1112,8 +1112,8 @@ function ENT.Sequence:DialFail(instant_stop,play_sound,fail)
 		action:Add({f=self.SguRampSetSkin,v={self,false,true},d=0}); -- change the sgu ramp skin
 
 		local number=0;
-	    if(self.Entity:GetNetworkedEntity( "SpinNumber", number ))then
-	        number = self.Entity:GetNetworkedEntity( "SpinNumber", number );
+		if(self.Entity:GetNWEntity( "SpinNumber", number ))then
+			number = self.Entity:GetNWEntity( "SpinNumber", number );
 		end
 		local lightdelay = 0;
 		if(number==2 or number==4 or number==6 or number==8)then
@@ -1125,7 +1125,7 @@ function ENT.Sequence:DialFail(instant_stop,play_sound,fail)
 	    action:Add({f=self.ActivateLights,v={self,false},d=lightdelay}); -- lights off of chevs -- verbessern
 		if(self.Outbound or fail)then -- and self.SpinBack
 		    if(not self.DialType.Fast)then
-				local chevron = self.Entity:GetNetworkedEntity( "ChevronBool", false );
+				local chevron = self.Entity:GetNWEntity( "ChevronBool", false );
 				if(number==1 or number==3 or number==5 or number==7 or number==9)then
 				    action:Add({f=self.SetSpeed,v={self,false},d=2}); -- Pause the ring
 				    --action:Add({f=self.StopRollSound,v={self},d=0});
@@ -1133,8 +1133,8 @@ function ENT.Sequence:DialFail(instant_stop,play_sound,fail)
 				else
 			 	    action:Add({f=self.SetSpeed,v={self,true,false},d=0}); -- Fix the StartAtStopPos
 				end
-				self.Entity:SetNetworkedEntity( "SpinNumber", 0 );
-				self.Entity:SetNetworkedEntity( "ChevronBool", false );
+				self.Entity:SetNWEntity( "SpinNumber", 0 );
+				self.Entity:SetNWEntity( "ChevronBool", false );
 		    end
 		end
 		action:Add({f=self.StopWithSteam,v={self,self.DialType.Fast,self.Outbound,fail},d=0});

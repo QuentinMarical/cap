@@ -91,7 +91,7 @@ function SWEP:Reload()
 	e.MiniDronePlatform = p.MiniDronePlatform;
 	p.MiniDronePlatform = nil;
 	p.CanMinidroneControll = nil;
-	p:SetNetworkedEntity("DronePlatform", NULL);
+	p:SetNWEntity("DronePlatform", NULL);
 
 	p:SelectWeapon("weapon_crowbar");
 	self:Remove();
@@ -116,7 +116,7 @@ local glow = Material("madman07/minidrone_platform/key_on");
 
 function SWEP:Think()
 	local p = self.Owner;
-	local platform = p:GetNetworkedEntity("DronePlatform", NULL);
+	local platform = p:GetNWEntity("DronePlatform", NULL);
 	if IsValid(platform) then
 		local len = (p:GetPos() - platform:GetPos()):Length();
 		if (len < 500) then

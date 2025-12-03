@@ -98,7 +98,7 @@ function SWEP:PrimaryAttack(fast)
 	elseif(self.AttackMode == 2 and ammo >= 3) then
 		self.Weapon:SendWeaponAnim(ACT_VM_RECOIL1)
 		timer.Simple( 0.5, function() if (IsValid(self)) then self.Weapon:SendWeaponAnim( ACT_VM_IDLE ) end end)
-		self.Owner:SetNetworkedBool("shooting_hand",true);
+		self.Owner:SetNWBool("shooting_hand",true);
 		local time = CurTime();
 		if((self.LastSound or 0)+0.9 < time) then
 			self.LastSound = time;
@@ -171,7 +171,7 @@ function SWEP:DoShoot()
 		end
 	elseif(self.AttackMode == 2) then -- Kill-Beam
 		if(ammo >= 3) then
-			if(p:GetNetworkedBool("handdevice_depleted",false)) then
+			if(p:GetNWBool("handdevice_depleted",false)) then
 				p:SetNWBool("handdevice_depleted",false);
 			end
 			self:TakePrimaryAmmo(1);
@@ -332,7 +332,7 @@ end
 --################### Tell a player how to use this @aVoN
 function SWEP:DrawHUD()
 	local mode = "Push";
-	local int = self.Weapon:GetNetworkedInt("Mode",1);
+	local int = self.Weapon:GetNWInt("Mode",1);
 	if(int == 1) then
 		mode = "Push";
 	elseif(int == 2) then

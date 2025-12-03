@@ -22,7 +22,7 @@ ENT.RenderGroup = RENDERGROUP_BOTH
 ENT.DoNotDuplicate = true 
 
 function ENT:GetEntRadius()
-   return self.Entity:GetNetworkedInt("blast_radius", 5);
+	return self.Entity:GetNWInt("blast_radius", 5);
 end
 
 function ENT:GetEntPos()
@@ -54,7 +54,7 @@ function ENT:Initialize()
 
 	self.Entity:EmitSound(self.Sounds.Shoot,100,math.random(98,102));
 
-	self.Entity:SetNetworkedInt("blast_radius", 0);
+	self.Entity:SetNWInt("blast_radius", 0);
 	self.Entities = {}
 
 	local shake = ents.Create("env_shake")
@@ -84,7 +84,7 @@ end
 function ENT:Think()
 
 	self.Radius = self.Radius + 100;
-	self.Entity:SetNetworkedInt("blast_radius", self.Radius);
+	self.Entity:SetNWInt("blast_radius", self.Radius);
 
 	for k,v in pairs(ents.FindInSphere(self.Entity:GetPos(), self.Radius )) do
 		if IsValid(v) then

@@ -25,7 +25,7 @@ function ENT:Draw()
 	self.Entity:DrawModel();
 	render.SetMaterial(self.BearingSprite);
 	local col = Color(255,255,255,50);
-	if(self.Entity:GetNetworkedBool("bearing",false)) then
+	if(self.Entity:GetNWBool("bearing",false)) then
 		local endpos = self.Entity:LocalToWorld(self.SpritePositions);
 		if StarGate.LOSVector(EyePos(), endpos, LocalPlayer(), 10) then
 			render.DrawSprite(endpos,46,46,col);
@@ -83,11 +83,11 @@ end
 function ENT:Bearing(skin)
     if(skin)then
         self.Entity:Fire("skin",1);
-        self.Entity:SetNetworkedBool("bearing",true);
+		self.Entity:SetNWBool("bearing",true);
         self:SetWire("Activated",true);
 	else
 	    self.Entity:Fire("skin",2);
-		self.Entity:SetNetworkedBool("bearing",false); -- Dynamic light of the bearing
+		self.Entity:SetNWBool("bearing",false); -- Dynamic light of the bearing
 		self:SetWire("Activated",false);
     end
 end

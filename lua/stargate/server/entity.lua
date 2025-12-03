@@ -180,7 +180,7 @@ function StarGate.CAP_GmodDuplicator(ply,Data)
 
 	if (Data.GateSpawnerSpawned and Data.GateSpawnerID) then
 		ent.GateSpawnerSpawned = true;
-		ent:SetNetworkedBool("GateSpawnerSpawned",true);
+		ent:SetNWBool("GateSpawnerSpawned",true);
 		ent.GateSpawnerID = Data.GateSpawnerID;
 	end
 

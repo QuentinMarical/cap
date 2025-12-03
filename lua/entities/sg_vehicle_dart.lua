@@ -54,7 +54,7 @@ function ENT:SpawnFunction(p, tr) --######## Pretty useless unless we can spawn 
 	e:SetModelScale(0.65,0) //Resize the Dart so It can go through the gate
 	e:Activate()
 	
-	e:SetWire("Health",e:GetNetworkedInt("health"));
+	e:SetWire("Health",e:GetNWInt("health"));
 	p:AddCount("CAP_ships", e)
 	return e
 end
@@ -66,7 +66,7 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 	self.EntHealth = 500
-	self:SetNetworkedInt("health",self.EntHealth)
+	self:SetNWInt("health",self.EntHealth)
 	self.Roll=0
 	self.On=0
 	self:SetUseType(SIMPLE_USE)
@@ -109,18 +109,18 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 
 	timer.Create("SGDartHealth"..self:EntIndex(),1,0,function()
 		if (not IsValid(self)) then return end
-		local health = self:GetNetworkedInt("health");
+		local health = self:GetNWInt("health");
 		health = health + 2.5;
 		if (health > 500) then health = 500; end
-		self:SetNetworkedInt("health", health);
+		self:SetNWInt("health", health);
 		self:SetWire("Health",health);
 	end);
 end
 
 function ENT:OnTakeDamage(dmg) --########## Darts aren't invincible are they? @RononDex
 
-	local health=self:GetNetworkedInt("health")
-	self:SetNetworkedInt("health",health-dmg:GetDamage()) -- Sets heath(Takes away damage from health)
+	local health=self:GetNWInt("health")
+	self:SetNWInt("health",health-dmg:GetDamage()) -- Sets heath(Takes away damage from health)
 	self:SetWire("Health",health-dmg:GetDamage());
 
 	if((health-dmg:GetDamage())<=0) then
@@ -338,7 +338,7 @@ function ENT:Effects()
 	if(not (data and data.Pos)) then return end
 
 	local p = LocalPlayer()
-	local dart = p:GetNetworkedEntity("ScriptedVehicle", NULL)
+	local dart = p:GetNWEntity("ScriptedVehicle", NULL)
 	local roll = math.Rand(-90,90)
 	local normal = (self.Entity:GetForward() * -1):GetNormalized()
 
@@ -362,7 +362,7 @@ end
 function ENT:Draw()
 
 	local p = LocalPlayer()
-	local dart = p:GetNetworkedEntity("ScriptedVehicle", NULL)
+	local dart = p:GetNWEntity("ScriptedVehicle", NULL)
 
 	self.BaseClass.Draw(self)
 
@@ -381,7 +381,7 @@ function ENT:Think()
 	self.BaseClass.Think(self)
 
 	local p = LocalPlayer()
-	local dart = p:GetNetworkedEntity("ScriptedVehicle", NULL)
+	local dart = p:GetNWEntity("ScriptedVehicle", NULL)
 
 	if((dart)and((dart)==self)and(dart:IsValid())) then
 		self.KBD:SetActive(true)

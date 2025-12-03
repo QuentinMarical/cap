@@ -56,7 +56,7 @@ ENT.ChevronSprite = Material("effects/multi_purpose_noz");
 --################# Get the address of this gate @aVoN
 -- ATTENTION: Make sure, this will be ALWAYS uppercased!
 function ENT:GetGateAddress()
-	return self:GetNetworkedString("Address",""):upper();
+	return self:GetNWString("Address",""):upper();
 end
 
 --################# Set a gate address @aVoN
@@ -122,7 +122,7 @@ end
 
 --################# Is the stargate blocked? by AlexALX
 function ENT:GetBlocked()
-	if (self:GetNetworkedInt("SG_BLOCK_ADDRESS")<=0 or self:GetNetworkedInt("SG_BLOCK_ADDRESS")==1 and self:GetClass()!="stargate_universe") then return false; end
+	if (self:GetNWInt("SG_BLOCK_ADDRESS")<=0 or self:GetNWInt("SG_BLOCK_ADDRESS")==1 and self:GetClass()!="stargate_universe") then return false; end
 	return self:GetNWBool("Blocked",false);
 end
 
@@ -142,7 +142,7 @@ function ENT:DialGate(address,mode,nox)
 end
 
 function ENT:GetDialledAddress()
-	return self:GetNetworkedString("DialledAddress",""):upper();
+	return self:GetNWString("DialledAddress",""):upper();
 end
 
 --################# Stops Dialling a Gate or closes it  @aVoN
@@ -226,7 +226,7 @@ hook.Add("HUDPaint","StarGate.Hook.HUDPaint.ShowAddressAndGroupAndName",
 					local e = trace.Entity;
 					local color = Color(255,255,255,255);
 					if (e.IsStargate and e:GetBlocked()) then color = Color(255,0,0,255); end
-					if(e.IsGroupStargate and e:GetNetworkedBool("SG_GROUP_SYSTEM")) then
+					if(e.IsGroupStargate and e:GetNWBool("SG_GROUP_SYSTEM")) then
 						local address = e:GetGateAddress();
 						local group = e:GetGateGroup();
 						if(address != "" and group != "") then
@@ -277,7 +277,7 @@ function ENT:FindDHD()
 		if (v.IsGroupDHD and (not IsValid(v:GetNWEntity("LockedGate")) or v:GetNWEntity("LockedGate")==self.Entity)) then
 			local e_pos = v:GetPos();
 			local dist = (e_pos - pos):Length(); -- Distance from DHD to this stargate
-			if(dist <= self.Entity:GetNetworkedInt("DHDRange",1000)) then
+			if(dist <= self.Entity:GetNWInt("DHDRange",1000)) then
 				-- Check, if this DHD really belongs to this gate
 				local add = true;
 				for _,gate in pairs(self:GetAllGates()) do
@@ -297,7 +297,7 @@ end
 
 --################# Find's special DHD's which may power this gate @Mad
 function ENT:FindPowerDHD()
-	if (IsValid(self:GetNWEntity("LockedDHD")) and (not self:GetNWEntity("LockedDHD"):GetNWBool("Destroyed",false) or util.tobool(self.Entity:GetNetworkedInt("SG_ENERGY_DHD_K")))) then return {self:GetNWEntity("LockedDHD")} end
+	if (IsValid(self:GetNWEntity("LockedDHD")) and (not self:GetNWEntity("LockedDHD"):GetNWBool("Destroyed",false) or util.tobool(self.Entity:GetNWInt("SG_ENERGY_DHD_K")))) then return {self:GetNWEntity("LockedDHD")} end
 	if (IsValid(self:GetNWEntity("LockedMDHD"))) then return {self:GetNWEntity("LockedMDHD")} end
 	if (IsValid(self:GetNWEntity("LockedDestC"))) then return {self:GetNWEntity("LockedDestC")} end
 	local pos = self.Entity:GetPos();
@@ -337,7 +337,7 @@ function ENT:FindPowerDHD()
 		if (v:GetClass()=="dhd_city" or IsValid(v:GetNWEntity("LockedGate")) and v:GetNWEntity("LockedGate")!=self.Entity) then continue end
 		local e_pos = v:GetPos();
 		local dist = (e_pos - pos):Length(); -- Distance from DHD to this stargate
-		if(dist <= self.Entity:GetNetworkedInt("DHDRange",1000)) then
+		if(dist <= self.Entity:GetNWInt("DHDRange",1000)) then
 			-- Check, if this DHD really belongs to this gate
 			local add = true;
 			for _,gate in pairs(self:GetAllGates()) do
@@ -347,7 +347,7 @@ function ENT:FindPowerDHD()
 					break;
 				end
 			end
-			if (v:GetClass():find("dhd_") and v:GetNWBool("Destroyed",false) and not util.tobool(self.Entity:GetNetworkedInt("SG_ENERGY_DHD_K"))) then
+			if (v:GetClass():find("dhd_") and v:GetNWBool("Destroyed",false) and not util.tobool(self.Entity:GetNWInt("SG_ENERGY_DHD_K"))) then
 				add = false;
 			end
 			if(add) then
@@ -367,7 +367,7 @@ function ENT:FindBlackHole()
 	for _,v in pairs(ents.FindByClass("black_hole_power")) do
 		local e_pos = v:GetPos();
 		local dist = (e_pos - pos):Length(); -- Distance from hole to this stargate
-		if(dist <= self.Entity:GetNetworkedInt("DHDRange",1000)*4) then
+		if(dist <= self.Entity:GetNWInt("DHDRange",1000)*4) then
 			if not hole then hole = true; end
 		end
 	end
@@ -402,11 +402,11 @@ end
 --################# Check if gate are powered somehow and if source is capable of handling gate consumption
 function ENT:CheckEnergy(target,chevs)
 	if (not self:GetNWBool("HAS_RD",false)) then return true end -- without RD always have energy
-	if(not util.tobool(self:GetNetworkedInt("SG_ENERGY")))then return true end;
-	if(self:GetNWBool("GateSpawnerSpawned",false) and not util.tobool(self:GetNetworkedInt("SG_ENERGY_SP")))then return true end;
+	if(not util.tobool(self:GetNWInt("SG_ENERGY")))then return true end;
+	if(self:GetNWBool("GateSpawnerSpawned",false) and not util.tobool(self:GetNWInt("SG_ENERGY_SP")))then return true end;
 	self:CheckConnection(chevs);
 	local energy = false;
-	local en = self:GetNetworkedInt("RD_ENERGY",0);
+	local en = self:GetNWInt("RD_ENERGY",0);
 	local distance = 100;
 	--if(IsValid(target)) then distance = (self:GetPos() - target:GetPos()):Length(); end;
 	if (target.pos) then distance = (self:GetPos() - target.pos):Length(); end

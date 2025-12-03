@@ -85,7 +85,7 @@ function EFFECT:Init(data)
 			else return end; -- KEEP OLD
 		end
 	end
-	local color = e:GetNetworkedVector("cloak_color",Vector(255,255,255));
+	local color = e:GetNWVector("cloak_color",Vector(255,255,255));
 	local alpha = e:GetNWInt("alpha",255);
 	local pos = e:GetPos();
 	self.Color = Color(color.x,color.y,color.z,alpha);

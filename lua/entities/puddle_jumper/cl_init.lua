@@ -151,10 +151,10 @@ end
 local function JumperCalcView(Player,Origin,Angles,FieldOfView)
 	local view = {};
 	local p = LocalPlayer();
-	local jumper = p:GetNetworkedEntity("jumper",NULL);
-	local passJumper = p:GetNetworkedEntity("JumperSeat",NULL);
-	local Passenger = p:GetNetworkedBool("JumperPassenger",false);
-    if (IsValid(jumper) and p:GetNetworkedBool("isFlyingjumper",false)) then
+	local jumper = p:GetNWEntity("jumper",NULL);
+	local passJumper = p:GetNWEntity("JumperSeat",NULL);
+	local Passenger = p:GetNWBool("JumperPassenger",false);
+	if (IsValid(jumper) and p:GetNWBool("isFlyingjumper",false)) then
     	local self = jumper;
 		if(not View.FirstPerson)  then
 			local pos = self:GetPos() + View.Angle*self:GetUp() - View.Distance*p:GetAimVector()
@@ -203,7 +203,7 @@ local function GetCloakData(um)
 	CloakData.Cloaked = um:ReadBool();
 
 end
-usermessage.Hook("JumperCloakData",GetCloakData);
+net.Receive("JumperCloakData",GetCloakData);
 
 function ENT:UpdateCloakData()
 	if (CloakData.Entity!=self) then return end
@@ -226,7 +226,7 @@ local function SetData(um) --############# Recieve Data from the Server @RononDe
 	JData.Engine = um:ReadBool();
 	JData.Inflight = um:ReadBool();
 end
-usermessage.Hook("jumperData", SetData)
+net.Receive("jumperData", SetData)
 
 local num = 3.3;
 local y = ScrH()/4*num;
@@ -237,12 +237,12 @@ function ENT:Think() --#########################  Overly complex think function 
 	local Jumper = p:GetNWEntity("jumper");
 	local IsInJumper = (Jumper == self.Entity); -- Is this "LocalPlayer" in/out jumper?
 	local IsDriver = p:GetNWBool("isFlyingjumper",false) and IsInJumper;
-	local Inflight = self:GetNetworkedBool("JumperInflight",false);
+	local Inflight = self:GetNWBool("JumperInflight",false);
 	local HasDriver = IsDriver or false;
-	local Passenger = p:GetNetworkedBool("JumperPassenger",false);
-	local passJumper = p:GetNetworkedEntity("JumperPassenger");
-	local jumperSeat  = p:GetNetworkedEntity("JumperSeat");
-	self.Cloaked = self:GetNetworkedBool("Cloaked",false);
+	local Passenger = p:GetNWBool("JumperPassenger",false);
+	local passJumper = p:GetNWEntity("JumperPassenger");
+	local jumperSeat  = p:GetNWEntity("JumperSeat");
+	self.Cloaked = self:GetNWBool("Cloaked",false);
 	
 	if(CloakData.Cloaked and IsValid(self.CurrentCloak)) then
 		self:UpdateCloakData();
@@ -466,7 +466,7 @@ local UP = Vector(0,0,50); -- Smoke always moves up
 function ENT:Smoke(b)
 
 	local p = LocalPlayer();
-	local jumper = p:GetNetworkedEntity("jumper",NULL);
+	local jumper = p:GetNWEntity("jumper",NULL);
 
 	if(b) and (jumper and jumper:IsValid() and jumper==self) then
 		local fwd = self:GetForward()

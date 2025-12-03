@@ -118,14 +118,14 @@ function SWEP.data.semi.Init(self)
 
 	self.Primary.Automatic = false
 	self.Weapon:EmitSound("weapons/smg1/switch_single.wav")
-	self.Weapon:SetNetworkedInt("firemode", 3)
+	self.Weapon:SetNWInt("firemode", 3)
 end
 
 function SWEP.data.auto.Init(self)
 
 	self.Primary.Automatic = true
 	self.Weapon:EmitSound("weapons/smg1/switch_burst.wav")
-	self.Weapon:SetNetworkedInt("firemode", 1)
+	self.Weapon:SetNWInt("firemode", 1)
 end
 
 ---------------------------
@@ -146,14 +146,14 @@ function SWEP:ResetVars()
 	self.NextSecondaryAttack = 0
 
 	self.bLastIron = false
-	self.Weapon:SetNetworkedBool("Ironsights", false)
+	self.Weapon:SetNWBool("Ironsights", false)
 
 	if self.UseScope then
 		self.CurScopeZoom = 1
 		self.fLastScopeZoom = 1
 		self.bLastScope = false
-		self.Weapon:SetNetworkedBool("Scope", false)
-		self.Weapon:SetNetworkedBool("ScopeZoom", self.ScopeZooms[1])
+		self.Weapon:SetNWBool("Scope", false)
+		self.Weapon:SetNWFloat("ScopeZoom", self.ScopeZooms[1])
 	end
 
 	if self.Owner then
@@ -200,7 +200,7 @@ function SWEP:Think()
 
 	if CLIENT then
 
-		if self.Weapon:GetNetworkedBool("Scope") then
+		if self.Weapon:GetNWBool("Scope") then
 			self.MouseSensitivity = self.Owner:GetFOV() / 60 -- scale sensitivity
 			self.Owner.Crosshair = false
 		else
@@ -296,7 +296,7 @@ function SWEP:Initialize()
 
 	self.NextSecondaryAttack = CurTime() + 0.3
 	self:ResetVars()
-	self.Weapon:SetNetworkedBool("Ironsights", false)
+	self.Weapon:SetNWBool("Ironsights", false)
 
 	self.data[self.mode].Init(self)
 
@@ -521,20 +521,20 @@ function SWEP:PrimaryAttack()
 	if (self.Owner:IsPlayer()) then
 		if (self.Owner:KeyDown(IN_USE) and not self.Weapon:GetNWBool("HasKull",false)) then
 		self.Weapon.Owner:GetViewModel():SetSkin( 1 )
-		self.Weapon:SetNetworkedBool("HasKull",true);
+		self.Weapon:SetNWBool("HasKull",true);
 		self.Weapon:SetNextPrimaryFire(CurTime()+1)
 		self.Weapon:EmitSound("npc/combine_soldier/gear2.wav")
 		elseif ( self.Owner:KeyDown(IN_USE) and self.Weapon:GetNWBool("HasKull",false)) then
 		self.Weapon.Owner:GetViewModel():SetSkin( 0 )
-		self.Weapon:SetNetworkedBool("HasKull",false);
+		self.Weapon:SetNWBool("HasKull",false);
 		self.Weapon:SetNextPrimaryFire(CurTime()+1)
 		self.Weapon:EmitSound("npc/combine_soldier/gear2.wav")
 		end
 	end
 
 		/* if ( self.Owner:KeyDown(IN_USE) ) then
-			self.Weapon:SetNetworkedBool("Active", self.Weapon.LaserEx)
-			if ( !self.Weapon:GetNetworkedBool("Active") ) then
+			self.Weapon:SetNWBool("Active", self.Weapon.LaserEx)
+			if ( !self.Weapon:GetNWBool("Active") ) then
 				Wire_TriggerOutput(self.Weapon,"Active",1)
 			else
 				Wire_TriggerOutput(self.Weapon,"Active",0)
@@ -570,7 +570,7 @@ function SWEP:PrimaryAttack()
 		self:TakePrimaryAmmo(1)
 
 		if ((game.SinglePlayer() and SERVER) or SERVER) then
-			self.Weapon:SetNetworkedFloat("LastShootTime", CurTime())
+			self.Weapon:SetNWFloat("LastShootTime", CurTime())
 		end
 	end
 end
@@ -593,16 +593,16 @@ function SWEP:SecondaryAttack()
 		self.data[self.mode].Init(self)
 
 		if self.mode == "auto" then
-			self.Weapon:SetNetworkedInt("csef",1)
+			self.Weapon:SetNWInt("csef",1)
 		elseif self.mode == "semi" then
-			self.Weapon:SetNetworkedInt("csef",3)
+			self.Weapon:SetNWInt("csef",3)
 		end
 
 	elseif self.IronSightsPos then
 
 		local NumberOfScopeZooms = table.getn(self.ScopeZooms)
 
-		if self.UseScope and self.Weapon:GetNetworkedBool("Scope", false) then
+		if self.UseScope and self.Weapon:GetNWBool("Scope", false) then
 
 			self.CurScopeZoom = self.CurScopeZoom + 1
 			if self.CurScopeZoom <= NumberOfScopeZooms then
@@ -611,7 +611,7 @@ function SWEP:SecondaryAttack()
 
 		else
 
-			local bIronsights = not self.Weapon:GetNetworkedBool("Ironsights", false)
+			local bIronsights = not self.Weapon:GetNWBool("Ironsights", false)
 			self:SetIronsights(bIronsights,self.Owner)
 
 		end
@@ -640,7 +640,7 @@ end*/
 
 function SWEP:DrawHUD()
 
-	local mode = self.Weapon:GetNetworkedInt("firemode")
+	local mode = self.Weapon:GetNWInt("firemode")
 
 	if mode == 1 then
 		self.mode = "auto"
@@ -665,7 +665,7 @@ function SWEP:DrawHUD()
 
 		if self.UseScope then
 
-			local bScope = self.Weapon:GetNetworkedBool("Scope")
+			local bScope = self.Weapon:GetNWBool("Scope")
 			if bScope ~= self.bLastScope then
 
 				self.bLastScope = bScope
@@ -673,7 +673,7 @@ function SWEP:DrawHUD()
 
 			elseif 	bScope then
 
-				local fScopeZoom = self.Weapon:GetNetworkedFloat("ScopeZoom")
+				local fScopeZoom = self.Weapon:GetNWFloat("ScopeZoom")
 				if fScopeZoom ~= self.fLastScopeZoom then
 
 					self.fLastScopeZoom = fScopeZoom
@@ -705,7 +705,7 @@ function SWEP:DrawHUD()
 				surface.DrawRect(self.QuadTable.x4 - 2.5, self.QuadTable.y4 - 2.5, self.QuadTable.w4 + 5, self.QuadTable.h4 + 5)
 			end
 		end
-		local mode = self.Weapon:GetNetworkedInt("firemode")
+		local mode = self.Weapon:GetNWInt("firemode")
 
 		if mode == 1 then
 			self.mode = "auto"
@@ -743,7 +743,7 @@ function SWEP:DrawHUD()
 	local scale = 10 * self.Primary.Cone
 
 	// Scale the size of the crosshair according to how long ago we fired our weapon
-	local LastShootTime = self.Weapon:GetNetworkedFloat( "LastShootTime", 0 )
+	local LastShootTime = self.Weapon:GetNWFloat( "LastShootTime", 0 )
 	scale = scale * (2 - math.Clamp( (CurTime() - LastShootTime) * 5, 0.0, 1.0 ))
 
 	surface.SetDrawColor( 0, 255, 0, 255 )
@@ -761,10 +761,10 @@ function SWEP:TranslateFOV(current_fov)
 
 	if CLIENT then
 
-		local fScopeZoom = self.Weapon:GetNetworkedFloat("ScopeZoom")
-		if self.Weapon:GetNetworkedBool("Scope") then return current_fov/fScopeZoom end
+		local fScopeZoom = self.Weapon:GetNWFloat("ScopeZoom")
+		if self.Weapon:GetNWBool("Scope") then return current_fov/fScopeZoom end
 
-		local bIron = self.Weapon:GetNetworkedBool("Ironsights")
+		local bIron = self.Weapon:GetNWBool("Ironsights")
 		if bIron ~= self.bLastIron then
 
 			self.bLastIron = bIron
@@ -798,7 +798,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 
 	if (not self.IronSightsPos) then return pos, ang end
 
-	local bIron = self.Weapon:GetNetworkedBool("Ironsights")
+	local bIron = self.Weapon:GetNWBool("Ironsights")
 
 	if (bIron != self.bLastIron) then
 		self.bLastIron = bIron
@@ -854,7 +854,7 @@ function SWEP:SetIronsights(b, player)
 if CLIENT then return end
 
 	-- Send the ironsight state to the client, so it can adjust the player's FOV/Viewmodel pos accordingly
-	self.Weapon:SetNetworkedBool("Ironsights", b)
+	self.Weapon:SetNWBool("Ironsights", b)
 
 	if self.UseScope then -- If we have a scope, use it instead of ironsights
 		if b then
@@ -870,9 +870,9 @@ function SWEP:SetScope(b, player)
 
 	if CLIENT then return end
 
-	local PlaySound = b ~= self.Weapon:GetNetworkedBool("Scope", not b)
+	local PlaySound = b ~= self.Weapon:GetNWBool("Scope", not b)
 	self.CurScopeZoom = 1
-	self.Weapon:SetNetworkedFloat("ScopeZoom", self.ScopeZooms[self.CurScopeZoom])
+	self.Weapon:SetNWFloat("ScopeZoom", self.ScopeZooms[self.CurScopeZoom])
 
 	if b then
 		if PlaySound then
@@ -891,7 +891,7 @@ function SWEP:SetScope(b, player)
 	end
 
 	-- Send the scope state to the client, so it can adjust the player's fov/HUD accordingly
-	self.Weapon:SetNetworkedBool("Scope", b)
+	self.Weapon:SetNWBool("Scope", b)
 end
 
 function SWEP:RecoilPower()

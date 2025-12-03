@@ -160,7 +160,7 @@ function SWEP:SVPrimaryAttack(fast)
 	self.Owner:EmitSound(snd,90,math.random(96,102));
 	-- Maily needed for NPCs, because NPC:GetActiveWeapon() is currently Serverside. Furthermore, I can't put that into "Deploy" because it isn't called on NPCs
 	-- http://www.garrysmod.com/bugs/view.php?id=802 and http://www.garrysmod.com/bugs/view.php?id=801
-	self.Owner:SetNetworkedEntity("zat",self.Weapon);
+	self.Owner:SetNWEntity("zat",self.Weapon);
 	-- Tracer and shot
 	timer.Simple(delay,function() if IsValid(self) then self:DoShoot(); end end);
 end

@@ -46,7 +46,7 @@ function ShouldEHEntitiesCollide(ent1,ent2)
 		noupdate = true;
 
 	else
-		eha, ehb = enta:GetNetworkedEntity("PhysEntity",NULL), entb:GetNWEntity("PhysEntity",NULL);
+		eha, ehb = enta:GetNWEntity("PhysEntity",NULL), entb:GetNWEntity("PhysEntity",NULL);
 		entab, entbb = enta:GetNWBool("PhysBuffered",false), entb:GetNWBool("PhysBuffered",false);
 		enta_dir, entb_dir = enta:GetNWInt("PhysBufferedDir",0),entb:GetNWInt("PhysBufferedDir",0);
 		eha_valid, ehb_valid = eha:IsValid(),ehb:IsValid();

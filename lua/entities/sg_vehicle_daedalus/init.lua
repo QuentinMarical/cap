@@ -99,7 +99,7 @@ function ENT:Initialize()
 
     self.TargetMode = 0;
 
-    self:SetNetworkedInt("ViewMode",0);
+	self:SetNWInt("ViewMode",0);
 
 
 
@@ -130,7 +130,7 @@ function ENT:SpawnFunction( ply, tr )
 	ent:Activate();
 	-- ent:SetOwner(self.Entity);
 	ent.Owner = ply;
-	-- ent.Owner:SetNetworkedEntity("DaedalusOutside",ent);
+	-- ent.Owner:SetNWEntity("DaedalusOutside",ent);
 
 	ent:SpawnRailguns(ply);
 	ent:SpawnRotor(ply);
@@ -761,7 +761,7 @@ function ENT:Use(ply,caller)
 		self.Driver = ply;
 		self.Driver:SetPos(self.Entity:GetPos());
 		--self.Driver:SetScriptedVehicle(self);
-		self.Driver:SetNetworkedEntity("ScriptedVehicle", self)
+		self.Driver:SetNWEntity("ScriptedVehicle", self)
 		self.Driver:SetViewEntity(self)
 		-- Garry broke this function
 		/*if(not(game.SinglePlayer())) then
@@ -776,7 +776,7 @@ function ENT:Use(ply,caller)
 		end
 		self.Driver:StripWeapons();
 		--self.Driver:SetParent(self.Entity);
-		self.Driver:SetNetworkedEntity("Daedalus",self);
+		self.Driver:SetNWEntity("Daedalus",self);
 	end
 	self.Entity:NextThink( CurTime() + 0.5 );
 end
@@ -803,53 +803,53 @@ function ENT:Exit()
 	-- end
 	self.Driver:SetParent();
 	--self.Driver:SetScriptedVehicle(NULL);
-	self.Driver:SetNetworkedEntity( "ScriptedVehicle", NULL )
+	self.Driver:SetNWEntity( "ScriptedVehicle", NULL )
 	self.Driver:SetViewEntity( NULL )
 	-- Garry broke this function
 	/*if(not(game.SinglePlayer())) then
 		self.Driver:SetClientsideVehicle(NULL);
 	end*/
-	self.Driver:SetNetworkedEntity("Daedalus",NULL);
+	self.Driver:SetNWEntity("Daedalus",NULL);
 	self.Driver = NULL;
 
 end
 
 
 -- concommand.Add("Daedalus_shields", function(ply,cmd,n)
-	-- local shut = ply:GetNetworkedEntity("Daedalus")
+	-- local shut = ply:GetNWEntity("Daedalus")
 	-- if (shut.Active) then
 		---shut.AsgardBeamEnable = !shut.AsgardBeamEnable;
 	-- end
 -- end)
 
 -- concommand.Add("Daedalus_asgard", function(ply,cmd,n)
-	-- local shut = ply:GetNetworkedEntity("Daedalus")
+	-- local shut = ply:GetNWEntity("Daedalus")
 	-- if (shut.Active) then
 		-- shut.AsgardBeamEnable = !shut.AsgardBeamEnable;
 	-- end
 -- end)
 
 -- concommand.Add("Daedalus_railguns", function(ply,cmd,n)
-	-- local shut = ply:GetNetworkedEntity("Daedalus")
+	-- local shut = ply:GetNWEntity("Daedalus")
 	-- if (shut.Active) then
 		-- shut.RailgunEnable = !shut.RailgunEnable;
 	-- end
 -- end)
 
 -- concommand.Add("Daedalus_rockets", function(ply,cmd,n)
-	-- local shut = ply:GetNetworkedEntity("Daedalus")
+	-- local shut = ply:GetNWEntity("Daedalus")
 	-- if (shut.Active) then
 		-- shut.RocketEnable = !shut.RocketEnable;
 	-- end
 -- end)
 
 -- concommand.Add("Daedalus_beam", function(ply,cmd,n)
-	-- local shut = ply:GetNetworkedEntity("DaedalusOutside")
+	-- local shut = ply:GetNWEntity("DaedalusOutside")
 	-- shut.Beam = true;
 -- end)
 
 -- concommand.Add("Daedalus_resetpitch", function(ply,cmd,n)
-	-- local shut = ply:GetNetworkedEntity("Daedalus")
+	-- local shut = ply:GetNWEntity("Daedalus")
 	-- if (shut.Active) then
 		-- shut.Angles.Pitch = 0;
 		-- shut.Driver:SetEyeAngles(shut.Angles);

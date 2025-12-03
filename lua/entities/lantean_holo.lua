@@ -72,7 +72,7 @@ function ENT:StartTouch(ent)
 			self.SoundLoop:SetSoundLevel(85);
 		end
 		self.Touching = self.Touching+1;
-		if (self.Touching == 1) then self:SetNetworkedBool("Display", true); self:SetWire("Activated",true); end
+		if (self.Touching == 1) then self:SetNWBool("Display", true); self:SetWire("Activated",true); end
 		if timer.Exists(self:EntIndex().."NotTouch") then timer.Destroy(self:EntIndex().."NotTouch"); end
 	end
 end
@@ -187,7 +187,7 @@ function ENT:Initialize()
 end
 
 function ENT:Draw()
-	if self:GetNetworkedBool("Display", false) then
+	if self:GetNWBool("Display", false) then
 		self.Alpha = math.Approach(self.Alpha, 255, 5);
 	else
 		self.Alpha = math.Approach(self.Alpha, 0, -5);

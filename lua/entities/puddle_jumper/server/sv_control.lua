@@ -7,14 +7,14 @@ function ENT:ExitJumper() --################# Get out the jumper@RononDex
 		self.Pilot:DrawViewModel(true)
 		self.Pilot:DrawWorldModel(true)
 		self.Pilot:Spawn()
-		self.Pilot:SetNetworkedBool("isFlyingjumper",false)
+		self.Pilot:SetNWBool("isFlyingjumper",false)
 		self.Pilot:SetPos(self:GetPos()+self:GetForward()*15+self:GetUp()*-40)
 		self.AllowActivation=false
 		self.Pilot:SetHealth(self.health)
 		self.Pilot:SetMoveType(MOVETYPE_WALK);
 		self.Pilot:SetCollisionGroup(COLLISION_GROUP_PLAYER);
 		--self.Pilot:SetScriptedVehicle(NULL)
-		self.Pilot:SetNetworkedEntity("ScriptedVehicle", NULL)
+		self.Pilot:SetNWEntity("ScriptedVehicle", NULL)
 		self.Pilot:SetViewEntity(NULL)
         self.Pilot:SetCollisionGroup(COLLISION_GROUP_PLAYER);
         self.Pilot:SetColor(self.PlayerColor);
@@ -30,7 +30,7 @@ function ENT:ExitJumper() --################# Get out the jumper@RononDex
 
 	if(IsValid(self)) then
 		self:EmitSound(self.Sounds.Shutdown,100,100)
-		self:SetNetworkedEntity("jumper",NULL)
+		self:SetNWEntity("jumper",NULL)
 		self.HoverPos = self:GetPos();
 		self:SetWire("Driver",NULL)
 
@@ -42,7 +42,7 @@ function ENT:ExitJumper() --################# Get out the jumper@RononDex
 		self.Accel.RIGHT = 0;
 		self.Accel.UP = 0;
 
-		self:SetNetworkedBool("JumperInflight",false);
+		self:SetNWBool("JumperInflight",false);
 
 		self:SpawnToggleButton(self.Owner);
 		self:SpawnBulkHeadDoor(nil,self.Owner);
@@ -138,7 +138,7 @@ function ENT:EnterJumper(ply) --############### Get in the jumper @ RononDex
 		end
 
 		--ply:SetScriptedVehicle(self)
-		ply:SetNetworkedEntity("ScriptedVehicle", self) -- still needed for event horizon
+		ply:SetNWEntity("ScriptedVehicle", self) -- still needed for event horizon
 		ply:SetViewEntity(self)
 
 		for _,v in pairs(ply:GetWeapons()) do
@@ -159,9 +159,9 @@ function ENT:EnterJumper(ply) --############### Get in the jumper @ RononDex
 		ply:Spectate( OBS_MODE_CHASE )
 		ply:StripWeapons()
 
-		ply:SetNetworkedBool("isFlyingjumper",true)
-		ply:SetNetworkedEntity("jumper",self)
-		self:SetNetworkedBool("JumperInflight",true);
+		ply:SetNWBool("isFlyingjumper",true)
+		ply:SetNWEntity("jumper",self)
+		self:SetNWBool("JumperInflight",true);
         self.PlayerColor = ply:GetColor() or Color(255,255,255,255);
 		ply:SetRenderMode(RENDERMODE_TRANSALPHA);
 		ply:SetColor(Color(255,255,255,0));

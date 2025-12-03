@@ -112,12 +112,12 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 		local e = ents.Create(v.classname);
 		if (not IsValid(e)) then return nil end
 		e.GateSpawnerSpawned = true;
-		e:SetNetworkedBool("GateSpawnerSpawned",true);
+		e:SetNWBool("GateSpawnerSpawned",true);
 		e.GateSpawnerProtected = protect;
-		e:SetNetworkedBool("GateSpawnerProtected",protect);
+		e:SetNWBool("GateSpawnerProtected",protect);
 		local pos = Vector(unpack(v.position:TrimExplode(" ")));
 		local IsGate = v.classname:find("stargate_") and not v.classname:find("iris");
-		local IsGroupGate = (v.classname:find("stargate_") and v.classname != "stargate_supergate");
+		local IsGroupGate = (v.classname:find("stargate_") and v.classname ~= "stargate_supergate");
 		local IsDHD = v.classname:find("dhd_");
 		local IsRing = v.classname:find("ring_base_");
 		local IsRingP = v.classname:find("ring_panel_");
@@ -197,7 +197,7 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 			if (v.doormodel) then
 				e.DoorModel = v.doormodel;
 			end
-			if (v.diffmat!=nil and v.diffmat!="" and util.tobool(v.diffmat)) then
+			if (v.diffmat~=nil and v.diffmat~="" and util.tobool(v.diffmat)) then
 				e:SetMaterial("madman07/doors/atlwall_red");
 			end
 		end
@@ -221,14 +221,14 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 				if (v.ecolor) then
 					local col = Color(unpack(v.ecolor:TrimExplode(" ")));
 					e:SetColor(col)
-					if (col.a!=255) then
+					if (col.a~=255) then
 						e:SetRenderMode(RENDERMODE_TRANSALPHA)
 					end
 				end
-				if (v.ematerial and v.ematerial!="") then
+				if (v.ematerial and v.ematerial~="") then
 					e:SetMaterial(v.ematerial)
 				end
-				if (v.renderfx and v.renderfx!="") then
+				if (v.renderfx and v.renderfx~="") then
 					e:SetRenderFX(tonumber(v.renderfx))
 				end
 				-- freeze stuff now
@@ -315,7 +315,7 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 					e:SetSolid(SOLID_NONE);
 					e:IrisProtection();
 				elseif (IsDHD) then
-					if(v.destroyed ~= nil and v.destroyed ~= "" and util.tobool(v.destroyed)==true and e:GetClass() != "dhd_concept" and e:GetClass() != "dhd_city") then
+					if(v.destroyed ~= nil and v.destroyed ~= "" and util.tobool(v.destroyed)==true and e:GetClass() ~= "dhd_concept" and e:GetClass() ~= "dhd_city") then
 						e.Healthh = 0;
 						e:DestroyEffect(true);
 					end
@@ -323,7 +323,7 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 						e.DisRingRotate = true;
 						e:SetNWBool("DisRingRotate",true);
 					end
-					if (v.disablering ~= nil and v.disablering ~= "" and util.tobool(v.disablering)==true and e:GetClass()!="dhd_city" and e:GetClass()!="dhd_atlantis" and e:GetClass()!="dhd_universe") then
+					if (v.disablering ~= nil and v.disablering ~= "" and util.tobool(v.disablering)==true and e:GetClass()~="dhd_city" and e:GetClass()~="dhd_atlantis" and e:GetClass()~="dhd_universe") then
 						e.DisRingRotate = true;
 						e:SetNWBool("DisRingRotate",true);
 					end
@@ -332,7 +332,7 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 					-- And rings Rings
 					if(v.address and v.address ~= "") then
 						e.Address = v.address;
-						e:SetNetworkedString("address",v.address);
+						e:SetNWString("address",v.address);
 					end
 				elseif (IsSGULightUp) then -- Weld sgu stuff to nearest gates
 					for _,v in pairs(ents.FindInSphere(pos, 200)) do
@@ -411,9 +411,9 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 						e.Door:SetAngles(Angle(tonumber(p),tonumber(y),tonumber(r)));
 					end
 					e.Door.GateSpawnerSpawned = true;
-					e.Door:SetNetworkedBool("GateSpawnerSpawned",true);
+					e.Door:SetNWBool("GateSpawnerSpawned",true);
 					e.Door.GateSpawnerProtected = protect;
-					e.Door:SetNetworkedBool("GateSpawnerProtected",protect);
+					e.Door:SetNWBool("GateSpawnerProtected",protect);
 				end
 				if (v.__id and e:GetClass()=="prop_physics") then
 					duplicator.StoreEntityModifier(e, "GateSpawnerProp", {GateSpawner=true,ID=e.GateSpawnerID} )
@@ -530,7 +530,8 @@ function StarGate.GateSpawner.InitialSpawn(reload)
 			local protect = GetConVar("stargate_gatespawner_protect"):GetBool();
 			local i = 0; -- For delayed spawning
 
-			local tbl = {				StarGate.GateSpawner.Ramp,
+			local tbl = {
+				StarGate.GateSpawner.Ramp,
 				StarGate.GateSpawner.Gates,
 				StarGate.GateSpawner.Iris,
 				StarGate.GateSpawner.DHDs,
@@ -548,7 +549,8 @@ function StarGate.GateSpawner.InitialSpawn(reload)
 				StarGate.GateSpawner.Props,
 				StarGate.GateSpawner.Doors,
 				StarGate.GateSpawner.DoorButtons,
-				StarGate.GateSpawner.Console,			}
+				StarGate.GateSpawner.Console,
+			}
 
 			for k,t in pairs(tbl) do
 				for _,v in pairs(t) do
@@ -937,10 +939,10 @@ function StarGate.GateSpawner.Restored()
 							if (StarGate.GateSpawner.Ents[tbl.ID]) then
 								StarGate.GateSpawner.Ents[tbl.ID].Entity = e;
 								e.GateSpawnerSpawned = true;
-								e:SetNetworkedBool("GateSpawnerSpawned",true);
+								e:SetNWBool("GateSpawnerSpawned",true);
 								e.GateSpawnerID = tbl.ID;
 								e.GateSpawnerProtected = protect;
-								e:SetNetworkedBool("GateSpawnerProtected",protect);
+								e:SetNWBool("GateSpawnerProtected",protect);
 							end
 						end
 					end
@@ -949,7 +951,7 @@ function StarGate.GateSpawner.Restored()
 						if (StarGate.GateSpawner.Ents[e.GateSpawnerID]) then
 							StarGate.GateSpawner.Ents[e.GateSpawnerID].Entity = e;
 							e.GateSpawnerProtected = protect;
-							e:SetNetworkedBool("GateSpawnerProtected",protect);
+							e:SetNWBool("GateSpawnerProtected",protect);
 						end
 					end
 					if (e.IsIris and IsValid(e.GateLink) and (e.GateSpawnerSpawned or e.GateLink.GateSpawnerSpawned)) then

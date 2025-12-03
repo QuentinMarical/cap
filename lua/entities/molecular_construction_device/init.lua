@@ -87,7 +87,7 @@ function ENT:Initialize()
 	end
 	self.Create = false;
 	self.InitCreate = true;
-	self.Entity:SetNetworkedInt("EntProgress",0);
+	self.Entity:SetNWInt("EntProgress",0);
 	self.EntProgress = 0;
 	self.Progress = 0;
 	self.Entity:SetNWInt("Progress",0);
@@ -231,7 +231,7 @@ function ENT:Think()
 				self:SetWire("Active", 1)
 			end
 		else
-		    self.EntProgress = self.Entity:GetNetworkedInt("EntProgress");
+			self.EntProgress = self.Entity:GetNWInt("EntProgress");
 			self.Progress = self.Entity:GetNWInt("Progress");
 			self.Progress = string.Explode(".",tostring(self.Progress))
 			if(self.Progress[2] != nil)then

@@ -46,7 +46,7 @@ function ENT:Initialize()
 	self.EHOpen = false;
 	self.GateActive = false;
 	self.Jamming = false;
-	self.Entity:SetNetworkedInt("timer",0);
+	self.Entity:SetNWInt("timer",0);
     self.Entity:SetNWInt("closetimer",0);
 	self.Entity:SetNWInt("deactivetimer",0);
 	self:IdleSound()
@@ -168,7 +168,7 @@ end
 function ENT:LowThink()
     local tim = CurTime();
     if(self.Entity.IsOpen)then
-		if(self.Entity:GetNetworkedInt("timer")==0)then
+		if(self.Entity:GetNWInt("timer")==0)then
 		    self.Entity:SetNWInt("timer",math.Round(tim)+50);
 			self.Entity:SetNWInt("closetimer",math.Round(tim)+60);
 			self.DeactivateGate = true;

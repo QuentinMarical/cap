@@ -215,9 +215,6 @@ function StarGate.Hook.PlayerInitialSpawn(p,reload)
 end
 hook.Add("PlayerInitialSpawn","StarGate.Hook.PlayerInitialSpawn",StarGate.Hook.PlayerInitialSpawn);
 
---################# Sends NWData of the gates to a client@aVoN
---If a new player joins the server, he normally does not have Networked Data which has been set before he joined. This hook forces to resend the date to everyone if he presses
--- "MoveForward" the first time just after he joined. Before I used a Think, but I think this was useless networked data.
 local joined = {};
 hook.Add("KeyPress","StarGate.KeyPress.SendGateData",
 	function(p,key)
@@ -225,7 +222,7 @@ hook.Add("KeyPress","StarGate.KeyPress.SendGateData",
 			joined[p] = true; -- Do not call this hook twice!
 			for _,v in pairs(ents.FindByClass("stargate_*")) do
 				if(v.IsStargate) then
-					v:SetNetworkedString("Address",""); -- "Reset old value" to cause an immediate update in the next step below
+					v:SetNWString("Address",""); -- "Reset old value" to cause an immediate update in the next step below
 					v:SetNWString("Address",v.GateAddress,true);
 					v:SetNWString("Group",""); -- "Reset old value" to cause an immediate update in the next step below
 					v:SetNWString("Group",v.GateGroup,true);

@@ -29,7 +29,7 @@ StarGate.Trace:Add("shield_core_buble",
 			if (type(values[3]) == "table") then
 				own = StarGate.GetMultipleOwner(values[3][1]);
 				if (IsValid(values[3][1])) then
-					values[3][1]:SetNetworkedEntity("SC_Owner", own); // for clientside prediction
+					values[3][1]:SetNWEntity("SC_Owner", own); // for clientside prediction
 				end
 			else
 				own = StarGate.GetMultipleOwner(values[3]);

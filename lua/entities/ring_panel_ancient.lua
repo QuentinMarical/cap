@@ -80,7 +80,7 @@ function ENT:PressButton(button, ply)
 
 		table.insert(self.DialAdress, 9)
 		local str = string.Implode(",",self.DialAdress)
-		self.Entity:SetNetworkedString("ADDRESS",str);
+		self.Entity:SetNWString("ADDRESS",str);
 
 		self.Entity:Fire("skin",6);
 		timer.Create( self.Entity:EntIndex().."Skin", 0.5, 1, function()
@@ -95,7 +95,7 @@ function ENT:PressButton(button, ply)
 				self.DialAdress = nil;
 				self.DialAdress = {};
 				self.CantDial = false;
-				self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialAdress));
+				self.Entity:SetNWString("ADDRESS",string.Implode(",",self.DialAdress));
 			end
 		end )
 
@@ -111,7 +111,7 @@ function ENT:PressButton(button, ply)
 					self.DialAdress = nil;
 					self.DialAdress = {};
 					self.CantDial = false;
-					self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialAdress));
+					self.Entity:SetNWString("ADDRESS",string.Implode(",",self.DialAdress));
 				end
 			end )
 		else
@@ -121,14 +121,14 @@ function ENT:PressButton(button, ply)
 					self.DialAdress = nil;
 					self.DialAdress = {};
 					self.CantDial = false;
-					self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialAdress));
+					self.Entity:SetNWString("ADDRESS",string.Implode(",",self.DialAdress));
 				end
 			end )
 		end
 
 		table.insert(self.DialAdress, button)
 
-		self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialAdress));
+		self.Entity:SetNWString("ADDRESS",string.Implode(",",self.DialAdress));
 
 		if (button > 5) then button = button + 1 end
 		self.Entity:Fire("skin",button);

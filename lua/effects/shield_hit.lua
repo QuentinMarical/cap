@@ -30,7 +30,7 @@ function EFFECT:Init(data)
 	self.Refract = 0;
 	local e = data:GetEntity();
 	if(not e:IsValid()) then return end;
-	local radius = e:GetNetworkedInt("size",false); -- Needed from the shield, to make this hit effect exactly there, where the "rounded" shield ended, even when the shield actually is cubic
+	local radius = e:GetNWInt("size",false); -- Needed from the shield, to make this hit effect exactly there, where the "rounded" shield ended, even when the shield actually is cubic
 	--self.Entity:SetParent(e); -- Parent to the shield so it moves along with it
 	-- This above was the old method. Sadly, it looks ugly when the hit effect does the same barrel roll like your ship
 	local pos = self.Entity:GetPos();

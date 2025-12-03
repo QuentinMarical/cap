@@ -30,7 +30,7 @@ ENT.Sounds = {}
 
 function ENT:Initialize()
   -- Bomb starts disarmed
-  self:SetNetworkedInt("State", 1) --  1 = Idle ,  2 = Armed,  3 = Charging
+   self:SetNWInt("State", 1) --  1 = Idle ,  2 = Armed,  3 = Charging
   self.charge = 0
 
   -- Set up physics for entity
@@ -96,7 +96,7 @@ function ENT:TriggerInput(inputName, inputValue)
 end
 
 function ENT:StartDetonation(code)
-   if(self:GetNetworkedInt("State", 1) == 3) then
+   if(self:GetNWInt("State", 1) == 3) then
 		return true
    end
 
@@ -128,7 +128,7 @@ function ENT:AbortDetonation(code)
 	--if(not self.malfunctioning) then
       self:SetNWInt("State", 2)
       self.charge = 0
-	  self.Entity:SetNetworkedInt("BombOverlayTime",0)
+   self.Entity:SetNWInt("BombOverlayTime",0)
 
       if(self.HasWire) then
          self:SetWire("Charging", 0)
@@ -266,14 +266,14 @@ end
 function ENT:Think()
 
    if(self:GetNWInt("State", 1) == 3) then
-		self.Entity:SetNetworkedString("BombOverlay","Charging!")
+      self.Entity:SetNWString("BombOverlay","Charging!")
 		self:Charge()
 		local explodetime = self.chargeTime * ((100-self.charge)/100)+1;
-		self.Entity:SetNetworkedInt("BombOverlayTime",explodetime)
+      self.Entity:SetNWInt("BombOverlayTime",explodetime)
    elseif(self.malfunctioned) then
       self:StartDetonation()
    else
-	  self.Entity:SetNetworkedString("BombOverlay","Armed")
+   self.Entity:SetNWString("BombOverlay","Armed")
    end
 
    if(self.Entity:Health() < self.Entity:GetMaxHealth()) then
@@ -316,10 +316,11 @@ function ENT:AcceptInput(inputType, activator, caller)
       caller:IsPlayer() &&
       caller:KeyDownLast(IN_USE) == false) then
 
-      umsg.Start("naquadah_bomb", caller)
-      umsg.Entity(self.Entity)
-      umsg.Bool(true)
-      umsg.End()
+      util.AddNetworkString("naquadah_bomb")
+      net.Start("naquadah_bomb")
+      net.WriteEntity(self.Entity)
+      net.WriteBool(true)
+      net.Send(caller)
 	end
 end
 
@@ -333,10 +334,10 @@ end
 
 local cycleInterval = 0.5
 
-function OnUserMessage(userMessage)
-	local self = userMessage:ReadEntity()
-	if (IsValid(self)) then
-   	self.showCodeWindow = userMessage:ReadBool()
+local function OnNetMessage()
+   local self = net.ReadEntity()
+   if (IsValid(self)) then
+      self.showCodeWindow = net.ReadBool()
    end
 end
 
@@ -354,7 +355,7 @@ function ENT:Draw()
 	local ang = self.Entity:GetAngles();
 
 
-	if self.Entity:GetNetworkedBool("Hud", false) then
+   if self.Entity:GetNWBool("Hud", false) then
 
 		if(self:GetModel()=="models/markjaw/gate_buster.mdl") then
 			pos = self.Entity:LocalToWorld(Vector(-7.5, 9.5, 25));
@@ -371,8 +372,8 @@ function ENT:Draw()
 		ang:RotateAroundAxis(ang:Forward(),	65)
 
 
-		local str=self.Entity:GetNetworkedString("BombOverlay","")
-		local time=self.Entity:GetNetworkedInt("BombOverlayTime",0)
+      local str=self.Entity:GetNWString("BombOverlay","")
+      local time=self.Entity:GetNWInt("BombOverlayTime",0)
 		if time > 0 then str = str.."\n"..tostring(time); end
 		surface.SetFont("SandboxLabel")
 		local w,h=surface.GetTextSize(str)
@@ -387,7 +388,7 @@ function ENT:Draw()
 
 end
 
-usermessage.Hook("naquadah_bomb", OnUserMessage)
+net.Receive("naquadah_bomb", OnNetMessage)
 
 function ENT:Think()
    self:NextThink(CurTime() + cycleInterval)

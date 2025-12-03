@@ -11,7 +11,7 @@ EFFECT.SpriteO = Material("effects/sprite_orange");
 function EFFECT:Init(data)
 	self.Parent = data:GetEntity();
 
-	self.Ent1 = self.Parent:GetNetworkedEntity("Ent1", self.Entity);
+	self.Ent1 = self.Parent:GetNWEntity("Ent1", self.Entity);
 	self.Ent2 = self.Parent:GetNWEntity("Ent2", self.Entity);
 	self.LocPos1 = self.Parent:GetNWVector("Loc1", Vector(0,0,0));
 	self.LocPos2 = self.Parent:GetNWVector("Loc2", Vector(0,0,0));

@@ -83,7 +83,7 @@ function ENT:SpawnFunction(pl, tr) --######## Pretty useless unless we can spawn
 	e:SpawnDoor(pl)
 	e:SpawnButtons(pl);
 	//e:ToggleDoors("out")
-	e:SetWire("Health",e:GetNetworkedInt("health"));
+	e:SetWire("Health",e:GetNWInt("health"));
 	pl:Give("weapon_ringcaller");
 	pl:AddCount("CAP_ships", e)
 	e.Owner = pl;
@@ -100,7 +100,7 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self.BlastCount = 0;
 	self.MaxBlasts = (4);
 	self.BlastsFired = 0;
-	self:SetNetworkedInt("health",self.EntHealth);
+	self:SetNWInt("health",self.EntHealth);
 	self.ExitPos = self:GetPos()+Vector(0,0,120);
 	self.ShouldRotorwash = true;
 
@@ -154,7 +154,7 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self.CanJump = true;
 	self.CanFire = true;
 	self.CooledDown = true; //Beam Cooldown
-	self.TeltakHealth = self:GetNetworkedInt("health");	
+	self.TeltakHealth = self:GetNWInt("health"); 
 	self.WeaponAllowed = StarGate.CFG:Get("teltak","allow_beam_weapon",true);
 
 end
@@ -183,8 +183,8 @@ end
 
 function ENT:OnTakeDamage(dmg) --########## Gliders aren't invincible are they? @RononDex
 
-	local health=self:GetNetworkedInt("health")
-	self:SetNetworkedInt("health",health-dmg:GetDamage()) -- Sets heath(Takes away damage from health)
+	local health=self:GetNWInt("health")
+	self:SetNWInt("health",health-dmg:GetDamage()) -- Sets heath(Takes away damage from health)
 	self:SetWire("Health",health-dmg:GetDamage());
 
 	if(health-dmg:GetDamage()<=1500) then
@@ -269,7 +269,7 @@ function ENT:Think()
 				end
 			end
 			
-			self.Pilot:SetNetworkedBool("Charging",self.Charging);
+			self.Pilot:SetNWBool("Charging",self.Charging);
 			
 			if(not self.Charging and self.HyperspaceDist > (self.MaxCharge/4)) then
 				self:HyperSpace();
@@ -831,7 +831,7 @@ function SGTeltakCalcView(Player,Origin, Angles, FieldOfView)
 	local view = {};
 
 	local p = LocalPlayer();
-	local self = p:GetNetworkedEntity("ScriptedVehicle", NULL);
+	local self = p:GetNWEntity("ScriptedVehicle", NULL);
 
 	if(IsValid(self) and self:GetClass()=="sg_vehicle_teltac") then
 		if(self.FPV==0) then
@@ -861,7 +861,7 @@ function ENT:Think()
 	self.BaseClass.Think(self)
 
 	local p = LocalPlayer()
-	local vehicle = p:GetNetworkedEntity("ScriptedVehicle", NULL)
+	local vehicle = p:GetNWEntity("ScriptedVehicle", NULL)
 
 	if((vehicle)and((vehicle)==self)and(vehicle:IsValid())) then
 		self.KBD:SetActive(true)
@@ -909,9 +909,9 @@ local CooldownWidth = 100;
 function PrintHUD()
 
 	local p = LocalPlayer()
-	local self = p:GetNetworkedEntity("ScriptedVehicle", NULL)
+	local self = p:GetNWEntity("ScriptedVehicle", NULL)
 	local Charging = p:GetNWBool("Charging");
-	local Teltak = p:GetNetworkedEntity("Teltak")
+	local Teltak = p:GetNWEntity("Teltak")
 	
 	local Charge = p:GetNWInt("Charge");
 	local Cooldown = math.Round(p:GetNWInt("BeamCooldown"));

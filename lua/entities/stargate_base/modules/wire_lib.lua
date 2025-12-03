@@ -12,7 +12,7 @@ function ENT:CheckWireSymbol(symbol)
 	local groupsystem = GetConVar("stargate_group_system"):GetBool();
 	local secret = false;
 	if (self.ScrSymCnt and self.ScrSymCnt[2] and symbol=="*" and #self.WireDialledAddress==self.ScrSymCnt[2] and string.Implode("",self.WireDialledAddress)==self.ScrAddress:sub(1,self.ScrSymCnt[2])
-	or self.ScrSymCnt and self.ScrSymCnt[1] and symbol=="?" and #self.WireDialledAddress==self.ScrSymCnt[1] and string.Implode("",self.WireDialledAddress)==self.ScrAddress:sub(1,self.ScrSymCnt[1]) and self.Entity:GetNetworkedInt("Point_of_Origin")==1) then secret = true end
+	or self.ScrSymCnt and self.ScrSymCnt[1] and symbol=="?" and #self.WireDialledAddress==self.ScrSymCnt[1] and string.Implode("",self.WireDialledAddress)==self.ScrAddress:sub(1,self.ScrSymCnt[1]) and self.Entity:GetNWInt("Point_of_Origin")==1) then secret = true end
 	if (groupsystem) then
 		if ((symbol=="*" or symbol=="?") and not secret or symbol=="!") then return false; end
 	else
@@ -243,7 +243,7 @@ function ENT:WireGetAddresses()
 						local ent = self.Entity;
 						if(address != "" and group != "" and IsValid(ent) and (not locale and not ent:GetLocale() or (ent:GetGateGroup() == group or v:GetClass()=="stargate_universe" and ent:GetClass()=="stargate_universe")) and (address!=ent:GetGateAddress() or group!=ent:GetGateGroup())) then
 							local range = (ent:GetPos() - v:GetPos()):Length();
-							local c_range = ent:GetNetworkedInt("SGU_FIND_RANDE"); -- GetConVar("stargate_sgu_find_range"):GetInt();
+							local c_range = ent:GetNWInt("SGU_FIND_RANDE"); -- GetConVar("stargate_sgu_find_range"):GetInt();
 							if (ent:GetGateGroup() != group and (v:GetClass()!="stargate_universe" or ent:GetClass()!="stargate_universe") or c_range > 0 and range>c_range and ent:GetGateGroup():len()==3) then
 								if (locale or ent:GetLocale()) then	continue end
 								if (ent:GetGateGroup():len()==3 and group:len()==3 or ent:GetGateGroup():len()==2 and group:len()==2) then
@@ -273,7 +273,7 @@ function ENT:WireGetAddresses()
 						local ent = self.Entity;
 						if(address != "" and group != "" and IsValid(ent) and (address!=ent:GetGateAddress() or group!=ent:GetGateGroup())) then
 							local range = (ent:GetPos() - v:GetPos()):Length();
-							local c_range = ent:GetNetworkedInt("SGU_FIND_RANDE"); -- GetConVar("stargate_sgu_find_range"):GetInt();
+							local c_range = ent:GetNWInt("SGU_FIND_RANDE"); -- GetConVar("stargate_sgu_find_range"):GetInt();
 							if ((ent:GetGateGroup() == group or v:GetClass()=="stargate_universe" and ent:GetClass()=="stargate_universe") and (range<=c_range and ent:GetGateGroup():len()==3 or ent:GetGateGroup():len()==2 or c_range == 0 and ent:GetGateGroup():len()==3)) then
 								local name = v:GetGateName();
 								if(name == "") then name = "N/A" end;
@@ -294,7 +294,7 @@ function ENT:WireGetAddresses()
 				    local g = self.Entity;
 					if(address ~= "") then
 						local range = (g:GetPos() - v:GetPos()):Length();
-						local c_range = g:GetNetworkedInt("SGU_FIND_RANDE");
+						local c_range = g:GetNWInt("SGU_FIND_RANDE");
 					    if(v:GetGalaxy() or g:GetGalaxy() or
 						   v:GetClass()=="stargate_universe" and g:GetClass()=="stargate_universe" and
 						   c_range > 0 and range>c_range)then

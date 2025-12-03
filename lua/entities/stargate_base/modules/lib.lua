@@ -1151,7 +1151,7 @@ function ENT:SetGateAddress(s)
 		if(not (address and (tostring(address):len() == 6 or address == ""))) then return end;
 		self.GateAddress = address;
 		self:SetEntityModifier("Address",address); -- Entity Modifiers for Duplicator
-		self.Entity:SetNetworkedString("Address",address);
+		self.Entity:SetNWString("Address",address);
 		self:RefreshGateList("address",self.GateAddress);
 	end
 end
@@ -1268,7 +1268,7 @@ end
 
 --################# Is this gate blocked? by AlexALX
 function ENT:GetBlocked()
-	if (self:GetNetworkedInt("SG_BLOCK_ADDRESS")<=0 or self:GetNetworkedInt("SG_BLOCK_ADDRESS")==1 and self:GetClass()!="stargate_universe") then return false; end
+	if (self:GetNWInt("SG_BLOCK_ADDRESS")<=0 or self:GetNWInt("SG_BLOCK_ADDRESS")==1 and self:GetClass()!="stargate_universe") then return false; end
 	return self.GateBlocked;
 end
 

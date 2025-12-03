@@ -29,7 +29,7 @@ end
 function ENT:Draw()
 
 	local p = LocalPlayer();
-	local Controlling = p:GetNetworkedBool("Control")
+	local Controlling = p:GetNWBool("Control")
 
 	self:DrawModel()
 
@@ -52,7 +52,7 @@ usermessage.Hook("ControlChair",Data)
 function ControlCHCalcView(Player, Origin, Angles, FieldOfView)
 	local view = {}
 	local p = Player
-	local self = p:GetNetworkedEntity( "ScriptedVehicle", NULL );
+	local self = p:GetNWEntity( "ScriptedVehicle", NULL );
 	local chair = p:GetNWEntity("chair")
 	if(not IsValid(chair) or self:GetClass()!="control_chair") then return end;
 
@@ -185,7 +185,7 @@ function ENT:AddChair(p)
 	e:SetParent(self)
 	--chair=e
 	self.Chair = e
-	self:SetNetworkedEntity("Chair",self.Chair)
+	self:SetNWEntity("Chair",self.Chair)
 	if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 
 end
@@ -220,7 +220,7 @@ function ENT:ActivateChair(p)
 			self.Pilot=p
 --			self:SpawnRagdoll()
 			--p:SetScriptedVehicle(self)
-			p:SetNetworkedEntity("ScriptedVehicle", self)
+			p:SetNWEntity("ScriptedVehicle", self)
 			p:SetViewEntity(self)
 			p:SetEyeAngles(self.Chair:GetAngles())
 			p:SetNWBool("Control",true)
@@ -247,7 +247,7 @@ function ENT:DeactivateChair(p)
 		self.Pilot:SetClientsideVehicle(NULL)
 	end*/
 	--self.Pilot:SetScriptedVehicle(NULL)
-	self.Pilot:SetNetworkedEntity("ScriptedVehicle", NULL)
+	self.Pilot:SetNWEntity("ScriptedVehicle", NULL)
 	self.Pilot:SetViewEntity(NULL)
 	self.Pilot:Spawn()
 	self.Pilot:SetParent()

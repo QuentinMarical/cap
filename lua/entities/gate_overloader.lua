@@ -49,11 +49,11 @@ function ENT:GetSubBeamPos(beam)
 end
 
 function ENT:IsActive()
-   return self.Entity:GetNetworkedBool("isActive", self.isActive == true)
+   return self.Entity:GetNWBool("isActive", self.isActive == true)
 end
 
 function ENT:IsFiring()
-   return self.Entity:GetNetworkedBool("isFiring", self.isFiring == true)
+   return self.Entity:GetNWBool("isFiring", self.isFiring == true)
 end
 
 function ENT:GetBeamColour()
@@ -61,11 +61,11 @@ function ENT:GetBeamColour()
 end
 
 function ENT:GetLocalGate()
-   return self.Entity:GetNetworkedEntity("localGate", nil)
+   return self.Entity:GetNWEntity("localGate", nil)
 end
 
 function ENT:GetRemoteGate()
-   return self.Entity:GetNetworkedEntity("remoteGate", nil)
+   return self.Entity:GetNWEntity("remoteGate", nil)
 end
 
 if SERVER then
@@ -227,7 +227,7 @@ function ENT:Initialize()
 	self.lastUseTime = 0
 
       --self.isBeamCoherent = false
-   --self.Entity:SetNetworkedBool("isBeamCoherent", self.isBeamCoherent)
+   --self.Entity:SetNWBool("isBeamCoherent", self.isBeamCoherent)
 end
 
 -- Respond to a given wire input
@@ -340,7 +340,7 @@ end
 
 function ENT:SetLocalGate(gate)
    self.localGate = gate
-   self.Entity:SetNetworkedEntity("localGate", gate)
+   self.Entity:SetNWEntity("localGate", gate)
 end
 
 -- Clears the current target and shuts down the overloader
@@ -586,17 +586,17 @@ function ENT:StartFiring()
    end
 
    self.remoteGate.overloader = self.Entity
-   self.Entity:SetNetworkedEntity("remoteGate", self.remoteGate)
+   self.Entity:SetNWEntity("remoteGate", self.remoteGate)
 end
 
 function ENT:SetIsActive(isActive)
    self.isActive = util.tobool(isActive)
-   self.Entity:SetNetworkedBool("isActive", self.isActive)
+   self.Entity:SetNWBool("isActive", self.isActive)
 end
 
 function ENT:SetIsFiring(isFiring)
    self.isFiring = util.tobool(isFiring)
-   self.Entity:SetNetworkedBool("isFiring", self.isFiring)
+   self.Entity:SetNWBool("isFiring", self.isFiring)
 end
 
 function ENT:CreateBeam()

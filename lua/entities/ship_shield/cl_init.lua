@@ -6,7 +6,7 @@ if (StarGate==nil or StarGate.Trace==nil) then return end
 -- Register shield SENT to the trace class
 StarGate.Trace:Add("shield",
 	function(e,values,trace,in_box)
-		local depleted = e:GetNetworkedBool("depleted",false);
+		local depleted = e:GetNWBool("depleted",false);
 		local containment = e:GetNWBool("containment",false);
 		if(not depleted) then
 			if((containment and in_box) or (not containment and not in_box)) then

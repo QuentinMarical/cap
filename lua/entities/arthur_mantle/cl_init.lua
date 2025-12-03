@@ -45,8 +45,8 @@ surface.CreateFont("GlyphsC", font);
 -- Damn, recoded this myself for fix stupid bugs with flashlight and cloak. I hope now all works fine (c) AlexALX
 hook.Add("Think","StarGate.ArthurCloaking.Think",
 	function()
-		local cloaked_self = LocalPlayer():GetNetworkedBool("ArthurCloaked",false);
-		local sodan_self = LocalPlayer():GetNetworkedBool("pCloaked",false);
+		local cloaked_self = LocalPlayer():GetNWBool("ArthurCloaked",false);
+		local sodan_self = LocalPlayer():GetNWBool("pCloaked",false);
 		for k,p in pairs(player.GetHumans()) do
 			local cloaked = p:GetNWBool("ArthurCloaked",NULL); -- If a player hasn't cloaked himself yet, we do not want to override color at all (It conflicted on my server
 			local sodan_cloaked = p:GetNWBool("pCloaked",NULL); -- sodan thing
@@ -117,8 +117,8 @@ surface.CreateFont("Glyphs", font);
 -- New much better way without overriding alpha on players @ AlexALX
 hook.Add("PrePlayerDraw","StarGate.ArthurCloak", function(p)
 		if (not IsValid(p)) then return end
-		local cloaked_self = LocalPlayer():GetNetworkedBool("ArthurCloaked",false);
-		local sodan_self = LocalPlayer():GetNetworkedBool("pCloaked",false);
+		local cloaked_self = LocalPlayer():GetNWBool("ArthurCloaked",false);
+		local sodan_self = LocalPlayer():GetNWBool("pCloaked",false);
 
 		local cloaked = p:GetNWBool("ArthurCloaked",NULL); -- If a player hasn't cloaked himself yet, we do not want to override color at all (It conflicted on my server
 		local sodan_cloaked = p:GetNWBool("pCloaked",NULL); -- sodan thing
@@ -155,7 +155,7 @@ hook.Add("HUDDrawTargetID","StarGate.ArthurCloak", function()
 	if (!trace.HitNonWorld) then return end
 
 	if (trace.Entity:IsPlayer()) then
-		if(not LocalPlayer():GetNetworkedBool("ArthurCloaked",false) and trace.Entity:GetNWBool("ArthurCloaked",false)) then return false end;
+		if(not LocalPlayer():GetNWBool("ArthurCloaked",false) and trace.Entity:GetNWBool("ArthurCloaked",false)) then return false end;
 	end
 end);
 
@@ -163,7 +163,7 @@ local datatable = {}
 
 function ENT:Think()
 
-	local cloak = LocalPlayer():GetNetworkedBool("ArthurCloaked",false);
+	local cloak = LocalPlayer():GetNWBool("ArthurCloaked",false);
 	if cloak and self:GetSkin()==1 then
 		self:SetSkin(0);
 	elseif not cloak and self:GetSkin()==0 then
@@ -221,7 +221,7 @@ function ENT:Draw()
 
 	self.Entity:DrawModel();
 
-	if LocalPlayer():GetNetworkedBool("ArthurCloaked",false) then
+	if LocalPlayer():GetNWBool("ArthurCloaked",false) then
 
 		local pos = self.Entity:GetPos() + self.Entity:GetUp()*50
 		for i=0,1 do
@@ -341,7 +341,7 @@ function util.TraceLine(...)
 	local t = util._Arthur_TraceLine(...);
 	if(t and IsValid(t.Entity)) then
 		if(t.Entity:IsPlayer()) then
-			if(not LocalPlayer():GetNetworkedBool("ArthurCloaked",false) and t.Entity:GetNWBool("ArthurCloaked",false)) then t.Entity = NULL end;
+			if(not LocalPlayer():GetNWBool("ArthurCloaked",false) and t.Entity:GetNWBool("ArthurCloaked",false)) then t.Entity = NULL end;
 		end
 	end
 	return t;

@@ -24,7 +24,7 @@ function ENT:Initialize()
 end
 
 function ENT:Think()
-	if (self:GetNetworkedBool("DoClientSide", false) and not self.Created) then
+	if (self:GetNWBool("DoClientSide", false) and not self.Created) then
 		self.Created = true
 		self:DoCollision();
 	end

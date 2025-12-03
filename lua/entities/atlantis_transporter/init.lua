@@ -1,4 +1,9 @@
 if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("devices")) then return end
+if SERVER then
+	util.AddNetworkString("AtlantisTransporterShowWindow")
+	util.AddNetworkString("AtlantisTransporterEditWindow")
+	util.AddNetworkString("AtlantisTransporterTele")
+end
 
 AddCSLuaFile("shared.lua");
 AddCSLuaFile("cl_init.lua");
@@ -164,9 +169,9 @@ function ENT:CreateDoors(ply,spawner,protect)
 	if CPPI and IsValid(ply) and d.CPPISetOwner then d:CPPISetOwner(ply) end
 	if (spawner) then
 		d.GateSpawnerSpawned = true;
-		d:SetNetworkedBool("GateSpawnerSpawned",true);
+		d:SetNWBool("GateSpawnerSpawned",true);
 		d.GateSpawnerProtected = protect;
-		d:SetNetworkedBool("GateSpawnerProtected",protect);
+		d:SetNWBool("GateSpawnerProtected",protect);
 	end
 	d.Atlantis = true
 	d.AtlTP = self;
@@ -189,9 +194,9 @@ function ENT:CreateDoors(ply,spawner,protect)
 	if CPPI and IsValid(ply) and d.CPPISetOwner then d:CPPISetOwner(ply) end
 	if (spawner) then
 		d.GateSpawnerSpawned = true;
-		d:SetNetworkedBool("GateSpawnerSpawned",true);
+		d:SetNWBool("GateSpawnerSpawned",true);
 		d.GateSpawnerProtected = protect;
-		d:SetNetworkedBool("GateSpawnerProtected",protect);
+		d:SetNWBool("GateSpawnerProtected",protect);
 	end
 	d.Atlantis = true
 	d.AtlTP = self;
@@ -371,21 +376,21 @@ function ENT:Use(ply)
 	if (self.Busy) then return end
 	if (self:GetAimingConsole(ply)) then
 		if (self.Open and not self.DisMenu and not self.ConsoleLocked and (not self:IsDoorsOpen() or not self.OnlyClosed) and not self:IsDoorsBusy()) then
-			umsg.Start("AtlantisTransporterShowWindow", ply)
-			umsg.Entity(self)
-			umsg.End()
+			net.Start("AtlantisTransporterShowWindow")
+			net.WriteEntity(self)
+			net.Send(ply)
 		end
 		return
 	end
 	if (self.DisEditMenu) then return end
 	if (not self:CAP_CanModify(ply)) then return end
-	umsg.Start("AtlantisTransporterEditWindow", ply)
-		umsg.Entity(self)
-		umsg.String(self.TName)
-		umsg.Bool(self.TPrivate)
-		umsg.String(self.TGroup)
-		umsg.Bool(self.TLocal)
-	umsg.End()
+	net.Start("AtlantisTransporterEditWindow")
+		net.WriteEntity(self)
+		net.WriteString(self.TName or "")
+		net.WriteBool(self.TPrivate or false)
+		net.WriteString(self.TGroup or "")
+		net.WriteBool(self.TLocal or false)
+	net.Send(ply)
 end
 
 function ENT:CAP_CanModify(ply)
@@ -556,9 +561,9 @@ function ENT:DoTeleport(target)
 					-- fix by AlexALX
 					v:SetPos(pos+Vector(0,0,4));
 					if (not v:IsNPC()) then
-						umsg.Start("AtlantisTransporterTele", v);
-							umsg.Bool(false);
-						umsg.End();
+						net.Start("AtlantisTransporterTele")
+							net.WriteBool(false)
+						net.Send(v)
 						v:SetEyeAngles(ang + Angle(0,ang2,0));
 					else
 						v:SetAngles(ang + Angle(0,ang2,0));
@@ -758,7 +763,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 
 	self:SetAtlNameGrp(dupeInfo.Name or "", dupeInfo.Group or self.TGroup, nil, true);
 	--self.TName = dupeInfo.Name or "";
-	--self:SetNetworkedString("TName",self.TName);
+	--self:SetNWString("TName",self.TName);
 	--self.TGroup = dupeInfo.Group or self.TGroup;
 
 	self.TPrivate = dupeInfo.Private or false;

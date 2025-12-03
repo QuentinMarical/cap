@@ -30,7 +30,7 @@ function EFFECT:Init(data)
 		self.Line = self.LineB;
 	end
 
-	self.StartTime = self.Parent:GetNetworkedInt("StartTime", 1) + CurTime();
+	self.StartTime = self.Parent:GetNWInt("StartTime", 1) + CurTime();
 
 	self:SetRenderBounds(-10000000*Vector(1,1,1), 10000000*Vector(1,1,1)	)
 end

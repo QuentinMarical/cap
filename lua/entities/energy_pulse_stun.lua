@@ -186,7 +186,7 @@ function ENT:Stun( Ent )
 				Ent:DrawViewModel( false )
 				Ent:DrawWorldModel( false )
 				Ent:SendLua( "LocalPlayer().Stunned = true" )
-				Ent:SetNetworkedEntity( "StunRagdoll", Ragdoll )
+				Ent:SetNWEntity( "StunRagdoll", Ragdoll )
 
 				Ragdoll:SetModel( model )
 				Ragdoll:SetPos( Ent:GetPos() )
@@ -443,7 +443,7 @@ function ENT:Initialize()
 		table.insert(snd,v);
 	end
 	self.Sounds = snd;
-	local size = self.Entity:GetNetworkedInt("Size", 0);
+	local size = self.Entity:GetNWInt("Size", 0);
 	self.Sizes={20+size*3,20+size*3,180+size*10}; -- X,Y and shaft-leght!
 end
 

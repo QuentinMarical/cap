@@ -45,8 +45,8 @@ function ENT:Draw()
 	self:DrawModel()
 end
 
-usermessage.Hook("StarGate.AtlantisTP.ClipStart", function(um)
-	local e = um:ReadEntity();
+net.Receive("StarGate.AtlantisTP.ClipStart", function()
+	local e = net.ReadEntity();
 	if (not IsValid(e)) then return end
 	local norm = e:GetForward()*(-50);
 	e.ClipEnabled = true;
@@ -54,8 +54,8 @@ usermessage.Hook("StarGate.AtlantisTP.ClipStart", function(um)
 	e:SetRenderClipPlane(norm, norm:Dot(e:GetPos()-norm));
 end)
 
-usermessage.Hook( "StarGate.AtlantisTP.ClipStop", function(um)
-	local e = um:ReadEntity();
+net.Receive( "StarGate.AtlantisTP.ClipStop", function()
+	local e = net.ReadEntity();
 	if (not IsValid(e)) then return end
 	e.ClipEnabled = nil;
 	e:SetRenderClipPlaneEnabled(false);
@@ -110,9 +110,9 @@ function ENT:Toggle()
 			timer.Create("Close2"..self:EntIndex(),self.Delay,1,function()
 				if (IsValid(self)) then
 					self.Open = false;
-					umsg.Start("StarGate.AtlantisTP.ClipStop");
-						umsg.Entity(self);
-					umsg.End()
+					net.Start("StarGate.AtlantisTP.ClipStop")
+						net.WriteEntity(self)
+					net.Broadcast()
 				end
 			end);
 			if (IsValid(self.BaseTP)) then
@@ -130,9 +130,9 @@ function ENT:Toggle()
 			if (IsValid(self.BaseTP)) then
 				self.BaseTP:SetWire("Doors Opened",1);
 			end
-			umsg.Start("StarGate.AtlantisTP.ClipStart");
-				umsg.Entity(self);
-			umsg.End()
+			net.Start("StarGate.AtlantisTP.ClipStart")
+				net.WriteEntity(self)
+			net.Broadcast()
 			self:SetNotSolid(true);
 			self:ResetSequence(self:LookupSequence("open")); -- play the sequence
 			if self.Sound then

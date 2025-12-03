@@ -37,26 +37,26 @@ function ENT:Draw()
 	if (not IsValid(self.Entity)) then return end
 	self.Entity:DrawModel();
 	if (StarGate.VisualsMisc==nil or not StarGate.VisualsMisc("cl_dhd_letters",true)) then return end
-	if self.Entity:GetNetworkedInt("DHD_LETTERS",0)<=0 then return end
-	if self:GetNetworkedBool("DisGlyphs",false) then return end
-	if self.IsCityDHD and not self:GetNetworkedBool("HasEnergy",false) then return end
-	if self:GetNetworkedBool("Destroyed",false) then return end
-	if self:GetNetworkedBool("Disabled",false) then return end
+	if self.Entity:GetNWInt("DHD_LETTERS",0)<=0 then return end
+	if self:GetNWBool("DisGlyphs",false) then return end
+	if self.IsCityDHD and not self:GetNWBool("HasEnergy",false) then return end
+	if self:GetNWBool("Destroyed",false) then return end
+	if self:GetNWBool("Disabled",false) then return end
 
 	local a = self.Entity:GetAngles();
 	-- ################# Get the chevrons
-	local address = self.Entity:GetNetworkedString("ADDRESS"):TrimExplode(",");
+	local address = self.Entity:GetNWString("ADDRESS"):TrimExplode(",");
 
 	local ChevronPositions
 	if (self.IsCityDHD) then
-		if (self.Entity:GetNetworkedBool("SG_GROUP_SYSTEM")) then
+		if (self.Entity:GetNWBool("SG_GROUP_SYSTEM")) then
 			self.ChevronPositions2 = self.ChevronPositionsGroup2;
 		else
 			self.ChevronPositions2 = self.ChevronPositionsGalaxy2;
 		end
 		ChevronPositions = self.ChevronPositions2;
 	else
-		if (self.Entity:GetNetworkedBool("SG_GROUP_SYSTEM")) then
+		if (self.Entity:GetNWBool("SG_GROUP_SYSTEM")) then
 			self.ChevronPositions = self.ChevronPositionsGroup;
 		else
 			self.ChevronPositions = self.ChevronPositionsGalaxy;
@@ -65,7 +65,7 @@ function ENT:Draw()
 	end
 	
 	
-	local buttonsmode = self.Entity:GetNetworkedBool("ButtonsMode",false)
+	local buttonsmode = self.Entity:GetNWBool("ButtonsMode",false)
 	
 	-- ################# Draw keyboard - Idea of how to use the cam3D2D stuff comes from Night-Eagles Computer SENT. Thank god, you coded it ;)
 	local btn;
@@ -77,7 +77,7 @@ function ENT:Draw()
 	local button_angle = 20; -- Maximum distant-angle of a button to get drawn - High value = massive (clientside)lags, because the SENT will calculate vector/matrix multiplication - and this is very CPU heavy
 	if (self.IsCityDHD) then button_angle = 30 end
 	local btns = {};
-	if(not self.Entity:GetNetworkedBool("Busy",false)/* and not self.Entity:GetNetworkedBool("CITYBUSY",false)*/) then
+	if(not self.Entity:GetNWBool("Busy",false)/* and not self.Entity:GetNWBool("CITYBUSY",false)*/) then
 		if((btn and btn ~= "DIAL") and (buttonsmode or not table.HasValue(address,"DIAL"))) then
 			btns = self:GetCurrentButton(LocalPlayer(),button_angle);
 		end
@@ -104,9 +104,9 @@ function ENT:Draw()
 		end
 	end
 	-- ################# Draw buttons
-	local candialg = self.Entity:GetNetworkedInt("CANDIAL_GROUP_DHD");
+	local candialg = self.Entity:GetNWInt("CANDIAL_GROUP_DHD");
 	local allowed_symbols = 9
-	if (not self.IsCityDHD and (candialg==0 or self.Entity:GetNetworkedBool("Locale")==true)) then
+	if (not self.IsCityDHD and (candialg==0 or self.Entity:GetNWBool("Locale")==true)) then
 		allowed_symbols = 7
 	end
 	for _,v in pairs(btns) do

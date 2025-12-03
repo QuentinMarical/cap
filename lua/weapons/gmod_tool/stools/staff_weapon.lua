@@ -82,7 +82,7 @@ function TOOL:LeftClick(t)
 	local add_cannon_velocity = self:GetClientNumber("add_cannon_velocity");
 	if(t.Entity and t.Entity:GetClass() == self.Entity.Class) then
 		t.Entity.Color = Color(r,g,b,255);
-		t.Entity:SetNetworkedBool("shaft",util.tobool(shaft));
+		t.Entity:SetNWBool("shaft",util.tobool(shaft));
 		t.Entity.DrawExplosion = util.tobool(explosion);
 		t.Entity.ColorizeExplosion = util.tobool(explosion_colorize);
 		t.Entity.AddCannonVelocity = util.tobool(add_cannon_velocity);
@@ -135,7 +135,7 @@ function TOOL:PostEntitySpawn(p,e,shoot,explode,model,r,g,b,shaft,explosion,expl
 	end      /*
 	e.AddCannonVelocity = util.tobool(add_cannon_velocity);
 	e.ColorizeExplosion = util.tobool(explosion_colorize);*/
-	-- Little workaround for that special model - It is turned upside down by 180°, so we need to alter the shoot position and direction with "this"
+	-- Little workaround for that special model - It is turned upside down by 180ï¿½, so we need to alter the shoot position and direction with "this"
 	if(e:GetModel():find("combine_binocular01.mdl")) then
 		e.ShootDirection = -1;
 	end

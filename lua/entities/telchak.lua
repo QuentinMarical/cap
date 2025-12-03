@@ -38,7 +38,7 @@ function ENT:Initialize()
 	self.Entity:SetUseType(SIMPLE_USE);
 
 	self.Active = false;
-	self.Entity:SetNetworkedBool("healing", false);
+	self.Entity:SetNWBool("healing", false);
 
 	self.SickPlayers = {}
 
@@ -193,8 +193,8 @@ end
 
 -- Small fix by AlexALX & Llapp
 local function playerDies( victim, weapon, killer )
-	if (victim:GetNetworkedBool("Telchak_Heal", false)) then
-		victim:SetNetworkedBool("Telchak_Heal", false);
+	if (victim:GetNWBool("Telchak_Heal", false)) then
+		victim:SetNWBool("Telchak_Heal", false);
 	end
 end
 hook.Add( "PlayerDeath", "StarGate.Telchak", playerDies )
@@ -251,7 +251,7 @@ function ENT:Initialize()
 end
 
 function ENT:Think()
-	self.Healing = self.Entity:GetNetworkedBool("healing",false);
+	self.Healing = self.Entity:GetNWBool("healing",false);
 end
 
 function ENT:Draw()

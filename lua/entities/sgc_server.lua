@@ -172,7 +172,7 @@ function ENT:GetFineAddress(gate,ogate)
 	if #address == 0 then return "" end
 
 	local range = (ogate:GetPos() - gate:GetPos()):Length();
-	local c_range = ogate:GetNetworkedInt("SGU_FIND_RANDE");
+	local c_range = ogate:GetNWInt("SGU_FIND_RANDE");
 	if grouped then
 		local group = gate.GateGroup
 		local mgroup = ogate.GateGroup

@@ -65,7 +65,7 @@ function EFFECT:Render()
 			else
 				-- For NPCs (Because NPC:GetActiveWeapon() is currently serverside)
 				-- http://www.garrysmod.com/bugs/view.php?id=802 and http://www.garrysmod.com/bugs/view.php?id=801
-				viewmodel = self.Owner:GetNetworkedEntity("zat");
+				viewmodel = self.Owner:GetNWEntity("zat");
 			end
 		end
 		-- Failsafe

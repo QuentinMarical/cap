@@ -202,7 +202,7 @@ function ENT:StartControl(p)
 	if(IsValid(self)) then
 		self.Control=true
 		self.Controler=p
-		p:SetNetworkedBool("ControllingMALP",true)
+		p:SetNWBool("ControllingMALP",true)
 	end
 end
 
@@ -221,19 +221,20 @@ end
 
 function ENT:SendData()
 	if not IsValid(self.Controler) or not self.environment then return end
-	umsg.Start("MALPData", self.Controler)
-		umsg.Entity(self)
-		umsg.Bool(self.SignalLost)
-		umsg.Float(self.environment.gravity or 0)
-		umsg.Short(self.environment.habitat or 0)
-		umsg.Short(self.environment.atmosphere or 0)
-		umsg.Short(self.environment.temperature or 0)
-		umsg.Float(self.environment.o2 or 0)
-		umsg.Float(self.environment.co2 or 0)
-		umsg.Float(self.environment.n2 or 0)
-		umsg.Float(self.environment.h2 or 0)
-		umsg.Short(self.environment.water or 0)
-	umsg.End()
+	util.AddNetworkString("MALPData")
+	net.Start("MALPData")
+		net.WriteEntity(self)
+		net.WriteBool(self.SignalLost)
+		net.WriteFloat(self.environment.gravity or 0)
+		net.WriteInt(self.environment.habitat or 0, 16)
+		net.WriteInt(self.environment.atmosphere or 0, 16)
+		net.WriteInt(self.environment.temperature or 0, 16)
+		net.WriteFloat(self.environment.o2 or 0)
+		net.WriteFloat(self.environment.co2 or 0)
+		net.WriteFloat(self.environment.n2 or 0)
+		net.WriteFloat(self.environment.h2 or 0)
+		net.WriteInt(self.environment.water or 0, 16)
+	net.Send(self.Controler)
 end
 
 function ENT:Think()
@@ -698,22 +699,22 @@ function ENT:Initialize()
 end
 
 
-local function SetData(um)
+local function SetData()
 	local p = LocalPlayer()
-	local ent = um:ReadEntity()
-	ent.SignalLost = um:ReadBool()
-	ent.gravity = um:ReadFloat()
-	ent.habitat = um:ReadShort()
-	ent.atmosphere = um:ReadShort()
-	ent.temp = um:ReadShort()
-	ent.o2 = um:ReadFloat()
+	local ent = net.ReadEntity()
+	ent.SignalLost = net.ReadBool()
+	ent.gravity = net.ReadFloat()
+	ent.habitat = net.ReadInt(16)
+	ent.atmosphere = net.ReadInt(16)
+	ent.temp = net.ReadInt(16)
+	ent.o2 = net.ReadFloat()
 end
-usermessage.Hook("MALPData", SetData)
+net.Receive("MALPData", SetData)
 
 function ENT:Think()
 
 	local p = LocalPlayer()
-	local control = p:GetNetworkedBool("ControllingMALP",false)
+	local control = p:GetNWBool("ControllingMALP",false)
 
 	if(control) then
 		self.KBD:SetActive(true)

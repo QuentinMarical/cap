@@ -15,7 +15,7 @@ function EFFECT:Init(data)
 
 	self.Satellite = {
 		self.Main,
-		self.Main:GetNetworkedEntity("Sat1", self.Main),
+		self.Main:GetNWEntity("Sat1", self.Main),
 		self.Main:GetNWEntity("Sat2", self.Main),
 		self.Main:GetNWEntity("Sat3", self.Main),
 		self.Main:GetNWEntity("Sat4", self.Main),

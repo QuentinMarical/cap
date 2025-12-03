@@ -924,7 +924,7 @@ end
 function ENT:ActivateChevron(chev,b,inbound,nosound)
 	if(not (self and self.Chevron)) then return end;
 	if(self.Chevron[chev]) then
-		if(b and self.Chevron[chev]:GetNetworkedString("ChevAnim") != "chevlocked") then
+		if(b and self.Chevron[chev]:GetNWString("ChevAnim") != "chevlocked") then
 			if (not IsValid(self.Chevron[chev])) then
 				self.Entity:Sparks(chev);
 			    timer.Simple(0.1, function()
@@ -933,7 +933,7 @@ function ENT:ActivateChevron(chev,b,inbound,nosound)
 				return
 			end
 			self.Chevron[chev]:Fire("SetAnimation","Lock",0);
-			self.Chevron[chev]:SetNetworkedString("ChevAnim","chevlocked");
+			self.Chevron[chev]:SetNWString("ChevAnim","chevlocked");
 			if (not nosound) then self.Entity:ChevronSound(chev,true,inbound,false); end
 		elseif (not b and self.Chevron[chev]:GetNWString("ChevAnim") == "chevlocked") then
 			self.Chevron[chev]:Fire("SetAnimation","UnLock",0);

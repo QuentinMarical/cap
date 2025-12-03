@@ -60,7 +60,7 @@ function ENT:SpawnBeam()
 end
 
 function ENT:Setup(start, dir, speed, time, effect)
-	self.Entity:SetNetworkedInt("StartTime", time)
+	self.Entity:SetNWInt("StartTime", time)
 	self.Dir = dir;
 	self.StartPos = start;
 	self.EndPos = start;

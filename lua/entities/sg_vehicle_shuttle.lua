@@ -52,7 +52,7 @@ function ENT:SpawnFunction(ply, tr) --######## Pretty useless unless we can spaw
 	e:SetPos(tr.HitPos + Vector(0,0,90))
 	e:Spawn()
 	e:Activate()
-	e:SetWire("Health",e:GetNetworkedInt("health"));
+	e:SetWire("Health",e:GetNWInt("health"));
 	ply:AddCount("CAP_ships", e)
 	e.Owner = ply;
 	return e
@@ -71,7 +71,7 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
-	self:SetNetworkedInt("health",self.EntHealth)
+	self:SetNWInt("health",self.EntHealth)
 	self:SetUseType(SIMPLE_USE)
 	self:StartMotionController()
 	self:SpawnChairs()
@@ -117,9 +117,9 @@ function ENT:OnRemove()	self.BaseClass.OnRemove(self) end
 
 function ENT:OnTakeDamage(dmg) --########## Shuttle's aren't invincible are they? @RononDex
 
-	local health=self:GetNetworkedInt("health")-(dmg:GetDamage()/10)
+	local health=self:GetNWInt("health")-(dmg:GetDamage()/10)
 	if(not self.Shields:Enabled() or self.Shields.Depleted) then
-		self:SetNetworkedInt("health",health)
+		self:SetNWInt("health",health)
 		self:SetWire("Health",health);
 	end
 	if((health)<=250) then
@@ -176,7 +176,7 @@ function ENT:ExitShut() --################# Get out the jumper@RononDex
 	self.Pilot:SetPos(self:GetPos()+self:GetForward()*15+self:GetUp()*-40)
 	self.Pilot:SetMoveType(MOVETYPE_WALK)
 	--self.Pilot:SetScriptedVehicle(NULL)
-	self.Pilot:SetNetworkedEntity( "ScriptedVehicle", NULL )
+	self.Pilot:SetNWEntity( "ScriptedVehicle", NULL )
 	self.Pilot:SetViewEntity( NULL )
 end
 
@@ -440,7 +440,7 @@ function ENT:Effects()
 	pos[4] = self:GetPos() + self:GetForward() * -390 + self:GetUp()*67.5 + self:GetRight()*-190
 
 	local p = LocalPlayer()
-	local Shuttle = p:GetNetworkedEntity("ScriptedVehicle", NULL)
+	local Shuttle = p:GetNWEntity("ScriptedVehicle", NULL)
 	local roll = math.Rand(-90,90)
 	local normal = (self.Entity:GetForward() * -1):GetNormalized()
 
@@ -487,7 +487,7 @@ function ENT:BoostFX()
 	local normal = (self.Entity:GetForward() * -1):GetNormalized()
 	local roll = math.Rand(-90,90)
 	local p = LocalPlayer()
-	local Shuttle = p:GetNetworkedEntity("ScriptedVehicle", NULL)
+	local Shuttle = p:GetNWEntity("ScriptedVehicle", NULL)
 
 	if((p:KeyDown("Shuttle","SPD"))and(p:KeyDown("Shuttle","FWD"))and((Shuttle)and(Shuttle:IsValid())and(Shuttle==self))) then
 
@@ -543,7 +543,7 @@ function ENT:Think()
 	self.BaseClass.Think(self)
 
 	local p = LocalPlayer()
-	local Shuttle = p:GetNetworkedEntity("ScriptedVehicle", NULL)
+	local Shuttle = p:GetNWEntity("ScriptedVehicle", NULL)
 
 	if((Shuttle)and((Shuttle)==self)and(Shuttle:IsValid())) then
 		self.KBD:SetActive(true)
@@ -581,8 +581,8 @@ local hudpos = {
 function PrintHUD()
 
 	local p = LocalPlayer()
-	local self = p:GetNetworkedEntity("ScriptedVehicle", NULL)
-	local shuttle = p:GetNetworkedEntity("Shuttle")
+	local self = p:GetNWEntity("ScriptedVehicle", NULL)
+	local shuttle = p:GetNWEntity("Shuttle")
 	if(IsValid(self)) then
 		if((IsValid(shuttle))and(shuttle==self)) then
 			local health = math.Round(shuttle:GetNWInt("health")/shuttle.EntHealth*100) -- test fix

@@ -40,7 +40,7 @@ if CLIENT then
 
 	local function PersonalShieldDrawHUD()
 		local ply = LocalPlayer()
-		if not( ply:IsValid() and ply:GetNetworkedBool("Has.A.pShield", false)) then return end
+		if not( ply:IsValid() and ply:GetNWBool("Has.A.pShield", false)) then return end
 
 		local strength = math.Clamp(ply:GetNWFloat("pShieldStrength", 12), 12, 100)
 		local a = 150
@@ -69,7 +69,7 @@ local Sounds = {
 
 function SWEP:Initialize()
 	self:SetWeaponHoldType(self.HoldType)
-	--self.Owner:SetNetworkedFloat("pShieldStrength", 0)
+	--self.Owner:SetNWFloat("pShieldStrength", 0)
 end
 
 local function EngageEffect(ply)
@@ -125,7 +125,7 @@ hook.Add("EntityTakeDamage", "Staraget.PersonalShield.StopDamage",
 			local infl = dmginfo:GetInflictor()
     		local att = dmginfo:GetAttacker()
     		local amount    = dmginfo:GetDamage()
-			local strength = ent:GetNetworkedFloat("pShieldStrength", 0)
+			local strength = ent:GetNWFloat("pShieldStrength", 0)
 			if  strength > 0 then
 				local dmg = dmginfo:GetDamage()
 				strength = strength - dmg/10

@@ -60,7 +60,7 @@ function ENT:Initialize()
 	end
 
 	self.IsActivated = false;
-	self:SetNetworkedVector("Col", Vector(200,100,0));
+	self:SetNWVector("Col", Vector(200,100,0));
 	self.GateLink = NULL;
 	timer.Create("StarGateIrisCheck"..self:EntIndex(),10.0,0,function()
 		local remove = true;

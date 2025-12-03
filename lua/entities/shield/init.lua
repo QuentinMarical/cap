@@ -65,7 +65,7 @@ function ENT:Initialize()
 	self.AntiNoclip = false;
 
 	self.TraceSize = Vector(self.Size, self.Size, self.Size);
-	self.Entity:SetNetworkedVector("TraceSize",self.TraceSize);
+	self.Entity:SetNWVector("TraceSize",self.TraceSize);
 
 	-- Imunity to the owner?
 	if(self.Parent.ImmuneOwner) then

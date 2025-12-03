@@ -150,7 +150,7 @@ function ENT:SpawnShield()
 	e:SetAngles(self.Entity:GetAngles());
 	e:SetParent(self.Entity);
 	e:Spawn();
-	e:SetNetworkedVector("shield_color",self.ShieldColor);
+	e:SetNWVector("shield_color",self.ShieldColor);
 	e:SetNWBool("containment",false);
 	timer.Simple(0.1,function()
 		if (IsValid(e)) then

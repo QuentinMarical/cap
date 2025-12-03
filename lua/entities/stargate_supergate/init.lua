@@ -318,7 +318,7 @@ function ENT:DisActivateLights(instant,fail)
 	timer.Destroy("FadeSegmentss"..self:EntIndex());
 	for i=1, 72 do
 		if (IsValid(self.Entity) and IsValid(self.Segments[i])) then -- because i will use same funciton in some other place
-			self.Entity:SetNetworkedBool("chevron"..i,false);
+			self.Entity:SetNWBool("chevron"..i,false);
 		end
 		if IsValid(self.Segments[i]) then -- because i will use same funciton in some other place
 

@@ -321,8 +321,8 @@ function ENT:TeleportEntity(t,base,basedata)
 	-- ######### Player teleport
 	if(e:IsPlayer()) then
 		-- Start teleport effect
-		umsg.Start("StarGate.CalcView.TeleportEffectStart",e);
-		umsg.End();
+		net.Start("StarGate.CalcView.TeleportEffectStart")
+		net.Send(e)
 		e.__PreviousMoveType = e.__PreviousMoveType or e:GetMoveType();
 		e:SetMoveType(MOVETYPE_NOCLIP); -- Needed, or person dont get teleported correctly
 		timer.Simple(0,
@@ -436,9 +436,9 @@ function ENT:DestroyEntity(e)
 		if (not e:HasGodMode()) then
 			e:StripWeapons();
 			e:KillSilent();
-			umsg.Start("StarGate.EventHorizon.PlayerKill");
-			umsg.Entity(e);
-			umsg.End();
+			net.Start("StarGate.EventHorizon.PlayerKill")
+			net.WriteEntity(e)
+			net.Broadcast()
 		end
 	else
 		if(e:IsVehicle()) then
@@ -448,9 +448,9 @@ function ENT:DestroyEntity(e)
 					if (not v:HasGodMode()) then
 						v:StripWeapons();
 						v:KillSilent();
-						umsg.Start("StarGate.EventHorizon.PlayerKill");
-						umsg.Entity(v);
-						umsg.End();
+						net.Start("StarGate.EventHorizon.PlayerKill")
+						net.WriteEntity(v)
+						net.Broadcast()
 					end
 					break;
 				end

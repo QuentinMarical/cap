@@ -53,7 +53,7 @@ function PANEL:Think()
 
 	local p = LocalPlayer();
 	local alpha = 255;
-	local Jumper = p:GetNetworkedEntity("jumper",NULL);
+	local Jumper = p:GetNWEntity("jumper",NULL);
 	if(not IsValid(Jumper)) then alpha = 0 end; -- Should never happen!
 	num = math.Approach(num,alpha,10);
 	self:SetAlpha(num);
@@ -167,8 +167,8 @@ local vX,vY;
 local s = "";
 local gate = "";
 function PANEL:Paint()
-	local Jumper = LocalPlayer():GetNetworkedEntity("jumper",NULL);
-	local Pilot = LocalPlayer():GetNetworkedEntity("JPilot",NULL);
+	local Jumper = LocalPlayer():GetNWEntity("jumper",NULL);
+	local Pilot = LocalPlayer():GetNWEntity("JPilot",NULL);
 	local viewpoint = Jumper:GetPos()+Jumper:GetForward()*75+Jumper:GetUp()*25
 	for k,v in pairs(ents.FindInCone(viewpoint,Jumper:GetForward(),10000,60)) do
 		local pos = (Jumper:GetPos() - v:GetPos()):Length()
@@ -265,7 +265,7 @@ function PANEL:Paint()
 						vY = v;
 					end
 				end
-				draw.WordBox(4,vX,vY,v.Vehicle.." (HP: "..v:GetNetworkedInt("health",0)..")","Default", Color(0,0,255,127.5),Color(255,0,0,255) )
+				draw.WordBox(4,vX,vY,v.Vehicle.." (HP: "..v:GetNWInt("health",0)..")","Default", Color(0,0,255,127.5),Color(255,0,0,255) )
 			end*/
 		end
 	end

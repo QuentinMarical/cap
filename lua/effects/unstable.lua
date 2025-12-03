@@ -28,7 +28,7 @@ function EFFECT:Init(data)
 
 	self.EntityO	= data:GetEntity() 	-- Give the overloader that is firing
 	if (not IsValid(self.EntityO)) then return end
-	self.EntityG	= self.EntityO:GetNetworkedEntity("remoteGate", nil)
+	self.EntityG	= self.EntityO:GetNWEntity("remoteGate", nil)
 	self.StartPos	= StarGate.GetEntityCentre(self.EntityG)
 	self.EntityE	= StarGate.FindEntInsideSphere(self.StartPos, 10, "event_horizon")[1]
 	self.Visibilty	= util.GetPixelVisibleHandle()

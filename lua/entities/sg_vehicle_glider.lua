@@ -53,7 +53,7 @@ function ENT:SpawnFunction(ply, tr) --######## Pretty useless unless we can spaw
 	e:SetPos(tr.HitPos + Vector(0,0,90))
 	e:Spawn()
 	e:Activate()
-	e:SetWire("Health",e:GetNetworkedInt("health"));
+	e:SetWire("Health",e:GetNWInt("health"));
 	ply:AddCount("CAP_ships", e)
 	return e
 end
@@ -75,7 +75,7 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self.BlastCount = 0;
 	self.MaxBlasts = (4);
 	self.BlastsFired = 0;
-	self:SetNetworkedInt("health",self.EntHealth);
+	self:SetNWInt("health",self.EntHealth);
 	self.Delay = 10;
 
 	--######### Flight Vars
@@ -111,8 +111,8 @@ end
 
 function ENT:OnTakeDamage(dmg) --########## Gliders aren't invincible are they? @RononDex
 
-	local health=self:GetNetworkedInt("health")
-	self:SetNetworkedInt("health",health-dmg:GetDamage()) -- Sets heath(Takes away damage from health)
+	local health=self:GetNWInt("health")
+	self:SetNWInt("health",health-dmg:GetDamage()) -- Sets heath(Takes away damage from health)
 	self:SetWire("Health",health-dmg:GetDamage());
 
 	if((health-dmg:GetDamage())<=0) then
@@ -230,7 +230,7 @@ function ENT:Think()
 	self.BaseClass.Think(self)
 
 	local p = LocalPlayer()
-	local vehicle = p:GetNetworkedEntity("ScriptedVehicle", NULL)
+	local vehicle = p:GetNWEntity("ScriptedVehicle", NULL)
 
 	if((vehicle)and((vehicle)==self)and(vehicle:IsValid())) then
 		self.KBD:SetActive(true)

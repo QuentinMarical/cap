@@ -116,7 +116,7 @@ function SWEP:SecondaryAttack()
 		self:EmitSound(self.Sounds.SwitchMode2, 150);
 		local modes = 3;
 		self.AttackMode = math.Clamp((self.AttackMode+1) % (modes + 1),1,modes);
-		self.Weapon:SetNetworkedBool("Mode",self.AttackMode); -- Tell client, what mode we are in
+		self.Weapon:SetNWBool("Mode",self.AttackMode); -- Tell client, what mode we are in
 		self.Owner._KinoRemoteMode = self.AttackMode; -- So modes are saved accross "session" (if he died it's the last mode he used it before)
 	else -- if we using kino, switch control to other kino
 		self.KinoNumber = self.KinoNumber + 1;
@@ -163,8 +163,11 @@ function SWEP:DoShoot()
 		local ring = self:FindClosestRings();
 		if(IsValid(ring) and not ring.Busy) then
 			self.Owner.RingDialEnt = ring;
-			umsg.Start("RingTransporterShowWindowCap",self.Owner);
-			umsg.End();
+			util.AddNetworkString("RingTransporterShowWindowCap")
+			net.Start("RingTransporterShowWindowCap")
+			net.WriteBool(true)
+			net.WriteEntity(ring)
+			net.Send(self.Owner)
 		end
 	end
 end
@@ -393,7 +396,7 @@ end
 function SWEP:DrawHUD()
 
 	local ply = LocalPlayer();
-	local active = ply:GetNetworkedBool("KActive")
+	local active = ply:GetNWBool("KActive")
 	local kino = ply:GetNWEntity("Kino", ply);
 
 	if (active == false) then -- Draw mode hud only, if we not flying with kino

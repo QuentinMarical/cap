@@ -14,7 +14,7 @@ ENT.SC_hud = surface.GetTextureID("VGUI/resources_hud/MCD");
 local matBlurScreen = Material( "pp/blurscreen" )
 
 function ENT:Draw()
-	if self:GetNetworkedBool("ShouldClip", false) then self:UpdateClipping();
+	if self:GetNWBool("ShouldClip", false) then self:UpdateClipping();
 	else self:SetRenderClipPlaneEnabled(false); end
 	self:DrawModel();
 

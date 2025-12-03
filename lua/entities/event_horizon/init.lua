@@ -18,6 +18,16 @@
 
 --################# HEADER #################
 if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("base")) then return end
+if SERVER then
+	util.AddNetworkString("StarGate.CalcView.TeleportEffectStart")
+	util.AddNetworkString("StarGate.EventHorizon.ClipStart")
+	util.AddNetworkString("StarGate.EventHorizon.ClipStop")
+	util.AddNetworkString("StarGate.EventHorizon.PlayerKill")
+	util.AddNetworkString("StarGate.EventHorizon.SecretStart")
+	util.AddNetworkString("StarGate.EventHorizon.SecretReset")
+	util.AddNetworkString("StarGate.EventHorizon.SecretOut")
+	util.AddNetworkString("StarGate.EventHorizon.SecretStop")
+end
 ENT.CDSIgnore = true; -- CDS Immunity
 function ENT:gcbt_breakactions() end; ENT.hasdamagecase = true; -- GCombat invulnarability!
 
@@ -726,7 +736,7 @@ function ENT:StartTouchPlayersNPCs(e,ignore)
 	if(self.Attached[e]) then return end; -- Attached props
 	if(self.ShuttingDown and not self.ShuttingDownKill) then return; end
 	if(not IsValid(e)) then return end; -- Not valid
-	if(e:IsPlayer() and (IsValid(e:GetParent()) or IsValid(e:GetVehicle()) or IsValid(e:GetNetworkedEntity("ScriptedVehicle", NULL)))) then return end; -- No teleport/kill of parented players
+	if(e:IsPlayer() and (IsValid(e:GetParent()) or IsValid(e:GetVehicle()) or IsValid(e:GetNWEntity("ScriptedVehicle", NULL)))) then return end; -- No teleport/kill of parented players
 	if(e.NotTeleportable) then return end; -- Does not want to be teleported!
 	local class = e:GetClass();
 	if(class:find("stargate")) then return end;
@@ -875,7 +885,7 @@ end
 function ENT:EndTouch(e)
 	if(self.ShuttingDown) then return end; -- We are shutting down
 	if(not IsValid(e)) then return end; -- Not valid or ignore
-	if(e:IsPlayer() and (IsValid(e:GetParent()) or IsValid(e:GetVehicle()) or IsValid(e:GetNetworkedEntity("ScriptedVehicle",NULL)))) then return end;  -- No teleport/kill of parented players
+	if(e:IsPlayer() and (IsValid(e:GetParent()) or IsValid(e:GetVehicle()) or IsValid(e:GetNWEntity("ScriptedVehicle",NULL)))) then return end;  -- No teleport/kill of parented players
 	if(e.NotTeleportable) then return end; -- Does not want to be teleported!
 
 	local parent = self.Entity:GetParent();
@@ -1212,11 +1222,11 @@ function BUFFER:StartTouch(EventHorizon,e)
 		//e:SetNWEntity("PhysEntityGate",e.gate.agate);
 	end
 
-	umsg.Start("StarGate.EventHorizon.ClipStart");
-		umsg.Short(e.dir)
-		umsg.Entity(e);
-		umsg.Entity(EventHorizon);
-	umsg.End();
+	net.Start("StarGate.EventHorizon.ClipStart")
+		net.WriteUInt(e.dir or 0, 16)
+		net.WriteEntity(e)
+		net.WriteEntity(EventHorizon)
+	net.Broadcast()
 
 	if(not(e:GetClass()=="kino_ball")) then
 		if(IsValid(e:GetPhysicsObject())) then
@@ -1294,11 +1304,11 @@ function BUFFER:Touch(EventHorizon,e)
 		end
 	end
 
-	umsg.Start("StarGate.EventHorizon.ClipStart")
-		umsg.Short(e.dir)
-		umsg.Entity(e)
-		umsg.Entity(EventHorizon)
-	umsg.End()
+	net.Start("StarGate.EventHorizon.ClipStart")
+		net.WriteUInt(e.dir or 0, 16)
+		net.WriteEntity(e)
+		net.WriteEntity(EventHorizon)
+	net.Broadcast()
 end
 
 function ENT:CleanBufferVars(e)
@@ -1319,9 +1329,9 @@ function ENT:CleanBufferVars(e)
 		e.EventHorizonNoCollide:Remove();
 	end
 
-	umsg.Start("StarGate.EventHorizon.ClipStop");
-		umsg.Entity(e);
-	umsg.End()
+	net.Start("StarGate.EventHorizon.ClipStop")
+		net.WriteEntity(e)
+	net.Broadcast()
 
 	e.IsInGate = false;
 	BUFFER.InBuffer[e] = nil;
@@ -1422,9 +1432,9 @@ function BUFFER:EndTouch(EventHorizon,e,ignore,tdir)
 
 	e.___dir = nil;
 
-	umsg.Start("StarGate.EventHorizon.ClipStop");
-		umsg.Entity(e);
-	umsg.End();
+	net.Start("StarGate.EventHorizon.ClipStop")
+		net.WriteEntity(e)
+	net.Broadcast()
 
 	if (not notouch) then
 		if(IsValid(e:GetPhysicsObject())) then
@@ -1516,14 +1526,14 @@ function ENT:DoSecret(v)
 
 	if (not hook_added) then
 		hook.Add("PostPlayerDeath","Stargate.EH.Secret",function(ply)
-			umsg.Start("StarGate.EventHorizon.SecretStop",ply);
-			umsg.End();
+			net.Start("StarGate.EventHorizon.SecretStop")
+			net.Send(ply)
 		end)
 		hook_added = true
 	end
 
-	umsg.Start("StarGate.EventHorizon.SecretStart",v);
-	umsg.End();
+	net.Start("StarGate.EventHorizon.SecretStart")
+	net.Send(v)
 
 	local old_pos = v:GetPos();
 	local old_angles = v:EyeAngles();
@@ -1596,17 +1606,17 @@ function ENT:DoSecret(v)
 				k.DisableSpawning = nil; -- Allow him again to spawn things
 				k.DisableSuicide = nil; -- Allow him to commit suicide again
 				k.DisableNoclip = nil;
-				umsg.Start("StarGate.EventHorizon.SecretReset",k);
-				umsg.End();
-				umsg.Start("StarGate.EventHorizon.PlayerKill");
-				umsg.Entity(k);
-				umsg.End();
+				net.Start("StarGate.EventHorizon.SecretReset")
+				net.Send(k)
+				net.Start("StarGate.EventHorizon.PlayerKill")
+				net.WriteEntity(k)
+				net.Broadcast()
 				return
 			end
 		end
 
-		umsg.Start("StarGate.EventHorizon.SecretOut",k);
-		umsg.End();
+		net.Start("StarGate.EventHorizon.SecretOut")
+		net.Send(k)
 
 		-- Special settings for a player
 		if(k:IsPlayer()) then

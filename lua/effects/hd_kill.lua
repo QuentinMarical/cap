@@ -58,9 +58,9 @@ function EFFECT:Render()
 		self.Draw = nil;
 	else
 		local is_me = (self.Parent == LocalPlayer());
-		if((is_me and self.Parent:KeyDown(IN_ATTACK)) or (not is_me and self.Parent:GetNetworkedBool("shooting_hand",false))) then
+		if((is_me and self.Parent:KeyDown(IN_ATTACK)) or (not is_me and self.Parent:GetNWBool("shooting_hand",false))) then
 			if(self.Parent:GetNWBool("handdevice_depleted",false)) then
-				self.Parent:SetNetworkedBool("handdevice_depleted",false);
+				self.Parent:SetNWBool("handdevice_depleted",false);
 				self.Draw = nil;
 			end
 		else

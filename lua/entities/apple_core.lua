@@ -45,9 +45,9 @@ function ENT:Initialize()
 		end
 
 		self.netid = CAF.GetAddon("Resource Distribution").CreateNetwork(self);
-		self:SetNetworkedInt( "netid", self.netid );
+		self:SetNWInt( "netid", self.netid );
 		self.range = 2048;
-		self:SetNetworkedInt( "range", self.range );
+		self:SetNWInt( "range", self.range );
 
 		self.RDEnt = CAF.GetAddon("Resource Distribution");
 	end
@@ -70,7 +70,7 @@ function ENT:SpawnConsole(p)
 	ent.HaveCore = true;
 	ent.Owner = self.Owner;
 	self.Console = ent;
-	self:SetNetworkedEntity("Console", self.Console);
+	self:SetNWEntity("Console", self.Console);
 	ent:SetNWBool("Core", true);
 	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	constraint.Weld(ent,self,0,0,0,true)
@@ -273,7 +273,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		self.Console.Core = self;
 		self.Console.HaveCore = true;
 		self.Console.Owner = self.Owner;
-		self:SetNetworkedEntity("Console", self.Console);
+		self:SetNWEntity("Console", self.Console);
 		self.Console:SetNWBool("Core", true);
 	end
 
@@ -300,14 +300,14 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		RD.ApplyDupeInfo(Ent, CreatedEntities)
 	end
 
-	self.Console:SetNetworkedString("NameA",dupeInfo.ScreenTextA);
-	self.Console:SetNetworkedString("NameB",dupeInfo.ScreenTextB);
-	self.Console:SetNetworkedString("NameC",dupeInfo.ScreenTextC);
-	self.Console:SetNetworkedString("NameD",dupeInfo.ScreenTextD);
-	self.Console:SetNetworkedString("NameE",dupeInfo.ScreenTextE);
-	self.Console:SetNetworkedString("NameF",dupeInfo.ScreenTextF);
-	self.Console:SetNetworkedString("NameG",dupeInfo.ScreenTextG);
-	self.Console:SetNetworkedString("NameH",dupeInfo.ScreenTextH);
+	self.Console:SetNWString("NameA",dupeInfo.ScreenTextA);
+	self.Console:SetNWString("NameB",dupeInfo.ScreenTextB);
+	self.Console:SetNWString("NameC",dupeInfo.ScreenTextC);
+	self.Console:SetNWString("NameD",dupeInfo.ScreenTextD);
+	self.Console:SetNWString("NameE",dupeInfo.ScreenTextE);
+	self.Console:SetNWString("NameF",dupeInfo.ScreenTextF);
+	self.Console:SetNWString("NameG",dupeInfo.ScreenTextG);
+	self.Console:SetNWString("NameH",dupeInfo.ScreenTextH);
          */
 	if (IsValid(ply)) then
 		self.Owner = ply;
@@ -367,7 +367,7 @@ end
 
 function ENT:Think()
 	if IsValid(self.Console) then
-		self.Wire = self.Console:GetNetworkedInt("Wire",0);
+		self.Wire = self.Console:GetNWInt("Wire",0);
 
 		self.NameA = self.Console:GetNWString("NameA","");
 		self.NameB = self.Console:GetNWString("NameB","");

@@ -30,7 +30,7 @@ function EFFECT:Think()
 		return false
 	end
 
-	if self.Parent:GetNetworkedBool("StopBuble") and self.Grow then
+	if self.Parent:GetNWBool("StopBuble") and self.Grow then
 		self.Grow = false;
 		self.Multiply = 0.5;
 		self.Created = CurTime()+0.5;

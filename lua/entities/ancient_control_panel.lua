@@ -67,9 +67,10 @@ end
 
 function ENT:Use(ply)
 	if(not self.Busy)then
-		umsg.Start("AncientPanel",ply)
-	    umsg.Entity(self.Entity);
-	    umsg.End()
+		util.AddNetworkString("AncientPanel")
+		net.Start("AncientPanel")
+		net.WriteEntity(self.Entity)
+		net.Send(ply)
 		self.Player = ply;
 	end
 end
@@ -331,13 +332,15 @@ end
 
 vgui.Register( "AncientEntry", VGUI )
 
-function AncientPanel(um)
-	local Window = vgui.Create( "AncientEntry" )
-	Window:SetMouseInputEnabled( true )
-	Window:SetVisible( true )
-	e = um:ReadEntity();
-	if(not IsValid(e)) then return end;
+if CLIENT then
+	local function AncientPanelReceive()
+		local Window = vgui.Create( "AncientEntry" )
+		Window:SetMouseInputEnabled( true )
+		Window:SetVisible( true )
+		local e = net.ReadEntity()
+		if(not IsValid(e)) then return end
+	end
+	net.Receive("AncientPanel", AncientPanelReceive)
 end
-usermessage.Hook("AncientPanel", AncientPanel)
 
 end

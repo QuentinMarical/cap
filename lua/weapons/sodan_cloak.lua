@@ -67,8 +67,8 @@ end
 
 --################### Primary Attack @Catdaemon
 function SWEP:PrimaryAttack()
-	if(not self.Owner:GetNetworkedBool("pCloaked",false)) then
-		self.Owner:SetNetworkedBool("pCloaked",true);
+	if(not self.Owner:GetNWBool("pCloaked",false)) then
+		self.Owner:SetNWBool("pCloaked",true);
 		self.Owner:SetNoTarget(true);
 		self.Owner:EmitSound(self.Sounds.Engage,90,math.random(97,103));
 		self:DoCloakEffect();
@@ -165,9 +165,9 @@ end
 /*
 hook.Add("Think","StarGate.SodanCloaking.Think",
 	function()
-		local cloaked_self = LocalPlayer():GetNetworkedBool("pCloaked",false);
+		local cloaked_self = LocalPlayer():GetNWBool("pCloaked",false);
 		for _,p in pairs(player.GetAll()) do
-			local cloaked = p:GetNetworkedBool("pCloaked",NULL); -- If a player hasn't cloaked himself yet, we do not want to override color at all (It conflicted on my server
+			local cloaked = p:GetNWBool("pCloaked",NULL); -- If a player hasn't cloaked himself yet, we do not want to override color at all (It conflicted on my server
 			if(cloaked ~= NULL) then
 				local weapon = p:GetActiveWeapon();
 				local color = p:GetColor();
@@ -249,7 +249,7 @@ function util.TraceLine(...)
 	local t = util._Sodan_TraceLine(...);
 	if(t and IsValid(t.Entity)) then
 		if(t.Entity:IsPlayer()) then
-			if(not LocalPlayer():GetNetworkedBool("pCloaked",false) and t.Entity:GetNWBool("pCloaked",false)) then t.Entity = NULL end;
+			if(not LocalPlayer():GetNWBool("pCloaked",false) and t.Entity:GetNWBool("pCloaked",false)) then t.Entity = NULL end;
 		end
 	end
 	return t;
@@ -263,7 +263,7 @@ hook.Add("HUDDrawTargetID","StarGate.SodanCloak", function()
 	if (!trace.HitNonWorld) then return end
 
 	if (trace.Entity:IsPlayer()) then
-		if(not LocalPlayer():GetNetworkedBool("pCloaked",false) and trace.Entity:GetNWBool("pCloaked",false)) then return false end;
+		if(not LocalPlayer():GetNWBool("pCloaked",false) and trace.Entity:GetNWBool("pCloaked",false)) then return false end;
 	end
 end);
 

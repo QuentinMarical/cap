@@ -160,7 +160,7 @@ function SWEP:SecondaryAttack()
 		if not self.Stun then
 			self.Stun = true;
 			p:EmitSound(self.Sounds.Deploy,100,115);
-			self:SetNetworkedInt("Mode",1);
+			self:SetNWInt("Mode",1);
 		else
 			self.Stun = false;
 			p:EmitSound(self.Sounds.Deploy,100,105);
@@ -196,7 +196,7 @@ end
 
 function SWEP:DrawHUD()
 	local mode = "Kill";
-	local int = self:GetNetworkedInt("Mode");
+	local int = self:GetNWInt("Mode");
 	if int == 1 then
 		mode = "Stun";
 	elseif int == 2 then

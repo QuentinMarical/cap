@@ -114,7 +114,7 @@ local function KeyPress()
 	end
 
 	local p = LocalPlayer();
-	local daedalus = p:GetNetworkedEntity("Daedalus");
+        local daedalus = p:GetNWEntity("Daedalus");
 	if (IsValid(daedalus) and key != "") then
 		p:ConCommand("Daedalus_FireRocket "..daedalus:EntIndex().." "..key);
 	end
@@ -141,7 +141,7 @@ function ENT:Think()
 	-- end
 
 	local p = LocalPlayer()
-	local IsDriver = (p:GetNetworkedEntity(self.Vehicle,NULL) == self.Entity);
+        local IsDriver = (p:GetNWEntity(self.Vehicle,NULL) == self.Entity);
 
 		if (IsDriver) then
 			self.KBD:SetActive(true)
@@ -150,15 +150,15 @@ function ENT:Think()
 		end
 
 
-        LocalPlayer().ViewMode = self.Entity:GetNetworkedInt("ViewMode");
-        LocalPlayer().Sublight = self.Entity:GetNetworkedInt("Sublight");
-        LocalPlayer().Hull = self.Entity:GetNetworkedInt("Hull");
-        LocalPlayer().Shield = self.Entity:GetNetworkedInt("Shield");
-        LocalPlayer().Power = self.Entity:GetNetworkedInt("Power");
-        LocalPlayer().Hangar = self.Entity:GetNetworkedInt("Hangar");
-        LocalPlayer().PowerSource = self.Entity:GetNetworkedInt("PowerSource");
-        LocalPlayer().ShieldStatus = self.Entity:GetNetworkedInt("ShieldStatus");
-        LocalPlayer().Hyperdrive = self.Entity:GetNetworkedInt("Hyperdrive");
+        LocalPlayer().ViewMode = self.Entity:GetNWInt("ViewMode");
+        LocalPlayer().Sublight = self.Entity:GetNWInt("Sublight");
+        LocalPlayer().Hull = self.Entity:GetNWInt("Hull");
+        LocalPlayer().Shield = self.Entity:GetNWInt("Shield");
+        LocalPlayer().Power = self.Entity:GetNWInt("Power");
+        LocalPlayer().Hangar = self.Entity:GetNWInt("Hangar");
+        LocalPlayer().PowerSource = self.Entity:GetNWInt("PowerSource");
+        LocalPlayer().ShieldStatus = self.Entity:GetNWInt("ShieldStatus");
+        LocalPlayer().Hyperdrive = self.Entity:GetNWInt("Hyperdrive");
         LocalPlayer().Warning = 0;
 
         -- if  (input.IsKeyDown(KEY_0) and Pressed == false) then
@@ -229,7 +229,7 @@ surface.CreateFont("DaedalusFont", font);
 function DaedalusHUD()
 
         local ply = LocalPlayer();
-        local self = ply:GetNetworkedEntity("ScriptedVehicle", NULL)
+        local self = ply:GetNWEntity("ScriptedVehicle", NULL)
         local vehicle = ply:GetNWEntity("Daedalus");
 
         if (self and self:IsValid() and vehicle and vehicle:IsValid() and LocalPlayer().HUDEnable) then
@@ -498,7 +498,7 @@ function SGDaedalusCalcView(Player, Origin, Angles, FieldOfView)
         local view={};
         local pos = Vector(0,0,0);
         local face = Angle(0,0,0);
-        local self = LocalPlayer():GetNetworkedEntity("ScriptedVehicle", NULL)
+        local self = LocalPlayer():GetNWEntity("ScriptedVehicle", NULL)
 
         if(IsValid(self) and self:GetClass()=="sg_vehicle_daedalus") then
 	        if (LocalPlayer().ViewMode == 0) then

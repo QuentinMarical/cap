@@ -64,7 +64,7 @@ function ENT:SpawnFunction(p, tr) --######## Pretty useless unless we can spawn 
 	e:SpawnMissile(p); -- Spawn the missile props
 	e:Turrets(p); -- Spawn turrets
 	e:SpawnWheels(nil,p);
-	e:SetWire("Health",e:GetNetworkedInt("health"));
+	e:SetWire("Health",e:GetNWInt("health"));
 	p:AddCount("CAP_ships", e)
 	return e;
 end
@@ -84,7 +84,7 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self:PhysicsInit(SOLID_VPHYSICS);
 	self:SetMoveType(MOVETYPE_VPHYSICS);
 	self:SetSolid(SOLID_VPHYSICS);
-	self:SetNetworkedInt("health",500);
+	self:SetNWInt("health",500);
 
 	self.Roll = 0;
 	self.On = 0;
@@ -174,8 +174,8 @@ end
 
 function ENT:OnTakeDamage(dmg) --########## F302's aren't invincible are they? @RononDex
 
-	local health=self:GetNetworkedInt("health")-(dmg:GetDamage()/5);
-	self:SetNetworkedInt("health",health); -- Sets heath(Takes away damage from health)
+	local health=self:GetNWInt("health")-(dmg:GetDamage()/5);
+	self:SetNWInt("health",health); -- Sets heath(Takes away damage from health)
 	self:SetWire("Health",health);
 
 	if((health)<=250) then
@@ -901,9 +901,9 @@ hook.Add("PlayerLeaveVehicle", "JumperSeatExit", function(p,v)
 	if(IsValid(p) and IsValid(v)) then
 		if(v.IsF302Seat) then
 			local F302 = v.F302;
-			p:SetNetworkedBool("302Passenger",false);
+			p:SetNWBool("302Passenger",false);
 			p:SetNWEntity("302Passenger",NULL);
-			p:SetNetworkedEntity("302Seat",NULL);
+			p:SetNWEntity("302Seat",NULL);
 			if (not IsValid(F302)) then return end
 			p:SetPos(F302:GetPos()+F302:GetForward()*100+F302:GetRight()*100+F302:GetUp()*25);
 		end
@@ -914,9 +914,9 @@ hook.Add("PlayerEnteredVehicle","JumperSeatEnter", function(p,v)
 	if(IsValid(v)) then
 		if(IsValid(p) and p:IsPlayer()) then
 			if(v.IsF302Seat) then
-				p:SetNetworkedEntity("302Seat",v);
-				p:SetNetworkedEntity("302Passenger",v:GetParent());
-				p:SetNetworkedBool("302Passenger",true);
+				p:SetNWEntity("302Seat",v);
+				p:SetNWEntity("302Passenger",v:GetParent());
+				p:SetNWBool("302Passenger",true);
 			end
 		end
 	end

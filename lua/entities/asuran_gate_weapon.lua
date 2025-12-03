@@ -47,27 +47,27 @@ function ENT:GetSubBeamPos(beam)
 end
 
 function ENT:IsActive()
-   return self.Entity:GetNetworkedBool("isActive", self.isActive == true)
+	return self.Entity:GetNWBool("isActive", self.isActive == true)
 end
 
 function ENT:IsFiring()
-   return self.Entity:GetNetworkedBool("isFiring", self.isFiring == true)
+	return self.Entity:GetNWBool("isFiring", self.isFiring == true)
 end
 
 function ENT:GetLocalGate()
-   return self.Entity:GetNetworkedEntity("localGate", nil)
+	return self.Entity:GetNWEntity("localGate", nil)
 end
 
 function ENT:GetRemoteGate()
-   return self.Entity:GetNetworkedEntity("remoteGate", nil)
+	return self.Entity:GetNWEntity("remoteGate", nil)
 end
 
 function ENT:GetOutboundBeam()
-    return self.Entity:GetNetworkedEntity("outBeam", nil)
+	return self.Entity:GetNWEntity("outBeam", nil)
 end
 
 function ENT:GetInboundBeam()
-    return self.Entity:GetNetworkedEntity("SmallBeam", nil)
+	return self.Entity:GetNWEntity("SmallBeam", nil)
 end
 
 if CLIENT then
@@ -309,7 +309,7 @@ end
 
 function ENT:SetLocalGate(gate)
 	self.localGate = gate
-	self.Entity:SetNetworkedEntity("localGate", gate)
+	self.Entity:SetNWEntity("localGate", gate)
 end
 
 -- Clears the current target and shuts down the overloader
@@ -513,28 +513,28 @@ function ENT:StartFiring()
 	end
 
 	StarGate.JamRemoteGate(self.remoteGate)
-    /*
+	/*
 	if(StarGate.GetStargateEnergyCapacity(self.remoteGate) == nil) then
 		StarGate.SetStargateEnergyCapacity(self.remoteGate, StarGate.STARGATE_DEFAULT_ENERGY_CAPACITY)
 	end
 
 	if(self.remoteGate.excessPowerLimit == nil) then
 		self.remoteGate.excessPowerLimit = StarGate.GetStargateEnergyCapacity(self.remoteGate) *
-													  energyMultiplier
+													 energyMultiplier
 	end
 
-	self.Entity:SetNetworkedEntity("remoteGate", self.remoteGate)  */
+	self.Entity:SetNWEntity("remoteGate", self.remoteGate)  */
 	self.remoteGate.asuranweapon = self.Entity
 end
 
 function ENT:SetIsActive(isActive)
 	self.isActive = util.tobool(isActive)
-	self.Entity:SetNetworkedBool("isActive", self.isActive)
+	self.Entity:SetNWBool("isActive", self.isActive)
 end
 
 function ENT:SetIsFiring(isFiring)
 	self.isFiring = util.tobool(isFiring)
-	self.Entity:SetNetworkedBool("isFiring", self.isFiring)
+	self.Entity:SetNWBool("isFiring", self.isFiring)
 end
 
 function ENT:CreateBeam()
@@ -559,7 +559,7 @@ function ENT:CreateBeam()
 	beam:Spawn()
 	beam:SetParent(self.Entity)
 	beam:Fire("TurnOn", 1)
-	 self.Entity:SetNetworkedEntity("SmallBeam", beam);
+	self.Entity:SetNWEntity("SmallBeam", beam);
 
 		timer.Simple(1.5, function() -- Spawn the beam after the effect finishes
 		  if(self.remoteGate == nil) then
@@ -584,7 +584,7 @@ function ENT:CreateBeam()
 
 		end)
 
-	self.Entity:SetNetworkedEntity("outBeam", energyBeam)
+	self.Entity:SetNWEntity("outBeam", energyBeam)
 
 	beam.sound = CreateSound(self.Entity, beamSoundPath);
 

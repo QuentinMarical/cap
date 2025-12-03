@@ -20,11 +20,11 @@ ENT.AutomaticFrameAdvance = true
 
 
 function ENT:SetOn( _in_ )
-	self:SetNetworkedBool( "Enabled", _in_ )
+	self:SetNWBool( "Enabled", _in_ )
 end
 
 function ENT:GetOn()
-	return self:GetNetworkedVar( "Enabled", true )
+	return self:GetNWBool( "Enabled", true )
 end
 
 if SERVER then
@@ -59,7 +59,7 @@ function ENT:Initialize()
 	construct.SetPhysProp( nil, self, 0, nil, {GravityToggle = false})
 
 	self.Entity:StartMotionController();
-	self.Entity:SetNetworkedEntity("KinoEnt", self.Entity);
+	self.Entity:SetNWEntity("KinoEnt", self.Entity);
 
 	self.LastYaw = self.Entity:GetAngles().Yaw;
 	self.AccSwep = self.AccSwep or Vector(0,0,0);

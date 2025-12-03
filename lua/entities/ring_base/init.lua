@@ -56,7 +56,7 @@ end
 function ENT:KeyValue(key,value)
 	if key=="name" then
 		self.Address=value
-		self.Entity:SetNetworkedString("address",value)
+		self.Entity:SetNWString("address",value)
 	end
 end
 
@@ -91,9 +91,10 @@ end
 function ENT:Use(ply)
 	--if self.Address then return end -- Allow address changing!
 	if (not self:CAP_CanModify(ply)) then return end
-	umsg.Start("RingTransporterShowNameWindowCap",ply)
-	umsg.Entity(self.Entity);
-	umsg.End()
+	util.AddNetworkString("RingTransporterShowNameWindowCap")
+	net.Start("RingTransporterShowNameWindowCap")
+	net.WriteEntity(self.Entity)
+	net.Send(ply)
 	ply.RingNameEnt=self
 end
 
@@ -110,7 +111,7 @@ function RingsNamingCallback(ply,cmd,args)
 				end
 			end
 			ply.RingNameEnt.Address=adr
-			ply.RingNameEnt:SetNetworkedString("address",adr)
+			ply.RingNameEnt:SetNWString("address",adr)
 			ply.RingNameEnt:SetEntityModifier("Address",adr);
 		end
 		ply.RingNameEnt=nil
@@ -128,7 +129,7 @@ function ENT:SetRingAddress(address)
 		end
 	end
 	self.Address=adr
-	self.Entity:SetNetworkedString("address",adr)
+	self.Entity:SetNWString("address",adr)
 	self.Entity:SetEntityModifier("Address",adr);
 end
 
@@ -280,9 +281,10 @@ function ENT:DoTeleport()
 					end
 					ent:SetPos(destination)
 					if ent:GetClass()=="player" then
-						umsg.Start("RingTransporterTele", ent)
-							umsg.Bool(false)
-						umsg.End()
+						util.AddNetworkString("RingTransporterTele")
+						net.Start("RingTransporterTele")
+						net.WriteBool(false)
+						net.Send(ent)
 					end
 				end
 			end
@@ -342,9 +344,10 @@ function ENT:ReadyChecks()
 			local entz=ents.FindInSphere(self.Entity:LocalToWorld(self.EndPos),80)
 			for _,ent in pairs(entz) do
 				if ent:GetClass()=="player" then
-					umsg.Start("RingTransporterTele", ent)
-						umsg.Bool(true)
-					umsg.End()
+					util.AddNetworkString("RingTransporterTele")
+					net.Start("RingTransporterTele")
+					net.WriteBool(true)
+					net.Send(ent)
 				end
 			end
 		else
@@ -366,7 +369,7 @@ function ENT:DoRings()
 	self:Anim(false);
 
 	local dir = 1;
-	-- Addtion by aVoN: Use "FindRange" everytime we are facing down and the angle is below 45° (pi/4)
+	-- Addtion by aVoN: Use "FindRange" everytime we are facing down and the angle is below 45ï¿½ (pi/4)
 	if(self.Entity:GetUp():DotProduct(Vector(0,0,-1)) > 1/math.sqrt(2)) then
 		--self.SetRange = 1024;
 		dir = -1;
@@ -578,7 +581,7 @@ function ENT.DuplicatorEntityModifier(_,e,data)
 					if(ring.Address == v) then allow = false break end;
 				end
 				if(allow) then
-					e:SetNetworkedString("address",v);
+					e:SetNWString("address",v);
 					e.Address = v;
 				end
 			end

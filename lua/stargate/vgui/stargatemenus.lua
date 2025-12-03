@@ -83,15 +83,15 @@ net.Receive("StarGate.VGUI.Menu",function(len)
 		VGUI:SetVisible(false);
 	end
 	local type = net.ReadInt(8);
-	local groupsystem = gate:GetNetworkedBool("SG_GROUP_SYSTEM");
+	local groupsystem = gate:GetNWBool("SG_GROUP_SYSTEM");
 	if (type<=0) then -- 0 is normal menu, -1 is alternative (without dial)
-		local candialg = util.tobool(gate:GetNetworkedInt("CANDIAL_GROUP_MENU"));
+		local candialg = util.tobool(gate:GetNWInt("CANDIAL_GROUP_MENU"));
 		local alternatemenu = (type<0);
 		VGUI = vgui.Create("SControlePanel");
 		VGUI:SetSettings(gate,groupsystem,alternatemenu,candialg);
 		VGUI:SetVisible(true);
 	elseif(type==1) then -- 1 is normal dial menu (used in ships/mobile dhd etc)
-		local candialg = util.tobool(gate:GetNetworkedInt("CANDIAL_GROUP_DHD"));
+		local candialg = util.tobool(gate:GetNWInt("CANDIAL_GROUP_DHD"));
 		VGUI = vgui.Create("SControlePanelDHD");
 		VGUI:SetSettings(gate,groupsystem,candialg);
 		VGUI:SetVisible(true);
@@ -101,12 +101,12 @@ net.Receive("StarGate.VGUI.Menu",function(len)
 		VGUI:SetSettings(gate,groupsystem,candialg);
 		VGUI:SetVisible(true);
 	elseif(type==3) then -- 3 is for nox dial
-		local candialg = util.tobool(gate:GetNetworkedInt("CANDIAL_GROUP_DHD"));
+		local candialg = util.tobool(gate:GetNWInt("CANDIAL_GROUP_DHD"));
 		VGUI = vgui.Create("SControlePanelDHD");
 		VGUI:SetSettings(gate,groupsystem,candialg,true);
 		VGUI:SetVisible(true);
 	elseif(type==4) then -- 4 is for orlin gate
-		local candialg = util.tobool(gate:GetNetworkedInt("CANDIAL_GROUP_MENU"));
+		local candialg = util.tobool(gate:GetNWInt("CANDIAL_GROUP_MENU"));
 		VGUI = vgui.Create("SControlePanelDHD");
 		VGUI:SetSettings(gate,groupsystem,candialg,false,true);
 		VGUI:SetVisible(true);
@@ -138,12 +138,13 @@ end)
 
 -- ################# Closes the dialling Dialoge @aVoN
 usermessage.Hook("StarGate.DialMenuDHDClose",
-	function(data)
-		if(VGUI and VGUI:IsValid()) then
-			VGUI:SetVisible(false);
-		end
-	end
-);
+if CLIENT then
+    net.Receive("StarGate.DialMenuDHDClose", function()
+        if (VGUI and VGUI:IsValid()) then
+            VGUI:SetVisible(false);
+        end
+    end)
+end
 
 -- ################# Screen clicking code @aVoN
 hook.Add("GUIMousePressed","StarGate.DHD.GUIMousePressed_Group",
@@ -152,7 +153,7 @@ hook.Add("GUIMousePressed","StarGate.DHD.GUIMousePressed_Group",
 			local p = LocalPlayer();
 			if (input.IsButtonDown( MOUSE_RIGHT ) or not IsValid(p)) then return end
 			local trace = util.QuickTrace(p:GetShootPos(),dir*1024,p);
-			if(IsValid(trace.Entity) and trace.Entity.IsDHD and not trace.Entity:GetNetworkedBool("BusyGUI",false)) then
+			if(IsValid(trace.Entity) and trace.Entity.IsDHD and not trace.Entity:GetNWBool("BusyGUI",false)) then
 				DHD = trace.Entity;
 				if (DHD:GetPos():Distance(p:GetPos()) > 110) then return end
 				local btn = DHD:GetCurrentButton(p);
@@ -247,7 +248,7 @@ function PANEL:SetSettings(entity,groupsystem,alternatemenu,candialg)
 	}
 
 	self.blocked_allowed = true;
-	if (entity:GetNetworkedInt("SG_BLOCK_ADDRESS")<=0 or entity:GetNetworkedInt("SG_BLOCK_ADDRESS")==1 and self.Class!="stargate_universe" or self.Class=="stargate_supergate") then
+	if (entity:GetNWInt("SG_BLOCK_ADDRESS")<=0 or entity:GetNWInt("SG_BLOCK_ADDRESS")==1 and self.Class!="stargate_universe" or self.Class=="stargate_supergate") then
 		self.blocked_allowed = false;
 	end
 
@@ -1389,7 +1390,7 @@ function PANEL:SetStatusGroup(s,g,no_message,letters,gs)
 					address:find(letters[6]) and
 					(g == group or g:sub(1,1) == group:sub(1,1))
 				) then
-					if (self.Entity:GetNetworkedInt("SG_ATL_OVERRIDE")<=0 or (v.class=="stargate_atlantis" and self.Entity:GetClass()=="stargate_atlantis" or v.class!="stargate_atlantis" and self.Entity:GetClass()!="stargate_atlantis") or g:sub(1,1) == group:sub(1,1) and g:sub(2,2) != group:sub(2,2)) then
+					if (self.Entity:GetNWInt("SG_ATL_OVERRIDE")<=0 or (v.class=="stargate_atlantis" and self.Entity:GetClass()=="stargate_atlantis" or v.class!="stargate_atlantis" and self.Entity:GetClass()!="stargate_atlantis") or g:sub(1,1) == group:sub(1,1) and g:sub(2,2) != group:sub(2,2)) then
 						if(tonumber(v.ent) == self.Entity:EntIndex()) then -- We have entered the same/similar address we had before - So we haven't changed anything
 							if (group:find(g)) then
 								set = false;
@@ -1821,7 +1822,7 @@ local function ApplyGlyphs(self, galaxy, small)
 	local universe, atlantis = false, false;
 	local block_address = 2;
 	local sizeg,sizea = 80,self.VGUI.Width;
-	if (IsValid(ent)) then block_address = ent:GetNetworkedInt("SG_BLOCK_ADDRESS"); end
+	if (IsValid(ent)) then block_address = ent:GetNWInt("SG_BLOCK_ADDRESS"); end
 	if (IsValid(ent) and ent:GetClass()=="stargate_universe") then
 		self.VGUI.AddressListView:SetDataHeight(hu);
 		universe = true;
@@ -1832,7 +1833,7 @@ local function ApplyGlyphs(self, galaxy, small)
 		self.VGUI.AddressListView:SetDataHeight(h);
 	end
 
-	local glyphs = ent:GetNetworkedInt("SG_VGUI_GLYPHS")
+	local glyphs = ent:GetNWInt("SG_VGUI_GLYPHS")
 
 	for i=1, #mlist do
 		local ss = self.VGUI.AddressListView:GetLine(i);
@@ -2382,7 +2383,7 @@ function PANEL:AddGatesToList(s)
 				end
 				if(address != "" and group != "" and IsValid(ent) and (not locale and not ent:GetLocale() and not self.LocalGate or (ent:GetGateGroup() == group or v.class=="stargate_universe" and ent:GetClass()=="stargate_universe")) and (address!=ent:GetGateAddress() or group!=ent:GetGateGroup())) then
 					local range = (ent:GetPos() - v.pos):Length();
-					local c_range = ent:GetNetworkedInt("SGU_FIND_RANDE"); -- GetConVar("stargate_sgu_find_range"):GetInt();
+					local c_range = ent:GetNWInt("SGU_FIND_RANDE"); -- GetConVar("stargate_sgu_find_range"):GetInt();
 					if (ent:GetGateGroup() != group and (v.class!="stargate_universe" or ent:GetClass()!="stargate_universe") or c_range > 0 and range>c_range and ent:GetGateGroup():len()==3) then
 						if (locale or ent:GetLocale()) then	continue end
 						if (ent:GetGateGroup():len()==3 and group:len()==3 or ent:GetGateGroup():len()==2 and group:len()==2) then
@@ -2438,7 +2439,7 @@ function PANEL:AddGatesToList(s)
 				if(address ~= "") then
 					if(IsValid(g))then
 						local range = (g:GetPos() - v.pos):Length();
-						local c_range = g:GetNetworkedInt("SGU_FIND_RANDE"); -- GetConVar("stargate_sgu_find_range"):GetInt();
+						local c_range = g:GetNWInt("SGU_FIND_RANDE"); -- GetConVar("stargate_sgu_find_range"):GetInt();
 					    if(v.galaxy or g:GetGalaxy() or
 						   v.class=="stargate_universe" and g:GetClass()=="stargate_universe" and
 						   c_range > 0 and range>c_range)then
@@ -2512,9 +2513,9 @@ end
 --################# If DHD is concept added by AlexALX
 function PANEL:IsConcept(ent)
 	if(not IsValid(self.Entity)) then return false end;
-	if (self.Entity:GetNetworkedInt("Point_of_Origin",0)==1) then
+	if (self.Entity:GetNWInt("Point_of_Origin",0)==1) then
 		return true;
-	elseif (self.Entity:GetNetworkedInt("Point_of_Origin",0)>=2) then
+	elseif (self.Entity:GetNWInt("Point_of_Origin",0)>=2) then
 		return false;
 	end
 	for _,v in pairs(self:FindDHD()) do

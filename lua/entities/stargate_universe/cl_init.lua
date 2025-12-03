@@ -57,7 +57,7 @@ ENT.SpritePositions = {
 function ENT:Initialize()
 	self.Emitter = ParticleEmitter(self.Entity:GetPos());
 	self.DestinyConsoleRange = StarGate.CFG:Get("destiny_console","range",1000);
-	self.Entity:SetNetworkedBool( "Smoke", false );
+	self.Entity:SetNWBool( "Smoke", false );
 	local snd = "stargate/universe/steam.wav";
 	local parsedsound = snd:Trim()
 	util.PrecacheSound(parsedsound)
@@ -67,7 +67,7 @@ end
 
 --############# Steam sound module
 function ENT:SteamSound(steam)
-    if(self.Entity:GetNetworkedBool( "Smoke", bool ) and steam)then
+	if(self.Entity:GetNWBool( "Smoke", bool ) and steam)then
         self.SND:Play();
     else
         self.SND:Stop();
@@ -135,7 +135,7 @@ function ENT:Think(ply)
 			if(self.Entity:GetNWBool("chevron"..i,false)) then
     		-- Clientside lights, yeah! Can be toggled by clients this causes much less lag when deactivated. Method below is from Catdaemon's harvester
 				local dlight = DynamicLight(self:EntIndex()..i);
-				local gate = self.Entity:GetNetworkedEntity("GateLights",self.Gate);
+				local gate = self.Entity:GetNWEntity("GateLights",self.Gate);
 				if(dlight and IsValid(gate)) then
 					dlight.Pos = gate:LocalToWorld(self.LightPositions[i]);
 					dlight.r = self.ChevronColor.r;
@@ -160,7 +160,7 @@ function ENT:Draw()
 	if (IsValid(self.Gate)) then
 		for i=1,18 do
 			if(self.Entity:GetNWBool("chevron"..i,false)) then
-				local endpos = self.Entity:GetNetworkedEntity("GateLights",self.Gate):LocalToWorld(self.SpritePositions[i]);
+				local endpos = self.Entity:GetNWEntity("GateLights",self.Gate):LocalToWorld(self.SpritePositions[i]);
 				if StarGate.LOSVector(EyePos(), endpos, LocalPlayer(), 10) then
 					render.DrawSprite(endpos,24,24,col);
 				end

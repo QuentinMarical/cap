@@ -142,7 +142,7 @@ function ENT:Output(perc,eng)
 	if(self.Connected)then add = "Connected" end;
 	if (self.Energy<=0) then add = "Depleted" end;
 	self:SetWire("Active",self.enabled);
-	self.Entity:SetNetworkedString("add",add);
+	self.Entity:SetNWString("add",add);
 	self.Entity:SetNWString("perc",perc);
 	self.Entity:SetNWString("eng",math.floor(eng));
 end
@@ -235,7 +235,7 @@ end
 ENT.Zpm_hud = surface.GetTextureID("VGUI/resources_hud/mk1");
 
 function ENT:Initialize()
-	self.Entity:SetNetworkedString("add","Disconnected");
+	self.Entity:SetNWString("add","Disconnected");
 	self.Entity:SetNWString("perc",0);
 	self.Entity:SetNWString("eng",0);
 end
@@ -263,7 +263,7 @@ function ENT:Draw()
 		    end
 
 			if(IsValid(self.Entity))then
-	            add = self.Entity:GetNetworkedString("add");
+				add = self.Entity:GetNWString("add");
 	            perc = self.Entity:GetNWString("perc");
 	            eng = self.Entity:GetNWString("eng");
 	        else

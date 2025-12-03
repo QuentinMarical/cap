@@ -19,7 +19,7 @@ function EFFECT:Init(data)
 end
 
 function EFFECT:Think()
-	if self.Parent:GetNetworkedBool("Kill", false) then
+	if self.Parent:GetNWBool("Kill", false) then
 		self.Draw = false;
 		return false
 	end

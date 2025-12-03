@@ -137,8 +137,11 @@ function SWEP:SecondaryAttack()
 		self.Weapon:SetNextSecondaryFire(CurTime()+3);
 		self.Owner.RingDialEnt = ring;
 		-- Open the menue. For some gay reason, "SWEP:Primary/SecondaryAttack" is not getting called CLIENTSIDE. Atleast not in singleplayer. I don't know why. AND NO, i fucking tested it WITHOUT the if(CLIENT) then return end;, I'm not stupid!
-		umsg.Start("RingTransporterShowWindowCap",self.Owner);
-		umsg.End();
+		util.AddNetworkString("RingTransporterShowWindowCap")
+		net.Start("RingTransporterShowWindowCap")
+		net.WriteBool(true)
+		net.WriteEntity(ring)
+		net.Send(self.Owner)
 		return true;
 	end
 	self.Weapon:SetNextSecondaryFire(CurTime()+0.5);

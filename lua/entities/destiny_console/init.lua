@@ -57,7 +57,7 @@ function ENT:Initialize()
 	self.Entity:SetUseType(SIMPLE_USE);
 	self.Range = StarGate.CFG:Get("mobile_dhd","range",3000);
 	self.DHDRange = self.Range;
-	self:SetNetworkedInt("DHDRange",self.DHDRange);
+	self:SetNWInt("DHDRange",self.DHDRange);
 
 	self:CreateWireOutputs("1","2","3","4","5","6","7","8","A", "B");
 	self:CreateWireInputs("Alarm [NORMAL]", "A [NORMAL]", "B [NORMAL]", "C [NORMAL]", "D [NORMAL]", "E [NORMAL]", "F [NORMAL]", "G [NORMAL]", "H [NORMAL]",
@@ -79,7 +79,7 @@ function ENT:Initialize()
 		[2] = "B",
 	}
 
-	self.Entity:SetNetworkedString("Buttons",string.Implode(",",self.Toggle));
+	self.Entity:SetNWString("Buttons",string.Implode(",",self.Toggle));
 
 	self.ScreenTextA = "ValueA";
 	self.ScreenTextB = "ValueB";
@@ -90,31 +90,31 @@ function ENT:Initialize()
 	self.ScreenTextG = "ValueG";
 	self.ScreenTextH = "ValueH";
 
-	self.Entity:SetNetworkedString("NameA",self.ScreenTextA);
-	self.Entity:SetNetworkedString("NameB",self.ScreenTextB);
-	self.Entity:SetNetworkedString("NameC",self.ScreenTextC);
-	self.Entity:SetNetworkedString("NameD",self.ScreenTextD);
-	self.Entity:SetNetworkedString("NameE",self.ScreenTextE);
-	self.Entity:SetNetworkedString("NameF",self.ScreenTextF);
-	self.Entity:SetNetworkedString("NameG",self.ScreenTextG);
-	self.Entity:SetNetworkedString("NameH",self.ScreenTextH);
+	self.Entity:SetNWString("NameA",self.ScreenTextA);
+	self.Entity:SetNWString("NameB",self.ScreenTextB);
+	self.Entity:SetNWString("NameC",self.ScreenTextC);
+	self.Entity:SetNWString("NameD",self.ScreenTextD);
+	self.Entity:SetNWString("NameE",self.ScreenTextE);
+	self.Entity:SetNWString("NameF",self.ScreenTextF);
+	self.Entity:SetNWString("NameG",self.ScreenTextG);
+	self.Entity:SetNWString("NameH",self.ScreenTextH);
 
-	self.Entity:SetNetworkedInt("ValueA",0);
-	self.Entity:SetNetworkedInt("ValueB",0);
-	self.Entity:SetNetworkedInt("ValueC",0);
-	self.Entity:SetNetworkedInt("ValueD",0);
-	self.Entity:SetNetworkedInt("ValueE",0);
-	self.Entity:SetNetworkedInt("ValueF",0);
-	self.Entity:SetNetworkedInt("ValueG",0);
-	self.Entity:SetNetworkedInt("ValueH",0);
+	self.Entity:SetNWInt("ValueA",0);
+	self.Entity:SetNWInt("ValueB",0);
+	self.Entity:SetNWInt("ValueC",0);
+	self.Entity:SetNWInt("ValueD",0);
+	self.Entity:SetNWInt("ValueE",0);
+	self.Entity:SetNWInt("ValueF",0);
+	self.Entity:SetNWInt("ValueG",0);
+	self.Entity:SetNWInt("ValueH",0);
 
 	self.Light = false;
 	self.Busy = false;
 	self.WireDisplay = 1;
 
-	self.Entity:SetNetworkedInt("Wire",self.WireDisplay);
+	self.Entity:SetNWInt("Wire",self.WireDisplay);
 	self:SpawnButtons();
-	self:SetNetworkedEntity("Screen",self.Screen);
+	self:SetNWEntity("Screen",self.Screen);
 	self.LockedGate = NULL;
 end
 
@@ -201,23 +201,23 @@ function ENT:OnRemove()
 end
 
 function ENT:TriggerInput(variable, value)
-	if (variable == "Name A") then self.ScreenTextA = value; self.Entity:SetNetworkedString("NameA",value)
-	elseif (variable == "Name B") then self.ScreenTextB = value; self.Entity:SetNetworkedString("NameB",value)
-	elseif (variable == "Name C") then self.ScreenTextC = value; self.Entity:SetNetworkedString("NameC",value)
-	elseif (variable == "Name D") then self.ScreenTextD = value; self.Entity:SetNetworkedString("NameD",value)
-	elseif (variable == "Name E") then self.ScreenTextE = value; self.Entity:SetNetworkedString("NameE",value)
-	elseif (variable == "Name F") then self.ScreenTextF = value; self.Entity:SetNetworkedString("NameF",value)
-	elseif (variable == "Name G") then self.ScreenTextG = value; self.Entity:SetNetworkedString("NameG",value)
-	elseif (variable == "Name H") then self.ScreenTextH = value; self.Entity:SetNetworkedString("NameH",value)
+	if (variable == "Name A") then self.ScreenTextA = value; self.Entity:SetNWString("NameA",value)
+	elseif (variable == "Name B") then self.ScreenTextB = value; self.Entity:SetNWString("NameB",value)
+	elseif (variable == "Name C") then self.ScreenTextC = value; self.Entity:SetNWString("NameC",value)
+	elseif (variable == "Name D") then self.ScreenTextD = value; self.Entity:SetNWString("NameD",value)
+	elseif (variable == "Name E") then self.ScreenTextE = value; self.Entity:SetNWString("NameE",value)
+	elseif (variable == "Name F") then self.ScreenTextF = value; self.Entity:SetNWString("NameF",value)
+	elseif (variable == "Name G") then self.ScreenTextG = value; self.Entity:SetNWString("NameG",value)
+	elseif (variable == "Name H") then self.ScreenTextH = value; self.Entity:SetNWString("NameH",value)
 
-	elseif (variable == "A") then self.Entity:SetNetworkedInt("ValueA",value)
-	elseif (variable == "B") then self.Entity:SetNetworkedInt("ValueB",value)
-	elseif (variable == "C") then self.Entity:SetNetworkedInt("ValueC",value)
-	elseif (variable == "D") then self.Entity:SetNetworkedInt("ValueD",value)
-	elseif (variable == "E") then self.Entity:SetNetworkedInt("ValueE",value)
-	elseif (variable == "F") then self.Entity:SetNetworkedInt("ValueF",value)
-	elseif (variable == "G") then self.Entity:SetNetworkedInt("ValueG",value)
-	elseif (variable == "H") then self.Entity:SetNetworkedInt("ValueH",value)
+	elseif (variable == "A") then self.Entity:SetNWInt("ValueA",value)
+	elseif (variable == "B") then self.Entity:SetNWInt("ValueB",value)
+	elseif (variable == "C") then self.Entity:SetNWInt("ValueC",value)
+	elseif (variable == "D") then self.Entity:SetNWInt("ValueD",value)
+	elseif (variable == "E") then self.Entity:SetNWInt("ValueE",value)
+	elseif (variable == "F") then self.Entity:SetNWInt("ValueF",value)
+	elseif (variable == "G") then self.Entity:SetNWInt("ValueG",value)
+	elseif (variable == "H") then self.Entity:SetNWInt("ValueH",value)
 
 	elseif (variable == "Alarm") then
 			if (value==1) then
@@ -291,7 +291,7 @@ function ENT:Use(ply, ...)
 			if IsValid(kino) then UpdateRenderTarget(kino) end
 
 			self.WireDisplay = 3;
-			self.Entity:SetNetworkedInt("Wire",self.WireDisplay);
+			self.Entity:SetNWInt("Wire",self.WireDisplay);
 			self.Screen:SetSkin(1);
 			self.Entity:FlashButton(button);
 
@@ -314,7 +314,7 @@ function ENT:Use(ply, ...)
 			self:EmitSound(self.Sounds.Butt3,100,math.random(98,102));
 			self.RT = false;
 			self.WireDisplay = button-10;
-			self.Entity:SetNetworkedInt("Wire",self.WireDisplay);
+			self.Entity:SetNWInt("Wire",self.WireDisplay);
 			self.Screen:SetSkin(0);
 			self.Entity:FlashButton(button);
 
@@ -341,7 +341,7 @@ function ENT:Use(ply, ...)
 		elseif (rand == 4) then self.Entity:EmitSound(self.Sounds.Butt4,100,math.random(90,110));
 		end
 
-		self.Entity:SetNetworkedString("Buttons",string.Implode(",",self.Toggle));
+		self.Entity:SetNWString("Buttons",string.Implode(",",self.Toggle));
 	end
 end
 
@@ -356,7 +356,7 @@ net.Receive("destiny_console",function(length, player)
 				local val = net.ReadString();
 				if (val!="") then
 					self["ScreenText"..v] = val;
-					self.Entity:SetNetworkedString("Name"..v,val);
+					self.Entity:SetNWString("Name"..v,val);
 				end
 			end
 		end
@@ -373,14 +373,14 @@ function ENT:Think(ply)
 			self.Light = true;
 			self.Entity:SetSkin(1);
 			if self.HaveCore then self.Core:SetSkin(1); end
-			self.Entity:SetNetworkedInt("Wire",self.WireDisplay);
+			self.Entity:SetNWInt("Wire",self.WireDisplay);
 		end
 	else
 		if self.Light then
 			self.Light = false;
 			self.Entity:SetSkin(0);
 			if self.HaveCore then self.Core:SetSkin(0); end
-			self.Entity:SetNetworkedInt("Wire",0);
+			self.Entity:SetNWInt("Wire",0);
 		end
 	end
 
@@ -469,14 +469,14 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	self.ScreenTextG = dupeInfo.ScreenTextG;
 	self.ScreenTextH = dupeInfo.ScreenTextH;
 
-	self.Entity:SetNetworkedString("NameA",dupeInfo.ScreenTextA);
-	self.Entity:SetNetworkedString("NameB",dupeInfo.ScreenTextB);
-	self.Entity:SetNetworkedString("NameC",dupeInfo.ScreenTextC);
-	self.Entity:SetNetworkedString("NameD",dupeInfo.ScreenTextD);
-	self.Entity:SetNetworkedString("NameE",dupeInfo.ScreenTextE);
-	self.Entity:SetNetworkedString("NameF",dupeInfo.ScreenTextF);
-	self.Entity:SetNetworkedString("NameG",dupeInfo.ScreenTextG);
-	self.Entity:SetNetworkedString("NameH",dupeInfo.ScreenTextH);
+	self.Entity:SetNWString("NameA",dupeInfo.ScreenTextA);
+	self.Entity:SetNWString("NameB",dupeInfo.ScreenTextB);
+	self.Entity:SetNWString("NameC",dupeInfo.ScreenTextC);
+	self.Entity:SetNWString("NameD",dupeInfo.ScreenTextD);
+	self.Entity:SetNWString("NameE",dupeInfo.ScreenTextE);
+	self.Entity:SetNWString("NameF",dupeInfo.ScreenTextF);
+	self.Entity:SetNWString("NameG",dupeInfo.ScreenTextG);
+	self.Entity:SetNWString("NameH",dupeInfo.ScreenTextH);
 
 	if (IsValid(ply)) then
 		self.Owner = ply;

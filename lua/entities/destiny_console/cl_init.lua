@@ -38,7 +38,7 @@ function ENT:Initialize()
 end
 
 function ENT:Think()
-	if not IsValid(self.Screen) then self.Screen = self:GetNetworkedEntity("Screen"); end
+	if not IsValid(self.Screen) then self.Screen = self:GetNWEntity("Screen"); end
 
 	self.Wire = self.Entity:GetNWInt("Wire",0);
 

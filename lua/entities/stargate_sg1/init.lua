@@ -766,7 +766,7 @@ function ENT:ActivateChevron(chev,b)
 		if(b) then
 			if (IsValid(self.Chevron[chev])) then
 				self.Chevron[chev]:Fire("skin",1);
-				self.Entity:SetNetworkedBool("chevron"..chev,true); -- Dynamic light of the chevron
+				self.Entity:SetNWBool("chevron"..chev,true); -- Dynamic light of the chevron
 			else
 				self.Entity:Sparks(chev);
 			    timer.Simple(0.1, function()

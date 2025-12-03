@@ -252,7 +252,7 @@ if CLIENT then
 
 function SWEP:DrawHUD()
 	local mode = "Kill";
-	local int = self:GetNetworkedInt("Mode");
+	local int = self:GetNWInt("Mode");
 	if int == 1 then
 		mode = "Kill";
 	elseif int == 2 then

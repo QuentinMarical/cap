@@ -27,7 +27,7 @@ function EFFECT:Init(data)
 	local e = data:GetEntity();
 	if(not e:IsValid()) then return end;
 	-- Color (also needed for the other shield bubble
-	local color = e:GetNetworkedVector("shield_color",Vector(1,1,1));
+	local color = e:GetNWVector("shield_color",Vector(1,1,1));
 	self.Color = Color(color.x,color.y,color.z);
 	local magnitude = math.ceil(data:GetMagnitude());
 	local hit = false;

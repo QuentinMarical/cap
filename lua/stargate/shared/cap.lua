@@ -354,7 +354,7 @@ function StarGate.IsStargateDialling(gate)
 end
 
 function StarGate.IsProtectedByGateSpawner(entity)
-   return entity:GetNetworkedBool("GateSpawnerProtected", false) or entity.GateSpawnerProtected == true
+	return entity:GetNWBool("GateSpawnerProtected", false) or entity.GateSpawnerProtected == true
 end
 
 --################ DrFattyJr's Functions
@@ -391,7 +391,7 @@ function StarGate.ShieldTrace(pos, dir, filter)
 		local class = tr.Entity:GetClass()
 		if(class == "shield") then 	--This is a  ridiculously complex way of actually finding where the spherical shield is and not the cubic bounding box if anybody knows of a better way PLEASE tell me
 			local pos2 = tr.Entity:GetPos()
-			local rad = tr.Entity:GetNetworkedInt("size",0)
+			local rad = tr.Entity:GetNWInt("size",0)
 			local relpos = tr.HitPos-pos2
 			local a = aim.x^2+aim.y^2+aim.z^2
 			local b = 2*(relpos.x*aim.x+relpos.y*aim.y+relpos.z*aim.z)

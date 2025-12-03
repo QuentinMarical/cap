@@ -25,7 +25,7 @@ ENT.Color = {
 	chevron="200 1 1"
 };
 
--- The directionvectors, relativly from the EntPos to to the chevrons pos - The numbers and chars behind it will aquire a human readable adress like 1B3D5F-Chevron7 - Chevron7 will always be "Â", because the gmod10 servers are on earth :D
+-- The directionvectors, relativly from the EntPos to to the chevrons pos - The numbers and chars behind it will aquire a human readable adress like 1B3D5F-Chevron7 - Chevron7 will always be "ï¿½", because the gmod10 servers are on earth :D
 ENT.ChevronPositionsGroup2 = {
 	["*"] = Vector(-9.13, 20.55, 37.84),    -- Both changed for galaxy and universe, using crystal for it
 	["@"] = Vector(-4.07, 20.52, 37.85),    -- # is included with DIAL
@@ -129,7 +129,7 @@ ENT.ChevronPositionsGalaxy2 = {
 --################# Gets the button, a player is aiming at @aVoN
 function ENT:GetCurrentButton(p,multi)
 	local e = self.Entity;
-	if (self.Entity:GetNetworkedBool("SG_GROUP_SYSTEM")) then
+	if (self.Entity:GetNWBool("SG_GROUP_SYSTEM")) then
 		self.ChevronPositions2 = self.ChevronPositionsGroup2;
 	else
 		self.ChevronPositions2 = self.ChevronPositionsGalaxy2;

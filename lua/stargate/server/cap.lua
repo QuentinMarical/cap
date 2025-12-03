@@ -46,7 +46,7 @@ function StarGate.Debug2(msg1, msg2)
 end
 /* this will be added later when finish function
 function StarGate.IsJammingOnline(pos,ent)
-	if (type(pos)!="Vector" or not IsValid(ent)) then return false end
+	if (type(pos)~="Vector" or not IsValid(ent)) then return false end
 	local radius = 1024; -- max range of jamming, we will adjust it later
 	local jaiming_online = false;
 	for k,v in pairs(ents.FindInSphere(pos, radius)) do
@@ -63,7 +63,7 @@ function StarGate.IsJammingOnline(pos,ent)
 									if (not table.HasValue(tbl,ent)) then jaiming_online = true end
 								elseif (ent.CPPIGetOwner) then
 									local own = ent:CPPIGetOwner()
-									if (own and own!=CPPI_DEFER and IsValid(own)) then
+									if (own and own~=CPPI_DEFER and IsValid(own)) then
 										if (own)
 									end
 								end

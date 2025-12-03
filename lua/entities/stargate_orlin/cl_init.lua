@@ -40,7 +40,7 @@ function ENT:Draw()
 	render.SetMaterial(self.ChevronSprite);
 	local col = Color(self.ChevronColor.r,self.ChevronColor.g,self.ChevronColor.b,120); -- Decent please -> Less alpha
 	for i=1,9 do
-		if(self.Entity:GetNetworkedBool("chevron"..i,false)) then
+		if(self.Entity:GetNWBool("chevron"..i,false)) then
 			local endpos = self.Entity:LocalToWorld(self.SpritePositions[i]);
 			if StarGate.LOSVector(EyePos(), endpos, LocalPlayer(), 5) then
 				render.DrawSprite(endpos,6,6,col);

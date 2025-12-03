@@ -102,7 +102,7 @@ if (table.Count(count)==0) then
 			for k,v in pairs(StarGate.GateSpawner.Ents) do
 				if(v.Entity and IsValid(v.Entity)) then
 					v.Entity.GateSpawnerProtected = protect;
-					v.Entity:SetNetworkedBool("GateSpawnerProtected",protect);
+					v.Entity:SetNWBool("GateSpawnerProtected",protect);
 				end
 			end
 		end

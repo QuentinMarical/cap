@@ -32,7 +32,7 @@ function ENT:Initialize()
 
 	self.Entity:Fire("skin",1);
 
-	self.Entity:SetNetworkedEntity("Arthur",self.Entity);
+	self.Entity:SetNWEntity("Arthur",self.Entity);
 
 	self:CreateWireInputs("Secret Code [STRING]");
 
@@ -193,9 +193,9 @@ end
 function ENT:Use(ply)
 
 	if IsValid(ply) then
-		if (ply:GetNetworkedBool("ArthurCloaked", false)) then -- uncloack
+		if (ply:GetNWBool("ArthurCloaked", false)) then -- uncloack
 
-			ply:SetNetworkedBool("ArthurCloaked",false);
+			ply:SetNWBool("ArthurCloaked",false);
 
 			ply:SetCollisionGroup(COLLISION_GROUP_PLAYER);
 			ply:SetNoTarget(false)
@@ -217,7 +217,7 @@ function ENT:Use(ply)
 
 		else -- cloack
 
-			ply:SetNetworkedBool("ArthurCloaked",true);
+			ply:SetNWBool("ArthurCloaked",true);
 
 			ply:SetCollisionGroup(COLLISION_GROUP_WORLD);
 			ply:SetNoTarget(true)
@@ -244,8 +244,8 @@ function ENT:Use(ply)
 end
 
 local function playerDies( victim, weapon, killer )
-	if (victim:GetNetworkedBool("ArthurCloaked", false)) then
-		victim:SetNetworkedBool("ArthurCloaked",false);
+	if (victim:GetNWBool("ArthurCloaked", false)) then
+		victim:SetNWBool("ArthurCloaked",false);
 		timer.Simple(0.1,function()
 			if (IsValid(p)) then
 				victim:SetNWBool("ArthurCloaked",nil);
@@ -290,7 +290,7 @@ if (StarGate and StarGate.CAP_GmodDuplicator) then
 end
 
 -- function Arthur_SpawnedProp(ply, model, ent)
-	-- local shut = self.Entity:GetNetworkedEntity("Arthur");
+	-- local shut = self.Entity:GetNWEntity("Arthur");
 	-- if table.HasValue(shut.CloackedPlayers, ply:EntIndex()) then
 		-- ent:SetCollisionGroup(COLLISION_GROUP_WORLD);
 		-- table.insert(shut.CloackedProps, ent:EntIndex());

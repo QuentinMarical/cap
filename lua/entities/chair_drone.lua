@@ -16,7 +16,7 @@ end
 function ChDroneCalcView(Player, Origin, Angles, FieldOfView)
 	local view = {};
 	local p = LocalPlayer()
-	local self = p:GetNetworkedEntity("Drone",p)
+	local self = p:GetNWEntity("Drone",p)
 
 	if(IsValid(self)) then
 		local pos = shut:GetPos()+shut:GetUp()*100+Player:GetAimVector():GetNormal()*-250;
@@ -54,7 +54,7 @@ function ENT:Initialize()
 	self:SetSolid(SOLID_VPHYSICS)
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetSkin(1)
-	self:SetNetworkedEntity("Drone",self)
+	self:SetNWEntity("Drone",self)
 	self.DroneCount=0
 
 end

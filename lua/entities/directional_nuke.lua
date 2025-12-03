@@ -34,7 +34,7 @@ function ENT:Initialize()
 	self.Entity:SetSolid(SOLID_VPHYSICS);
 	self.Entity:SetUseType(SIMPLE_USE);
 
-	self:SetNetworkedInt("Timer",0);
+	self:SetNWInt("Timer",0);
 	self:SetNWBool("ShouldCount",false);
 end
 
@@ -169,7 +169,7 @@ end
 function ENT:Draw()
 	self.Entity:DrawModel();
 
-	local shouldcount = self:GetNetworkedBool("ShouldCount",false);
+	local shouldcount = self:GetNWBool("ShouldCount",false);
 	if (shouldcount and not self.Started) then
 		self.Started = true;
 		self.TargetTime = CurTime() + self:GetNWInt("Timer",0);

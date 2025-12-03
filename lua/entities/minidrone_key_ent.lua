@@ -39,7 +39,7 @@ end
 function ENT:StartTouch(ply)
 	if (self.CanTouch and ply:IsPlayer() and not ply:HasWeapon("minidrone_key")) then
 		ply.MiniDronePlatform = self.MiniDronePlatform;
-		ply:SetNetworkedEntity("DronePlatform", self.MiniDronePlatform);
+		ply:SetNWEntity("DronePlatform", self.MiniDronePlatform);
 		ply:Give("minidrone_key");
 		self:Remove();
 	end

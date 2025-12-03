@@ -157,7 +157,7 @@ if (CLIENT) then
 	local function CAP_ShowError(tbl)
 		local text = "";
 		for k,v in pairs(tbl) do
-			if (k!=1) then
+			if (k~=1) then
 				text = text.."<br><br>";
 			end
 			if (type(v)=="table") then
@@ -227,7 +227,7 @@ if (CLIENT) then
 end
 
 -- just to be sure
-if (GetAddonList!=nil and (table.HasValue( GetAddonList(true), "before_cap_sg_groups" ) or table.HasValue( GetAddonList(true), "z_cap_sg_groups" ))) then
+if (GetAddonList~=nil and (table.HasValue( GetAddonList(true), "before_cap_sg_groups" ) or table.HasValue( GetAddonList(true), "z_cap_sg_groups" ))) then
 	status = "Error";
 	MsgN("Status: "..status)
 	table.insert(StarGate_Group.ErrorMSG, {"The Stargate Group System has been found on your system. Please remove it.","01"});
@@ -270,7 +270,7 @@ end
 end  ]]
 if (not StarGate.WorkShop) then
 	if (cap_installed and not Workshop_res_Installed()) then
-		if (status != "Error") then
+		if (status ~= "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
@@ -279,7 +279,7 @@ if (not StarGate.WorkShop) then
 		MsgN("-------");
 		MsgN("Error #09\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	elseif (Workshop_res_Installed() and table.HasValue( addonlist, "Carter Addon Pack - Resources" )) then
-		if (status != "Error") then
+		if (status ~= "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
@@ -288,7 +288,7 @@ if (not StarGate.WorkShop) then
 		MsgN("-------");
 		MsgN("Error #10\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	elseif (not Workshop_res_Installed() and (not table.HasValue( addonlist, "Carter Addon Pack" ) or not table.HasValue( addonlist, "Carter Addon Pack - Resources" ))) then
-		if (status != "Error") then
+		if (status ~= "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
@@ -297,7 +297,7 @@ if (not StarGate.WorkShop) then
 		MsgN("-------");
 		MsgN("Error #02\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	elseif (not cap_ver or cap_ver==0 or cap_ver<493 and (game.SinglePlayer() or SERVER)) then
-		if (status != "Error") then
+		if (status ~= "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
@@ -307,7 +307,7 @@ if (not StarGate.WorkShop) then
 		MsgN("Error #03\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end
 	if (ws_addonlist[175394472]) then
-		if (status != "Error") then
+		if (status ~= "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
@@ -317,7 +317,7 @@ if (not StarGate.WorkShop) then
 		MsgN("Error #04\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end
 	if (table.HasValue( addonlist, "Carter Addon Pack - Resources" ) and cap_res<cap_res_req) then
-		if (status != "Error") then
+		if (status ~= "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
@@ -328,7 +328,7 @@ if (not StarGate.WorkShop) then
 	end
 else
 	if (cap_installed and not Workshop_res_Installed()) then
-		if (status != "Error") then
+		if (status ~= "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
@@ -338,7 +338,7 @@ else
 		MsgN("Error #09\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end
 	if (ws_addonlist[175394472] and (not cap_installed and not table.HasValue( addonlist, "Carter Addon Pack - Resources" ))) then
-		if (status != "Error") then
+		if (status ~= "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
@@ -348,7 +348,7 @@ else
 		MsgN("Error #05\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end
 	if (not cap_installed and table.HasValue( addonlist, "Carter Addon Pack - Resources" ) and cap_res<cap_res_req) then
-		if (status != "Error") then
+		if (status ~= "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
@@ -358,7 +358,7 @@ else
 		MsgN("Error #12\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end
 	if (Workshop_res_Installed() and table.HasValue( addonlist, "Carter Addon Pack - Resources" )) then
-		if (status != "Error") then
+		if (status ~= "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
@@ -368,7 +368,7 @@ else
 		MsgN("Error #10\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end
 	if (ws_addonlist[175394472] and table.HasValue( addonlist, "Carter Addon Pack" )) then
-		if (status != "Error") then
+		if (status ~= "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
@@ -380,7 +380,7 @@ else
 end
 
 if (table.getn(oldfiles)>0) then
-	if (status != "Error") then
+	if (status ~= "Error") then
 		status = "Error";
 		MsgN("Status: "..status)
 	end
@@ -391,7 +391,7 @@ if (table.getn(oldfiles)>0) then
 end
 
 if (VERSION<201023) then
-	if (status != "Error") then
+	if (status ~= "Error") then
 		status = "Error";                 
 		MsgN("Status: "..status)
 	end
@@ -401,7 +401,7 @@ if (VERSION<201023) then
 	MsgN("Error #06\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 end
 if (not WireAddon and not file.Exists("weapons/gmod_tool/stools/wire_adv.lua","LUA")) then
-	if (status != "Error") then
+	if (status ~= "Error") then
 		status = "Error";
 		MsgN("Status: "..status)
 	end
@@ -410,7 +410,7 @@ if (not WireAddon and not file.Exists("weapons/gmod_tool/stools/wire_adv.lua","L
 	MsgN("-------");
 	MsgN("Error #07\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 elseif (file.Exists("weapons/gmod_tool/stools/wire_adv.lua","LUA") and not ws_addonlist[160250458] and not table.HasValue(js_addonlist,"Wiremod")) then
-	if (status != "Error") then
+	if (status ~= "Error") then
 		status = "Error";
 		MsgN("Status: "..status)
 	end
@@ -419,7 +419,7 @@ elseif (file.Exists("weapons/gmod_tool/stools/wire_adv.lua","LUA") and not ws_ad
 	MsgN("-------");
 	MsgN("Error #14\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 end /*if (string.find(util.RelativePathToFull("gameinfo.txt"),"garrysmodbeta")) then
-	if (status != "Error") then
+	if (status ~= "Error") then
 		status = "Error";
 		MsgN("Status: "..status)
 	end
@@ -428,7 +428,7 @@ end /*if (string.find(util.RelativePathToFull("gameinfo.txt"),"garrysmodbeta")) 
 	MsgN("-------");
 	MsgN("Error #08\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 end  */
-if (status != "Error") then
+if (status ~= "Error") then
 	MsgN("Status: "..status)
 else
 	StarGate_Group.Error = true;
@@ -447,7 +447,7 @@ end
 function StarGate_Group.ShowError(ply,cl)
 	local ErrorMSG = StarGate_Group.ErrorMSG;
 	local ErrorMSG_HTML = StarGate_Group.ErrorMSG_HTML;
-	if (cl!=nil) then
+	if (cl~=nil) then
 		ErrorMSG = cl[1];
 		ErrorMSG_HTML = cl[2];
 	end

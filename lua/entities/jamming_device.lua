@@ -86,7 +86,7 @@ function ENT:ShowOutput(active)
 end
 
 function ENT:SetOverlayText( text )
-       self:SetNetworkedString( "GModOverlayText", text )
+	self:SetNWString( "GModOverlayText", text )
 end
 
 -----------------------------------USE---------------------------------

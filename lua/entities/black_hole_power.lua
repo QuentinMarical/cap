@@ -29,7 +29,7 @@ end
 
 function ENT:Draw()
 	local pos = self.Entity:GetPos()
-	local mass = self:GetNetworkedInt("mass", 10);
+	local mass = self:GetNWInt("mass", 10);
 
 	render.SetMaterial( self.Mat )
 	render.DrawSprite( pos, mass, mass, self.Color )
@@ -122,7 +122,7 @@ function ENT:Think()
 	local phys = self.Entity:GetPhysicsObject()
 	phys:ApplyForceCenter( Vector(0,0,0) )
 	phys:Wake() -- fix on freeze
-	self:SetNetworkedInt("mass", x);
+	self:SetNWInt("mass", x);
 
 	self.Entity:NextThink(CurTime() + 1)
 	return true

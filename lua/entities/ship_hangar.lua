@@ -259,7 +259,7 @@ function ENT:ButtonPressed(id, ply)
 		e:Activate();
 		e.Owner = ply;
 		if (e.HangarSpawn) then e:HangarSpawn(ply) end
-		e:SetWire("Health",e:GetNetworkedInt("health"));
+		e:SetWire("Health",e:GetNWInt("health"));
 		if CPPI and IsValid(ply) and e.CPPISetOwner then e:CPPISetOwner(ply) end
 		ply:AddCount("CAP_ships", e)
 	elseif (id == 4) then
@@ -286,14 +286,14 @@ function ENT:Think(ply)
 	for _,v in pairs(ents.FindByClass("sg_vehicle_*")) do
 		local ship_dist = (pos - v:GetPos()):Length();
 		if(ship_dist < self.Range) then
-			local health = v:GetNetworkedInt("health");
+			local health = v:GetNWInt("health");
 			health = health + 5;
 			if (v.EntHealth) then
 				if (health > v.EntHealth) then health = v.EntHealth; end
 			else
 				if (health > 300) then health = 300; end
 			end
-			v:SetNetworkedInt("health", health);
+			v:SetNWInt("health", health);
 			v:SetWire("Health",health);
 		end
 	end
@@ -301,10 +301,10 @@ function ENT:Think(ply)
 	for _,v in pairs(ents.FindByClass("puddle_jumper")) do
 		local ship_dist = (pos - v:GetPos()):Length();
 		if(ship_dist < self.Range) then
-			local health = v:GetNetworkedInt("health");
+			local health = v:GetNWInt("health");
 			health = health + 5;
 			if (health > 500) then health = 500; end
-			v:SetNetworkedInt("health", health);
+			v:SetNWInt("health", health);
 			v:SetWire("Health",health);
 		end
 	end

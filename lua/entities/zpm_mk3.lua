@@ -64,7 +64,7 @@ end
 function ENT:Skin(a)
     if(a==1)then
 		self.Entity:SetSkin(1);
-		self.Entity:SetNetworkedInt("zpmyellowlightalpha",155);
+		self.Entity:SetNWInt("zpmyellowlightalpha",155);
 	elseif(a==2)then
         self.Entity:SetSkin(0);
 		self.Entity:SetNWInt("zpmyellowlightalpha",1);
@@ -73,8 +73,8 @@ end
 
 function ENT:Think()
     if(self.empty or not self.HasResourceDistribution)then return end;
-	if(self.Entity:SetNetworkedEntity("ZPM",self.Zpm)==NULL)then
-	    self.Entity:SetNetworkedEntity("ZPM",self.Zpm)
+	if(self.Entity:SetNWEntity("ZPM",self.Zpm)==NULL)then
+		self.Entity:SetNWEntity("ZPM",self.Zpm)
 	end
 
 	local energy = self:GetResource("energy");
@@ -220,7 +220,7 @@ ENT.SpritePositions = {
 ENT.Zpm_hud = surface.GetTextureID("VGUI/resources_hud/zpm");
 
 function ENT:Initialize()
-	self.Entity:SetNetworkedString("add","Disconnected");
+	self.Entity:SetNWString("add","Disconnected");
 	self.Entity:SetNWString("perc",0);
 	self.Entity:SetNWString("eng",0);
 end
@@ -248,7 +248,7 @@ function ENT:Draw()
 		    end
 
 			if(IsValid(self.Entity))then
-	            add = self.Entity:GetNetworkedString("add");
+				add = self.Entity:GetNWString("add");
 	            perc = self.Entity:GetNWString("perc");
 	            eng = self.Entity:GetNWString("eng");
 	        end

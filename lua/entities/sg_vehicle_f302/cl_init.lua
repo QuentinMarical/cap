@@ -77,9 +77,9 @@ function SGF302CalcView(Player, Origin, Angles, FieldOfView)
 	local view = {}
 
 	local p = LocalPlayer()
-	local self = p:GetNetworkedEntity("ScriptedVehicle", NULL)
-	local pass302 = p:GetNetworkedEntity("302Seat",NULL);
-	local Passenger = p:GetNetworkedBool("302Passenger",false);
+	local self = p:GetNWEntity("ScriptedVehicle", NULL)
+	local pass302 = p:GetNWEntity("302Seat",NULL);
+	local Passenger = p:GetNWBool("302Passenger",false);
 
 	if(IsValid(self) and self:GetClass()=="sg_vehicle_f302") then
 		if(not self.FPV) then
@@ -115,10 +115,10 @@ function ENT:Effects(b)
 
 	local p = LocalPlayer();
 	if(not b) then return end;
-	local f302 = p:GetNetworkedEntity("ScriptedVehicle", NULL);
+	local f302 = p:GetNWEntity("ScriptedVehicle", NULL);
 	local roll = math.Rand(-90,90);
 	local normal = (self.Entity:GetForward() * -1):GetNormalized();
-	local Boost = self:GetNetworkedBool("Boost");
+	local Boost = self:GetNWBool("Boost");
 	local drawfx;
 
 	if Boost then return end;
@@ -181,7 +181,7 @@ function ENT:BoostFX()
 	local normal = (self.Entity:GetForward() * -1):GetNormalized();
 	local roll = math.Rand(-90,90);
 	local p = LocalPlayer();
-	local f302 = p:GetNetworkedEntity("ScriptedVehicle", NULL);
+	local f302 = p:GetNWEntity("ScriptedVehicle", NULL);
 	local Boost = self:GetNWBool("Boost");
 
 	if Boost then
@@ -222,7 +222,7 @@ function ENT:Smoke(b)
 	if(not (data and data.Pos)) then return end; -- Old or no valid model - Don't draw!
 	local pos = data.Pos;
 	local p = LocalPlayer();
-	local f302 = p:GetNetworkedEntity("ScriptedVehicle", NULL);
+	local f302 = p:GetNWEntity("ScriptedVehicle", NULL);
 
 	if(b) then
 		if IsValid(f302) and f302 == self then
@@ -244,7 +244,7 @@ end
 function ENT:Draw()
 
 	local p = LocalPlayer();
-	local f302 = p:GetNetworkedEntity("ScriptedVehicle", NULL);
+	local f302 = p:GetNWEntity("ScriptedVehicle", NULL);
 	local Boost = self:GetNWBool("Boost");
 
 	self.BaseClass.Draw(self);
@@ -304,7 +304,7 @@ local function F302Hud()
 
 	local p = LocalPlayer();
 	local f302 = p:GetNWEntity("F302");
-	local self = p:GetNetworkedEntity("ScriptedVehicle", NULL);
+	local self = p:GetNWEntity("ScriptedVehicle", NULL);
 	if (not IsValid(self)) then return end
 	local health = math.Round(((self:GetNWInt("health"))/5));
 	if(self.HideHUD) then return end;
@@ -372,7 +372,7 @@ function ENT:Think()
 	self.BaseClass.Think(self);
 
 	local p = LocalPlayer();
-	local f302 = p:GetNetworkedEntity("ScriptedVehicle", NULL);
+	local f302 = p:GetNWEntity("ScriptedVehicle", NULL);
 
 	if((IsValid(f302))and((f302)==self)) then
 		self.KBD:SetActive(true);
