@@ -220,32 +220,29 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 	end
 	--####### This sends necessary information to the client
 	if(IsValid(self.Pilot)) then
-		-- TODO Phase 2: migrate to net.Start/net.Send
 		net.Start("jumperData")
+			net.WriteEntity(self)
+			net.WriteInt(self.DroneCount or 0, 16)
+			net.WriteBool(self.epodo or false)
+			net.WriteBool(self.CantCloak or false)
+			net.WriteBool(self.Cloaked or false)
+			net.WriteBool(self.CanShield or false)
+			net.WriteBool(self.CanShoot or false)
+			net.WriteInt(self.EntHealth or 0, 16)
+			net.WriteBool(self.Engine or false)
+			net.WriteBool(self.Inflight or false)
 		if IsValid(self.Pilot) then net.Send(self.Pilot) end
-			umsg.Entity(self)
-			umsg.Short(self.DroneCount)
-			umsg.Bool(self.epodo)
-			umsg.Bool(self.CantCloak)
-			umsg.Bool(self.Cloaked)
-			umsg.Bool(self.CanShield)
-			umsg.Bool(self.CanShoot)
-			umsg.Short(self.EntHealth)
-			umsg.Bool(self.Engine)
-			umsg.Bool(self.Inflight)
-		umsg.End()
 	end
 	
 	if(self.Cloaked) then
 		net.Start("JumperCloakData")
+			net.WriteEntity(self)
+			net.WriteBool(self.CloakPods or false)
+			net.WriteBool(self.door or false)
+			net.WriteBool(self.BulkHead or false)
+			net.WriteBool(self.WepPods or false)
+			net.WriteBool(self.AnimCloaked or false)
 		if IsValid(self.Owner) then net.Send(self.Owner) end
-			umsg.Entity(self);
-			umsg.Bool(self.CloakPods);
-			umsg.Bool(self.door);
-			umsg.Bool(self.BulkHead);
-			umsg.Bool(self.WepPods);
-			umsg.Bool(self.AnimCloaked);
-		umsg.End()
 	end
 	--####### Keep giving us air, coolant etc.
 	if(self.HasRD) then

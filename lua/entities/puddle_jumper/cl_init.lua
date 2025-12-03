@@ -193,17 +193,14 @@ function ENT:OnRemove()
 end
 
 local CloakData = {};
-local function GetCloakData(um)
-	
-	CloakData.Entity = um:ReadEntity();
-	CloakData.Pods = um:ReadBool();
-	CloakData.Door = um:ReadBool();
-	CloakData.BulkHead = um:ReadBool();
-	CloakData.WepPods = um:ReadBool();
-	CloakData.Cloaked = um:ReadBool();
-
-end
-net.Receive("JumperCloakData",GetCloakData);
+net.Receive("JumperCloakData", function()
+	CloakData.Entity = net.ReadEntity();
+	CloakData.Pods = net.ReadBool();
+	CloakData.Door = net.ReadBool();
+	CloakData.BulkHead = net.ReadBool();
+	CloakData.WepPods = net.ReadBool();
+	CloakData.Cloaked = net.ReadBool();
+end)
 
 function ENT:UpdateCloakData()
 	if (CloakData.Entity!=self) then return end
@@ -214,19 +211,18 @@ function ENT:UpdateCloakData()
 	self.CloakData.Cloaked = CloakData.Cloaked;
 end
 
-local function SetData(um) --############# Recieve Data from the Server @RononDex
-	JData.Entity = um:ReadEntity();
-	JData.Drones = um:ReadShort();
-	JData.Pods = um:ReadBool();
-	JData.CantCloak = um:ReadBool();
-	JData.Cloaked = um:ReadBool();
-	JData.CanShield = um:ReadBool();
-	JData.CanShoot = um:ReadBool();
-	JData.Health = um:ReadShort();
-	JData.Engine = um:ReadBool();
-	JData.Inflight = um:ReadBool();
-end
-net.Receive("jumperData", SetData)
+net.Receive("jumperData", function() --############# Recieve Data from the Server @RononDex
+	JData.Entity = net.ReadEntity();
+	JData.Drones = net.ReadInt(16);
+	JData.Pods = net.ReadBool();
+	JData.CantCloak = net.ReadBool();
+	JData.Cloaked = net.ReadBool();
+	JData.CanShield = net.ReadBool();
+	JData.CanShoot = net.ReadBool();
+	JData.Health = net.ReadInt(16);
+	JData.Engine = net.ReadBool();
+	JData.Inflight = net.ReadBool();
+end)
 
 local num = 3.3;
 local y = ScrH()/4*num;
