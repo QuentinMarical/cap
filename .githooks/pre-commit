@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+
+# Block common temporary/log/cache files from being committed
+blocked_patterns='\\.(log|tmp|temp|swp|swo|bak|cache)$'
+lua_cache='\\.luac$'
+
+if git diff --cached --name-only | grep -Ei "$blocked_patterns" >/dev/null 2>&1; then
+  echo "pre-commit: des fichiers temporaires/logs/backup sont staged. Veuillez les retirer."
+  git diff --cached --name-only | grep -Ei "$blocked_patterns" || true
+  exit 1
+fi
+
+if git diff --cached --name-only | grep -Ei "$lua_cache" >/dev/null 2>&1; then
+  echo "pre-commit: fichiers Lua compilés (*.luac) détectés. Veuillez les retirer."
+  git diff --cached --name-only | grep -Ei "$lua_cache" || true
+  exit 1
+fi
+
+exit 0
