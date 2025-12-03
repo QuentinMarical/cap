@@ -213,3 +213,57 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+ 
+#################
+## VS Code
+#################
+
+.vscode/
+*.code-workspace
+
+#################
+## Logs & Temp
+#################
+
+*.log
+log/
+logs/
+*.tmp
+*.temp
+
+#################
+## OS-specific
+#################
+
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+#################
+## Node / tooling
+#################
+
+node_modules/
+
+#################
+## Lua caches
+#################
+
+*.luac
+
+#################
+## Garry's Mod addon artifacts
+#################
+
+cache/
+*.cache
+*.bak
+backup/
+
+#################
+## Git related
+#################
+
+.git-credentials
+.gitconfig
