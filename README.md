@@ -4,6 +4,10 @@
 ![GMod](https://img.shields.io/badge/GMod-13%2B-orange.svg)
 ![License](https://img.shields.io/badge/license-Custom-green.svg)
 ![Status](https://img.shields.io/badge/status-maintained-brightgreen.svg)
+![Discord](https://img.shields.io/badge/chat-discord-7289da.svg?logo=discord)
+![GitHub Issues](https://img.shields.io/github/issues/QuentinMarical/cap)
+![GitHub Stars](https://img.shields.io/github/stars/QuentinMarical/cap)
+![Last Commit](https://img.shields.io/github/last-commit/QuentinMarical/cap)
 
 Stargate Carter Pack more commonly known as Carter's Addon Pack or CAP is an addon for Garry's mod that adds new content elements to the game, all based off the Stargate franchise from the 1994 film to the late Stargate Universe. Carter's Addon Pack gives the most impressive array of Stargate elements for Garry's Mod, allowing much more diversity & variations for Stargate gameplay in Garry's Mod.
 
@@ -261,16 +265,25 @@ Check out the **[examples/](./examples/)** folder for:
 - [x] Enhanced documentation
 - [x] Git workflow improvements
 - [x] Expression 2 example scripts
+- [x] GitHub infrastructure & templates
+- [x] Security policy
+- [x] Community code of conduct
+
+### In Progress 🚀
+- [ ] GitHub Actions CI/CD workflows
+- [ ] Automated code quality checks
+- [ ] Security scanning
 
 ### Planned 🔜
-- [ ] Performance optimizations
-- [ ] New gate models and textures
-- [ ] Enhanced ship physics
-- [ ] More E2/Starfall examples
+- [ ] 10+ additional E2 scripts
 - [ ] Video tutorials
-- [ ] Multiplayer improvements
+- [ ] StarFall examples
+- [ ] Community showcase
+- [ ] Performance optimizations
+- [ ] Web-based tools (address calculator, base planner)
+- [ ] API reference documentation
 
-Want to help? Check our [Contributing Guide](./CONTRIBUTING.md)!
+**See [ROADMAP.md](./ROADMAP.md) for detailed timeline and future plans!**
 
 ---
 

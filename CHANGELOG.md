@@ -4,6 +4,167 @@ Toutes les modifications notables apportées au Carter Addon Pack depuis le fork
 
 ## [Unreleased] - 2025-12-04
 
+### 🤖 Automation & CI/CD
+
+#### GitHub Actions Workflows
+Ajout de workflows automatisés pour l'assurance qualité:
+
+**Nouveau fichier:**
+- `.github/workflows/lint.yml` - Pipeline de contrôle qualité
+
+**Contrôles inclus:**
+- ✅ Vérification syntaxe Lua (luacheck)
+- ✅ Détection APIs dépréciées (SetNetworked*)
+- ✅ Validation fichiers documentation requis
+- ✅ Vérification validité addon.json (JSON parsing)
+- ✅ Structure répertoires requis
+- ✅ Détection fichiers temporaires/logs
+- ✅ Vérification scripts E2 et leurs headers
+- ✅ Rapport de synthèse
+
+**Exécution:**
+- Automatic sur chaque push/PR sur `master`, `main`, `develop`
+- Contrôles sur `lua/` et workflows eux-mêmes
+- Continue on errors pour visibilité complète
+- Email notifications en cas d'échec
+
+**Avantages:**
+- Prévention d'erreurs Lua en production
+- Respect des standards APIs
+- Documentation toujours à jour
+- Structure projet garantie
+- E2 scripts validés
+
+#### Dépendabot Configuration
+Automatisation des mises à jour de sécurité:
+
+**Nouveau fichier:**
+- `.github/dependabot.yml` - Configuration Dependabot
+
+**Fonctionnalités:**
+- 🔄 Vérification hebdomadaire des dépendances
+- 🔒 Mises à jour de sécurité automatiques
+- 🤖 Mises à jour GitHub Actions automatiques
+- 📝 Commits avec préfixes standardisés
+- 🏷️ Labeling automatique (dependencies, security)
+
+**Bénéfices:**
+- Sécurité: patches de vulnérabilités automatiques
+- Maintenabilité: dépendances à jour
+- Transparence: PR claires avec changelog
+
+### 📚 Développement & Guides
+
+#### Guide de Développement Local
+Nouveau fichier pour les contributeurs:
+
+**Nouveau fichier:**
+- `DEVELOPMENT.md` - Guide complet de développement
+
+**Contenu:**
+- 🚀 Quick Start (5 minutes)
+- 📂 Structure du projet expliquée
+- 🔧 Configuration VS Code
+- 🧪 Guide de test (GMod, E2, Lua)
+- 📝 Standards de code (style, conventions)
+- 🐛 Conseils de débogage
+- 📚 Ressources d'apprentissage
+- 🔄 Workflow Git expliqué
+- 📋 Checklist contributeur
+- 🎓 Ressources Lua/Git/GitHub
+
+**Bénéfices:**
+- Nouveaux développeurs peuvent démarrer rapidement
+- Standards clairs et documentés
+- Processus de contribution transparent
+- Ressources d'apprentissage centralisées
+
+#### Configuration EditorConfig
+Standardisation du formatage du code:
+
+**Nouveau fichier:**
+- `.editorconfig` - Configuration d'éditeur unifiée
+
+**Configurations:**
+- Indentation Lua: 4 espaces
+- JSON: 2 espaces
+- YAML: 2 espaces
+- Shell scripts: 2 espaces
+- Encodage: UTF-8
+- Fin de ligne: LF (Unix style)
+- Nettoyage espaces traînants
+- Nouvelle ligne finale
+
+**Avantages:**
+- Formatage cohérent entre contributeurs
+- VS Code/Sublime/JetBrains supportent EditorConfig
+- Pas de conflits de formatting
+- Diffs plus propres
+
+### 📊 Documentation Améliorée
+
+#### Badges Dynamiques
+Ajout de badges supplémentaires au README:
+
+**Nouveaux badges:**
+- ![Discord](https://img.shields.io/badge/chat-discord-7289da.svg?logo=discord)
+- ![GitHub Issues](https://img.shields.io/github/issues/QuentinMarical/cap)
+- ![GitHub Stars](https://img.shields.io/github/stars/QuentinMarical/cap)
+- ![Last Commit](https://img.shields.io/github/last-commit/QuentinMarical/cap)
+
+**Bénéfices:**
+- Statut du projet plus visible
+- Activité communautaire visible
+- Liens directs vers ressources
+
+#### Roadmap Détaillée
+Fichier de planification long terme:
+
+**Nouveau fichier:**
+- `ROADMAP.md` - Feuille de route publique
+
+**Contenu:**
+- 🎯 Vision du projet
+- 📅 5 phases sur 12 mois (Foundation ✅, Quality 🚀, Community 📚, Enhancement 🎮, Ecosystem 🌐)
+- 🎯 Objectifs court/moyen/long terme
+- 📊 Métriques de succès
+- 🔄 Processus de contribution à la roadmap
+
+**Phases:**
+1. **Foundation (Dec 2025)** ✅ Complété
+2. **Quality & Automation (Jan 2026)** 🚀 En cours
+3. **Community & Examples (Feb 2026)** 📚 Planifié
+4. **Enhancement & Features (Mar-Apr 2026)** 🎮 Planifié
+5. **Website & Ecosystem (May 2026)** 🌐 Planifié
+
+**Bénéfices:**
+- Transparence: tout le monde voit les plans
+- Direction claire du projet
+- Possibilité de contribuer aux priorités
+- Traçabilité des progrès
+
+### 📈 Impacts Globaux
+
+**Mises à jour cumulées:** ~250 lignes
+- Workflows: ~150 lignes (lint.yml + dependabot.yml)
+- Guide développement: ~600 lignes
+- Roadmap: ~250 lignes
+- EditorConfig: ~30 lignes
+- README amélioré: ~10 lignes
+
+**Qualité:**
+- Automation: automatique sur chaque changement
+- Dépendances: vérification hebdomadaire
+- Documentation: toujours à jour
+- Code: standards appliqués
+
+**Communauté:**
+- Contribution facilitée (guide clair)
+- Transparence (roadmap publique)
+- Direction connue (phases définies)
+
+---
+
 ### 🔒 Security & Modern Standards
 
 #### Security Policy
