@@ -1,0 +1,37 @@
+{
+	"title": "Carter Addon Pack",
+	"type": "tool",
+	"tags": [
+		"roleplay",
+		"realism",
+		"stargate",
+		"scifi",
+		"build",
+		"fun"
+	],
+	"description": "An actively maintained and modernized version of Carter's Addon Pack for Garry's Mod. Adds comprehensive Stargate content including gates, ships, weapons, shields, and more from SG-1, Atlantis, and Universe.",
+	"author": "CAP Team & Quentin Marical",
+	"version": "3.0",
+	"license": "Custom (see LICENSE.md)",
+	"website": "https://github.com/QuentinMarical/cap",
+	"ignore": [
+		".git/*",
+		".github/*",
+		".githooks/*",
+		".gitignore",
+		".gitattributes",
+		"docs/*",
+		"README.md",
+		"CHANGELOG.md",
+		"CONTRIBUTING.md",
+		"CORRECTIONS.md",
+		"CREDITS.md",
+		"FAQ.md",
+		"INSTALLATION.md",
+		"LICENSE.md",
+		"SECURITY.md",
+		"E2_GUIDE.md",
+		"examples/README.md",
+		"examples/SCRIPTS_OVERVIEW.md"
+	]
+}

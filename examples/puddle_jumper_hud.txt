@@ -1,0 +1,187 @@
+@name Puddle Jumper Advanced HUD
+@inputs PJ:entity Pilot:entity
+@outputs Speed Altitude FuelPercent:string Status:string
+@persist Screen:entity UpdateRate HUDColor:vector
+@trigger 
+
+#[
+    ==========================================
+    PUDDLE JUMPER ADVANCED HUD
+    ==========================================
+    
+    Displays flight information for Puddle Jumpers:
+    - Speed and altitude
+    - Fuel levels
+    - Drone count
+    - Shield status
+    - Cloak status
+    
+    HOW TO USE:
+    1. Spawn a Puddle Jumper
+    2. Spawn this E2 and attach to jumper
+    3. Optional: Attach an EGP screen for visual HUD
+    4. Sit in pilot seat
+    
+    WIRING:
+    - PJ (Entity) -> Puddle Jumper entity
+    - Pilot (Entity) -> Player in pilot seat (optional)
+    - Screen (Entity) -> EGP screen for visual display
+]#
+
+if(first()) {
+    UpdateRate = 100 # Update every 100ms
+    HUDColor = vec(100, 200, 255) # Cyan Ancient tech color
+    timer("updateHUD", UpdateRate)
+}
+
+if(clk("updateHUD")) {
+    
+    if(!PJ:isValid()) {
+        Status = "No Jumper Connected"
+        timer("updateHUD", UpdateRate)
+        exit()
+    }
+    
+    # Read jumper data
+    Speed = PJ["Speed", number]
+    Altitude = PJ["Altitude", number]
+    local Fuel = PJ["Fuel", number]
+    local MaxFuel = PJ["MaxFuel", number]
+    local Drones = PJ["Drones", number]
+    local MaxDrones = PJ["MaxDrones", number]
+    local ShieldActive = PJ["ShieldActive", number]
+    local CloakActive = PJ["CloakActive", number]
+    
+    # Calculate fuel percentage
+    local FuelPct = 0
+    if(MaxFuel > 0) {
+        FuelPct = (Fuel / MaxFuel) * 100
+    }
+    FuelPercent = round(FuelPct, 1) + "%"
+    
+    # Status message
+    if(Speed > 0) {
+        Status = "IN FLIGHT"
+    } else {
+        Status = "LANDED"
+    }
+    
+    # Display on screen if available
+    if(Screen:isValid()) {
+        Screen:egpClear()
+        
+        # Title bar
+        Screen:egpBox(1, vec2(256, 30), vec2(512, 50))
+        Screen:egpColor(1, 0, 50, 100, 200)
+        Screen:egpText(2, "PUDDLE JUMPER HUD", vec2(256, 30))
+        Screen:egpSize(2, 25)
+        Screen:egpAlign(2, 1, 1)
+        Screen:egpColor(2, HUDColor)
+        
+        local YPos = 100
+        
+        # Speed
+        Screen:egpText(3, "SPEED", vec2(100, YPos))
+        Screen:egpSize(3, 20)
+        Screen:egpAlign(3, 0)
+        Screen:egpColor(3, 200, 200, 200)
+        
+        Screen:egpText(4, round(Speed) + " HU/s", vec2(400, YPos))
+        Screen:egpSize(4, 20)
+        Screen:egpAlign(4, 2)
+        Screen:egpColor(4, HUDColor)
+        YPos = YPos + 40
+        
+        # Altitude
+        Screen:egpText(5, "ALTITUDE", vec2(100, YPos))
+        Screen:egpSize(5, 20)
+        Screen:egpAlign(5, 0)
+        Screen:egpColor(5, 200, 200, 200)
+        
+        Screen:egpText(6, round(Altitude) + " HU", vec2(400, YPos))
+        Screen:egpSize(6, 20)
+        Screen:egpAlign(6, 2)
+        Screen:egpColor(6, HUDColor)
+        YPos = YPos + 40
+        
+        # Fuel bar
+        Screen:egpText(7, "FUEL", vec2(100, YPos))
+        Screen:egpSize(7, 20)
+        Screen:egpAlign(7, 0)
+        Screen:egpColor(7, 200, 200, 200)
+        
+        local FuelBarWidth = 250 * (FuelPct / 100)
+        Screen:egpBox(8, vec2(275 + FuelBarWidth/2, YPos), vec2(FuelBarWidth, 25))
+        if(FuelPct > 50) {
+            Screen:egpColor(8, 0, 255, 0)
+        } elseif(FuelPct > 25) {
+            Screen:egpColor(8, 255, 255, 0)
+        } else {
+            Screen:egpColor(8, 255, 0, 0)
+        }
+        
+        Screen:egpText(9, FuelPercent, vec2(400, YPos))
+        Screen:egpSize(9, 18)
+        Screen:egpAlign(9, 2)
+        Screen:egpColor(9, 255, 255, 255)
+        YPos = YPos + 50
+        
+        # Drones
+        Screen:egpText(10, "DRONES", vec2(100, YPos))
+        Screen:egpSize(10, 20)
+        Screen:egpAlign(10, 0)
+        Screen:egpColor(10, 200, 200, 200)
+        
+        Screen:egpText(11, Drones + " / " + MaxDrones, vec2(400, YPos))
+        Screen:egpSize(11, 20)
+        Screen:egpAlign(11, 2)
+        Screen:egpColor(11, HUDColor)
+        YPos = YPos + 40
+        
+        # Systems status
+        YPos = YPos + 20
+        Screen:egpText(12, "SYSTEMS", vec2(256, YPos))
+        Screen:egpSize(12, 22)
+        Screen:egpAlign(12, 1, 1)
+        Screen:egpColor(12, 200, 200, 200)
+        YPos = YPos + 40
+        
+        # Shield status
+        Screen:egpCircle(13, vec2(150, YPos), vec2(15, 15))
+        if(ShieldActive) {
+            Screen:egpColor(13, 0, 255, 0)
+        } else {
+            Screen:egpColor(13, 100, 100, 100)
+        }
+        Screen:egpText(14, "SHIELD", vec2(180, YPos))
+        Screen:egpSize(14, 18)
+        Screen:egpAlign(14, 0, 1)
+        Screen:egpColor(14, 200, 200, 200)
+        
+        # Cloak status
+        Screen:egpCircle(15, vec2(280, YPos), vec2(15, 15))
+        if(CloakActive) {
+            Screen:egpColor(15, 0, 255, 0)
+        } else {
+            Screen:egpColor(15, 100, 100, 100)
+        }
+        Screen:egpText(16, "CLOAK", vec2(310, YPos))
+        Screen:egpSize(16, 18)
+        Screen:egpAlign(16, 0, 1)
+        Screen:egpColor(16, 200, 200, 200)
+        
+        # Status
+        YPos = 450
+        Screen:egpText(17, Status, vec2(256, YPos))
+        Screen:egpSize(17, 30)
+        Screen:egpAlign(17, 1, 1)
+        if(Status == "IN FLIGHT") {
+            Screen:egpColor(17, 0, 255, 0)
+        } else {
+            Screen:egpColor(17, HUDColor)
+        }
+    }
+    
+    # Schedule next update
+    timer("updateHUD", UpdateRate)
+}

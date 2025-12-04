@@ -1,0 +1,116 @@
+@name CAP Entity Finder
+@inputs ScanRadius:normal Update
+@outputs Found:array EntityCount Status:string
+@persist ScanPos:vector LastScan
+@trigger Update
+
+#[
+    ==========================================
+    CAP ENTITY FINDER
+    ==========================================
+    
+    Scans for nearby Carter Addon Pack entities.
+    Useful for finding and cataloging CAP items.
+    
+    HOW TO USE:
+    1. Place this E2 chip where you want to scan from
+    2. Wire a number input to ScanRadius (default: 5000)
+    3. Wire a button to Update to trigger scan
+    
+    WIRING:
+    - ScanRadius (Number) -> How far to scan (Hammer Units)
+    - Update (Number) -> Pulse to scan
+    
+    OUTPUTS:
+    - Found (Array) -> Array of found entity types
+    - EntityCount (Number) -> Total entities found
+    - Status (String) -> Status message
+]#
+
+if(first()) {
+    ScanPos = entity():pos()
+    LastScan = 0
+}
+
+# Update scan radius default
+if(!ScanRadius) {
+    ScanRadius = 5000
+}
+
+# Trigger scan
+if(~Update & Update) {
+    
+    Status = "Scanning..."
+    Found = array()
+    local Count = 0
+    
+    # Find all entities in radius
+    local Entities = findInSphere(ScanPos, ScanRadius)
+    
+    # Filter for CAP entities
+    foreach(K, E:entity = Entities) {
+        if(E:isValid()) {
+            local Class = E:getClass()
+            
+            # Check if it's a CAP entity (most start with specific prefixes)
+            if(
+                Class:find("stargate_") == 1 |
+                Class:find("shield_") == 1 |
+                Class:find("zpm_") == 1 |
+                Class:find("ancient_") == 1 |
+                Class:find("asgard_") == 1 |
+                Class:find("goauld_") == 1 |
+                Class:find("wraith_") == 1 |
+                Class:find("ori_") == 1 |
+                Class:find("tollan_") == 1 |
+                Class:find("nox_") == 1 |
+                Class:find("iris_") == 1 |
+                Class:find("dhd_") == 1 |
+                Class:find("rings_") == 1 |
+                Class:find("transport_") == 1 |
+                Class:find("puddle_") == 1 |
+                Class:find("f302") == 1 |
+                Class:find("daedalus") == 1 |
+                Class:find("destiny_") == 1 |
+                Class:find("dart_") == 1 |
+                Class:find("deathglider") == 1 |
+                Class:find("alkesh") == 1 |
+                Class:find("teltac") == 1 |
+                Class:find("hatak") == 1 |
+                Class:find("drone_") == 1 |
+                Class:find("staff_") == 1 |
+                Class:find("zat_") == 1
+            ) {
+                Count++
+                
+                # Add to found array with details
+                local Info = Class + " (" + E:id() + ")"
+                Found[Count, string] = Info
+            }
+        }
+    }
+    
+    EntityCount = Count
+    
+    if(Count > 0) {
+        Status = "Found " + Count + " CAP entities"
+    } else {
+        Status = "No CAP entities found"
+    }
+    
+    LastScan = curtime()
+}
+
+# Auto-display results (optional console output)
+if(EntityCount > 0 & curtime() - LastScan < 1) {
+    print("=== CAP ENTITY SCAN RESULTS ===")
+    print("Scan Radius: " + ScanRadius + " HU")
+    print("Total Found: " + EntityCount)
+    print("-------------------------------")
+    
+    for(I = 1, EntityCount) {
+        print(I + ". " + Found[I, string])
+    }
+    
+    print("===============================")
+}

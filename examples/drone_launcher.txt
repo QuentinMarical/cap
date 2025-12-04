@@ -1,0 +1,206 @@
+@name Drone Defense System
+@inputs Base:entity ThreatRadius AutoDefense:normal ManualFire
+@outputs ThreatsDetected Status:string DronesAvailable
+@persist DroneWeapons:array LastScan ScanInterval Defending:normal
+@trigger AutoDefense, ManualFire
+
+#[
+    ==========================================
+    AUTOMATED DRONE DEFENSE SYSTEM
+    ==========================================
+    
+    Automatically detects and engages threats with Ancient drones.
+    Perfect for base defense!
+    
+    HOW TO USE:
+    1. Spawn drone weapons (Ancient drone launcher)
+    2. Wire them to this E2
+    3. Set Base entity as reference point
+    4. Set ThreatRadius (how far to scan)
+    5. Enable AutoDefense to automatically engage
+    
+    WIRING:
+    - Base (Entity) -> Reference point for defense
+    - ThreatRadius (Number) -> Scan radius (default: 5000)
+    - AutoDefense (Number) -> Toggle auto-defense (0/1)
+    - ManualFire (Number) -> Button to manually fire
+    
+    OUTPUTS:
+    - ThreatsDetected (Number) -> Number of threats in range
+    - Status (String) -> Current system status
+    - DronesAvailable (Number) -> Drones ready to fire
+]#
+
+if(first()) {
+    # Default values
+    if(!ThreatRadius) { ThreatRadius = 5000 }
+    ScanInterval = 1000 # Scan every second
+    LastScan = 0
+    Defending = 0
+    
+    # Find nearby drone weapons
+    findClearAllEntities()
+    findIncludeClass("ancient_drone_weapon")
+    findIncludeClass("drone_weapon")
+    findInSphere(entity():pos(), 2000)
+    
+    DroneWeapons = findToArray()
+    DronesAvailable = DroneWeapons:count()
+    
+    if(DronesAvailable > 0) {
+        Status = "DEFENSE ACTIVE: " + DronesAvailable + " drones"
+    } else {
+        Status = "WARNING: No drone weapons found"
+    }
+    
+    timer("scanThreats", 500)
+}
+
+# Scan for threats
+if(clk("scanThreats")) {
+    
+    if(!Base:isValid()) {
+        Base = entity() # Use E2 chip as base if no base set
+    }
+    
+    local BasePos = Base:pos()
+    local Threats = array()
+    local ThreatCount = 0
+    
+    # Find NPCs in radius
+    findClearAllEntities()
+    findIncludeClass("npc_*")
+    findInSphere(BasePos, ThreatRadius)
+    local NPCs = findToArray()
+    
+    # Find hostile players (if applicable)
+    # You might want to add friend detection here
+    local Players = players()
+    
+    # Check NPCs
+    foreach(K, NPC:entity = NPCs) {
+        if(NPC:isValid() & NPC:health() > 0) {
+            ThreatCount++
+            Threats[ThreatCount, entity] = NPC
+        }
+    }
+    
+    ThreatsDetected = ThreatCount
+    
+    # Update status
+    if(ThreatCount > 0) {
+        if(AutoDefense & !Defending) {
+            Status = "THREATS DETECTED: ENGAGING"
+            Defending = 1
+            timer("engageThreats", 100)
+        } else {
+            Status = "THREATS DETECTED: " + ThreatCount
+        }
+    } else {
+        if(Defending) {
+            Status = "AREA SECURE"
+            Defending = 0
+            timer("clearStatus", 3000)
+        } elseif(Status == "AREA SECURE") {
+            # Keep status
+        } else {
+            Status = "SCANNING..."
+        }
+    }
+    
+    # Reschedule scan
+    timer("scanThreats", ScanInterval)
+}
+
+# Engage threats with drones
+if(clk("engageThreats") | (~ManualFire & ManualFire)) {
+    
+    if(ThreatsDetected == 0 & clk("engageThreats")) {
+        exit() # No threats to engage
+    }
+    
+    if(!Base:isValid()) {
+        Status = "ERROR: No base reference"
+        exit()
+    }
+    
+    # Find closest threat
+    local BasePos = Base:pos()
+    local ClosestThreat = noentity()
+    local ClosestDist = 999999
+    
+    findClearAllEntities()
+    findIncludeClass("npc_*")
+    findInSphere(BasePos, ThreatRadius)
+    local NPCs = findToArray()
+    
+    foreach(K, NPC:entity = NPCs) {
+        if(NPC:isValid() & NPC:health() > 0) {
+            local Dist = NPC:pos():distance(BasePos)
+            if(Dist < ClosestDist) {
+                ClosestDist = Dist
+                ClosestThreat = NPC
+            }
+        }
+    }
+    
+    # Fire drones at threat
+    if(ClosestThreat:isValid()) {
+        local FiredCount = 0
+        
+        foreach(K, Drone:entity = DroneWeapons) {
+            if(Drone:isValid()) {
+                # Target the threat
+                Drone["Target", entity] = ClosestThreat
+                Drone["Fire", number] = 1
+                FiredCount++
+                
+                # Fire 2-3 drones per threat
+                if(FiredCount >= 3) {
+                    break
+                }
+            }
+        }
+        
+        Status = "DRONES LAUNCHED: " + FiredCount
+        
+        # Continue engaging if auto-defense is on
+        if(AutoDefense & ThreatsDetected > 0) {
+            timer("engageThreats", 2000) # Fire again in 2 seconds
+        }
+    }
+}
+
+# Toggle auto-defense
+if(~AutoDefense) {
+    if(AutoDefense) {
+        Status = "AUTO-DEFENSE ENABLED"
+        if(ThreatsDetected > 0) {
+            timer("engageThreats", 100)
+        }
+    } else {
+        Status = "AUTO-DEFENSE DISABLED"
+        Defending = 0
+    }
+    timer("clearStatus", 3000)
+}
+
+if(clk("clearStatus")) {
+    if(ThreatsDetected > 0) {
+        Status = "THREATS DETECTED: " + ThreatsDetected
+    } else {
+        Status = "DEFENSE ACTIVE: " + DronesAvailable + " drones"
+    }
+}
+
+# Periodically update drone count
+if(curtime() - LastScan > 10) {
+    local Count = 0
+    foreach(K, Drone:entity = DroneWeapons) {
+        if(Drone:isValid()) {
+            Count++
+        }
+    }
+    DronesAvailable = Count
+    LastScan = curtime()
+}

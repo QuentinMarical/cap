@@ -1,0 +1,112 @@
+@name Stargate Auto Dialer
+@inputs Gate:entity AddressIndex
+@outputs Status:string
+@persist Addresses:array CurrentAddress:string DialingInProgress
+@trigger AddressIndex
+
+#[
+    ==========================================
+    STARGATE AUTO DIALER
+    ==========================================
+    
+    This E2 automatically dials a list of addresses.
+    Perfect for automated travel systems!
+    
+    HOW TO USE:
+    1. Spawn a Stargate
+    2. Wire this E2's "Gate" input to the Stargate
+    3. Wire a button or numeric input to "AddressIndex"
+    4. Change AddressIndex to dial different addresses
+    
+    WIRING:
+    - Gate (Entity) -> Your Stargate entity
+    - AddressIndex (Number) -> Button/keypad (1-5 for different addresses)
+    
+    OUTPUT:
+    - Status -> Shows current dialing status
+]#
+
+if(first()) {
+    
+    # Define your address book
+    # Format: 7 or 9 chevron addresses
+    Addresses = array()
+    Addresses[1, string] = "ABCDEFG"      # Address 1
+    Addresses[2, string] = "GFEDCBA"      # Address 2  
+    Addresses[3, string] = "ZXCVBNM"      # Address 3
+    Addresses[4, string] = "POIUYTR"      # Address 4
+    Addresses[5, string] = "LKJHGFD"      # Address 5
+    
+    # You can add 9-chevron addresses too:
+    # Addresses[6, string] = "ABCDEFGHI"
+    
+    DialingInProgress = 0
+    Status = "Ready"
+}
+
+# When AddressIndex changes, start dialing
+if(~AddressIndex & AddressIndex > 0) {
+    
+    if(!Gate:isValid()) {
+        Status = "Error: No gate connected!"
+        exit()
+    }
+    
+    if(DialingInProgress) {
+        Status = "Already dialing..."
+        exit()
+    }
+    
+    # Get the address from our array
+    if(Addresses:exists(AddressIndex)) {
+        CurrentAddress = Addresses[AddressIndex, string]
+        
+        # Start dialing sequence
+        DialingInProgress = 1
+        Status = "Dialing " + CurrentAddress
+        
+        # Send dial command to gate
+        Gate:egpClear()
+        
+        # Use stargate functions (these depend on CAP's wire integration)
+        # Note: Actual function names may vary, check CAP documentation
+        Gate["Dial", string] = CurrentAddress
+        
+        timer("dialComplete", 5000) # Wait 5 seconds for dial to complete
+        
+    } else {
+        Status = "Error: Invalid address index!"
+    }
+}
+
+# Check if dialing completed
+if(clk("dialComplete")) {
+    DialingInProgress = 0
+    
+    if(Gate:isValid()) {
+        # Check if gate is active
+        local IsActive = Gate["Active", number]
+        
+        if(IsActive) {
+            Status = "Connected to " + CurrentAddress
+        } else {
+            Status = "Failed to connect"
+        }
+    }
+}
+
+# Monitor gate status
+if(Gate:isValid() & !DialingInProgress) {
+    local IsActive = Gate["Active", number]
+    
+    if(IsActive & Status != "Connected to " + CurrentAddress) {
+        Status = "Gate Active"
+    } elseif(!IsActive & Status == "Gate Active") {
+        Status = "Gate Closed"
+        timer("resetStatus", 2000)
+    }
+}
+
+if(clk("resetStatus")) {
+    Status = "Ready"
+}

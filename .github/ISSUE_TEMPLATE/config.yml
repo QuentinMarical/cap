@@ -1,0 +1,14 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 🔒 Security Vulnerability
+    url: https://github.com/QuentinMarical/cap/security
+    about: Report security vulnerabilities privately (do NOT create a public issue)
+  - name: 💬 Questions & Discussions
+    url: https://github.com/QuentinMarical/cap/discussions
+    about: Ask questions, share ideas, or discuss CAP with the community
+  - name: 📖 Documentation
+    url: https://github.com/RafaelDeJongh/cap/wiki
+    about: Read the CAP wiki for help and documentation
+  - name: 🎮 E2 Guide
+    url: https://github.com/QuentinMarical/cap/blob/master/E2_GUIDE.md
+    about: Learn about Expression 2 integration with CAP

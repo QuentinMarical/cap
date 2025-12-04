@@ -2,6 +2,268 @@
 
 Toutes les modifications notables apportées au Carter Addon Pack depuis le fork initial.
 
+## [Unreleased] - 2025-12-04
+
+### 🔒 Security & Modern Standards
+
+#### Security Policy
+Ajout d'une politique de sécurité complète (`SECURITY.md`):
+
+**Nouveau fichier:**
+- `SECURITY.md` - Politique de sécurité et signalement de vulnérabilités
+
+**Contenu:**
+- 🔒 Guide de signalement privé des vulnérabilités
+- 🛡️ Distinction entre problèmes de sécurité et bugs réguliers
+- 📋 Liste des versions supportées
+- 🎯 Meilleures pratiques de sécurité pour serveurs/joueurs/développeurs
+- 📜 Politique de divulgation responsable
+- 🏆 Hall of Fame pour les chercheurs en sécurité
+- 📞 Canaux de contact appropriés
+
+**Catégories de vulnérabilités couvertes:**
+- Exécution de code à distance (RCE)
+- Escalade de privilèges
+- Accès non autorisé aux configurations serveur
+- Crashes intentionnels de clients
+- Exposition de données sensibles
+- Contournement de protections
+
+#### Modernisation des Métadonnées
+Création de `addon.json` moderne remplaçant l'ancien `addon.txt`:
+
+**Nouveau fichier:**
+- `addon.json` - Métadonnées au format JSON
+
+**Améliorations:**
+- 📋 Format JSON structuré
+- 🏷️ Tags appropriés (roleplay, realism, stargate, scifi, build, fun)
+- 📝 Description détaillée et attractive
+- 🔧 Liste complète des fichiers à ignorer lors du packaging
+- 🌐 Métadonnées complètes (auteur, version, license, website)
+- ✅ Compatible avec les standards modernes de GMod
+
+#### README Amélioré - Style Q&A
+Refonte majeure du README avec sections inspirées de viral32111/stargate:
+
+**Nouvelles sections:**
+- ❓ **Quick Questions** - FAQ inline au début du document
+  - "What is this?" - Présentation claire du projet
+  - "Why this fork?" - Justification et objectifs
+  - "How do I install it?" - Liens directs vers installation
+  - "Where can I get help?" - Ressources d'aide centralisées
+  - "Can I contribute?" - Encouragement à la contribution
+
+**Améliorations "Community & Resources":**
+- 📚 Section d'aide structurée avec checklist
+- 🔍 Encouragement à vérifier la documentation avant de demander
+- 🐛 Instructions pour rapports de bugs complets
+- 💬 Canaux de communication clarifiés
+- 📋 Template de rapport d'issue (informations requises)
+
+**Impact:**
+- Navigation plus intuitive
+- Réponses rapides aux questions courantes
+- Ton plus engageant et communautaire
+- Meilleure orientation pour nouveaux utilisateurs
+
+#### GitHub Templates & Community Infrastructure
+Ajout d'une infrastructure GitHub complète pour la gestion du projet:
+
+**Nouveaux fichiers:**
+- `.github/ISSUE_TEMPLATE/bug_report.md` - Template de rapport de bug
+- `.github/ISSUE_TEMPLATE/feature_request.md` - Template de demande de fonctionnalité
+- `.github/ISSUE_TEMPLATE/e2_script_submission.md` - Template de soumission de script E2
+- `.github/ISSUE_TEMPLATE/config.yml` - Configuration des templates
+- `.github/PULL_REQUEST_TEMPLATE.md` - Template de Pull Request
+- `CODE_OF_CONDUCT.md` - Code de conduite de la communauté
+
+**Templates d'Issues:**
+
+1. **Bug Report** - Structure complète pour rapports de bugs
+   - Description claire du bug
+   - Étapes de reproduction
+   - Comportement attendu vs actuel
+   - Informations d'environnement (GMod, OS, version CAP)
+   - Console errors
+   - Screenshots/vidéos
+   - Checklist de vérifications
+
+2. **Feature Request** - Format pour suggestions
+   - Description de la fonctionnalité
+   - Cas d'usage et problème résolu
+   - Solution proposée
+   - Alternatives considérées
+   - Exemples d'implémentation
+   - Impact sur différents types d'utilisateurs
+
+3. **E2 Script Submission** - Soumission de scripts
+   - Informations sur le script (nom, catégorie, difficulté)
+   - Description et fonctionnalités
+   - Exigences de câblage
+   - Code du script
+   - Documentation et tests
+   - Accord de licence
+
+**Pull Request Template:**
+- Type de changement (bug fix, feature, docs, etc.)
+- Description détaillée
+- Checklist de qualité de code
+- Checklist de documentation
+- Checklist de tests
+- Contexte additionnel
+
+**Configuration GitHub:**
+- Liens vers sécurité (rapports privés)
+- Liens vers discussions
+- Liens vers documentation et guides
+- Désactivation des issues vides non-structurées
+
+**Code of Conduct:**
+- 🤝 Standards de comportement communautaire
+- 📢 Processus de signalement
+- 🔨 Application et conséquences
+- 🎯 Guidelines pour discussions saines
+- 🌍 Engagement envers la diversité et l'inclusion
+- 💬 Directives de communication
+
+**Bénéfices:**
+- Issues mieux structurées et plus faciles à traiter
+- Contributions plus faciles pour nouveaux contributeurs
+- Communauté plus saine et accueillante
+- Processus de développement professionnel
+- Meilleure collaboration et communication
+
+### 📚 Documentation & Community Features
+
+#### Expression 2 Examples & Documentation
+Ajout d'une collection complète d'exemples Expression 2 pour faciliter l'utilisation du CAP:
+
+**Nouveaux fichiers:**
+- `examples/README.md` - Guide complet des exemples E2 disponibles
+- `examples/stargate_auto_dialer.txt` - Système de numérotation automatique avec carnet d'adresses
+- `examples/zpm_monitor.txt` - Surveillance et affichage des ZPMs avec écran EGP
+- `examples/shield_manager.txt` - Gestionnaire de boucliers avancé avec auto-réparation
+- `examples/cap_entity_finder.txt` - Scanner d'entités CAP dans un rayon défini
+- `examples/puddle_jumper_hud.txt` - HUD avancé pour Puddle Jumper avec affichage visuel
+- `examples/teleporter_network.txt` - Réseau de transporteurs par anneaux
+- `examples/drone_launcher.txt` - Système de défense automatisé avec drones anciens
+- `E2_GUIDE.md` - Guide complet d'intégration Expression 2 avec CAP
+
+**Caractéristiques des exemples:**
+- 📝 Documentation détaillée dans chaque script
+- 🔌 Instructions de câblage claires
+- ⚡ Exemples prêts à l'emploi
+- 🎯 Cas d'usage pratiques (automatisation, surveillance, défense)
+- 🖥️ Support d'affichage EGP pour interfaces visuelles
+
+#### README Modernization
+Refonte complète du README principal avec:
+
+**Ajouts visuels:**
+- 🏷️ Badges (version, GMod, license, status)
+- 📊 Sections organisées avec émojis pour clarté
+- 🗺️ Roadmap du projet (complété + planifié)
+
+**Nouvelles sections:**
+- 🎮 **Features Overview** - Présentation détaillée des fonctionnalités
+  - Stargates (9 variants)
+  - Systèmes de défense
+  - Systèmes d'alimentation
+  - Véhicules et vaisseaux
+  - Technologies diverses
+  - Intégration Wire & E2
+- 🚀 **Quick Start** - Guide de démarrage rapide
+- 📚 **Documentation** - Index de toute la documentation
+- 🌟 **Community & Resources** - Liens utiles et ressources
+- 🎯 **Roadmap** - Progrès et plans futurs
+- 👥 **Credits** - Équipe originale et contributeurs
+
+#### Contributing Guide Enhancement
+Amélioration du guide de contribution (`CONTRIBUTING.md`):
+
+**Ajouts:**
+- 🎮 Section dédiée aux contributions E2
+- ✅ Exigences pour les scripts
+- 📋 Processus de soumission détaillé
+- 💡 Template de script E2
+- ⚠️ Bonnes pratiques et choses à éviter
+- 🐛 Guide de rapport de bugs
+- 💻 Processus de contribution de code
+
+**Organisation améliorée:**
+- Structure claire avec émojis
+- Sections bien délimitées
+- Instructions étape par étape
+- Exemples concrets
+
+#### Documentation Structure
+Organisation complète de la documentation:
+```
+/
+├── README.md (principal, modernisé)
+├── E2_GUIDE.md (nouveau)
+├── CONTRIBUTING.md (amélioré)
+├── INSTALLATION.md
+├── FAQ.md
+├── CHANGELOG.md (ce fichier)
+├── CORRECTIONS.md
+├── CREDITS.md
+├── LICENSE.md
+└── examples/ (nouveau dossier)
+    ├── README.md
+    ├── stargate_auto_dialer.txt
+    ├── zpm_monitor.txt
+    ├── shield_manager.txt
+    ├── cap_entity_finder.txt
+    ├── puddle_jumper_hud.txt
+    ├── teleporter_network.txt
+    └── drone_launcher.txt
+```
+
+#### Community Integration
+Inspiration du dépôt [mouuff/Garry-s-mod-E2](https://github.com/mouuff/Garry-s-mod-E2):
+- Organisation similaire pour les exemples E2
+- Focus sur l'utilisabilité et la documentation
+- Approche communautaire pour le partage de scripts
+- Lien vers ressources externes utiles
+
+### 🎯 Impact
+Ces améliorations rendent le Carter Addon Pack plus accessible:
+- ✅ Nouveaux utilisateurs peuvent démarrer avec des exemples concrets
+- ✅ Documentation complète pour l'intégration E2
+- ✅ README moderne et attractif
+- ✅ Processus de contribution clarifié
+- ✅ Meilleure visibilité du projet
+
+#### CAP Resources - Modernisation
+Mise à jour de l'addon de ressources (`cap_resources`):
+
+**Fichiers créés/modifiés:**
+- `cap_resources/addon.json` - Métadonnées modernes JSON
+- `cap_resources/README.md` - Documentation améliorée avec badges
+
+**Améliorations README:**
+- 📦 Sections claires sur le contenu (materials, models, sounds, maps)
+- ⚙️ Instructions d'installation détaillées
+- 📊 Statistiques des ressources (200+ models, 1000+ materials, 300+ sounds)
+- ⚠️ Notes importantes sur la dépendance requise
+- 🔗 Liens vers documentation principale
+
+**Clarifications:**
+- Indique clairement que c'est un addon **REQUIS**
+- Explique la relation avec l'addon principal `cap`
+- Structure de dossiers attendue
+- Taille et contenu de l'addon
+
+**Bénéfices:**
+- Les utilisateurs comprennent mieux la séparation des addons
+- Documentation cohérente entre `cap` et `cap_resources`
+- Métadonnées modernes pour les deux addons
+- Professionnalisme accru
+
+---
+
 ## [Unreleased] - 2025-12-03
 
 ### 🔄 Migration majeure des APIs de réseautage

@@ -1,0 +1,152 @@
+@name ZPM Monitor & Display
+@inputs ZPM1:entity ZPM2:entity ZPM3:entity
+@outputs TotalPower PowerPercent:string Status:string
+@persist Screen:entity UpdateInterval
+@trigger 
+
+#[
+    ==========================================
+    ZPM MONITOR & POWER DISPLAY
+    ==========================================
+    
+    Monitors up to 3 ZPMs and displays their status.
+    Shows total power, individual ZPM levels, and warnings.
+    
+    HOW TO USE:
+    1. Spawn 1-3 ZPMs
+    2. Wire them to ZPM1, ZPM2, ZPM3 inputs
+    3. Optional: Wire to a screen for visual display
+    
+    WIRING:
+    - ZPM1/2/3 (Entity) -> Your ZPM entities
+    - Screen (Entity) -> Optional EGP screen for display
+    
+    OUTPUTS:
+    - TotalPower -> Combined power from all ZPMs
+    - PowerPercent -> Formatted percentage string
+    - Status -> Power status and warnings
+]#
+
+if(first()) {
+    UpdateInterval = 500 # Update every 500ms
+    timer("update", UpdateInterval)
+}
+
+if(clk("update")) {
+    
+    local Power1 = 0
+    local Power2 = 0
+    local Power3 = 0
+    local MaxPower = 0
+    
+    # Read ZPM 1
+    if(ZPM1:isValid()) {
+        Power1 = ZPM1["Power", number]
+        MaxPower = MaxPower + ZPM1["MaxPower", number]
+    }
+    
+    # Read ZPM 2
+    if(ZPM2:isValid()) {
+        Power2 = ZPM2["Power", number]
+        MaxPower = MaxPower + ZPM2["MaxPower", number]
+    }
+    
+    # Read ZPM 3
+    if(ZPM3:isValid()) {
+        Power3 = ZPM3["Power", number]
+        MaxPower = MaxPower + ZPM3["MaxPower", number]
+    }
+    
+    # Calculate totals
+    TotalPower = Power1 + Power2 + Power3
+    
+    local Percentage = 0
+    if(MaxPower > 0) {
+        Percentage = (TotalPower / MaxPower) * 100
+    }
+    
+    PowerPercent = round(Percentage, 1) + "%"
+    
+    # Determine status
+    if(TotalPower == 0) {
+        Status = "NO POWER"
+    } elseif(Percentage < 10) {
+        Status = "CRITICAL - " + PowerPercent
+    } elseif(Percentage < 25) {
+        Status = "LOW - " + PowerPercent
+    } elseif(Percentage < 50) {
+        Status = "MODERATE - " + PowerPercent
+    } else {
+        Status = "OPTIMAL - " + PowerPercent
+    }
+    
+    # Optional: Display on screen
+    if(Screen:isValid()) {
+        Screen:egpClear()
+        
+        # Title
+        Screen:egpText(1, "ZPM POWER MONITOR", vec2(256, 50))
+        Screen:egpSize(1, 30)
+        Screen:egpAlign(1, 1, 1)
+        Screen:egpColor(1, 100, 200, 255)
+        
+        # Total power bar
+        local BarWidth = 400 * (Percentage / 100)
+        Screen:egpBox(2, vec2(256, 150), vec2(BarWidth, 40))
+        
+        if(Percentage > 50) {
+            Screen:egpColor(2, 0, 255, 0) # Green
+        } elseif(Percentage > 25) {
+            Screen:egpColor(2, 255, 255, 0) # Yellow
+        } else {
+            Screen:egpColor(2, 255, 0, 0) # Red
+        }
+        
+        # Percentage text
+        Screen:egpText(3, PowerPercent, vec2(256, 150))
+        Screen:egpSize(3, 25)
+        Screen:egpAlign(3, 1, 1)
+        Screen:egpColor(3, 255, 255, 255)
+        
+        # Individual ZPM status
+        local YPos = 220
+        
+        if(ZPM1:isValid()) {
+            local P1 = (Power1 / ZPM1["MaxPower", number]) * 100
+            Screen:egpText(4, "ZPM 1: " + round(P1, 1) + "%", vec2(256, YPos))
+            Screen:egpSize(4, 20)
+            Screen:egpAlign(4, 1, 1)
+            YPos = YPos + 30
+        }
+        
+        if(ZPM2:isValid()) {
+            local P2 = (Power2 / ZPM2["MaxPower", number]) * 100
+            Screen:egpText(5, "ZPM 2: " + round(P2, 1) + "%", vec2(256, YPos))
+            Screen:egpSize(5, 20)
+            Screen:egpAlign(5, 1, 1)
+            YPos = YPos + 30
+        }
+        
+        if(ZPM3:isValid()) {
+            local P3 = (Power3 / ZPM3["MaxPower", number]) * 100
+            Screen:egpText(6, "ZPM 3: " + round(P3, 1) + "%", vec2(256, YPos))
+            Screen:egpSize(6, 20)
+            Screen:egpAlign(6, 1, 1)
+            YPos = YPos + 30
+        }
+        
+        # Status text
+        Screen:egpText(7, Status, vec2(256, 400))
+        Screen:egpSize(7, 25)
+        Screen:egpAlign(7, 1, 1)
+        
+        if(Percentage > 25) {
+            Screen:egpColor(7, 255, 255, 255)
+        } else {
+            Screen:egpColor(7, 255, 0, 0)
+        }
+    }
+    
+    # Schedule next update
+    timer("update", UpdateInterval)
+}

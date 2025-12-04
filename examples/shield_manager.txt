@@ -1,0 +1,139 @@
+@name Shield Manager Advanced
+@inputs Shield:entity Toggle Recharge AutoRepair
+@outputs ShieldHealth:string ShieldActive Status:string
+@persist LastHealth WarningSound RepairMode
+@trigger Toggle, Recharge, AutoRepair
+
+#[
+    ==========================================
+    ADVANCED SHIELD MANAGER
+    ==========================================
+    
+    Controls and monitors a shield system with:
+    - Health monitoring
+    - Auto-repair functionality
+    - Warning alerts
+    - Manual toggle and recharge
+    
+    HOW TO USE:
+    1. Spawn a Shield Core (any type)
+    2. Wire this E2 to the shield
+    3. Wire buttons to Toggle, Recharge, AutoRepair
+    
+    WIRING:
+    - Shield (Entity) -> Shield core entity
+    - Toggle (Number) -> Button (0/1 to turn shield on/off)
+    - Recharge (Number) -> Button (pulse to force recharge)
+    - AutoRepair (Number) -> Toggle auto-repair mode
+    
+    OUTPUTS:
+    - ShieldHealth -> Current shield strength
+    - ShieldActive -> 1 if active, 0 if down
+    - Status -> Current status message
+]#
+
+if(first()) {
+    LastHealth = 100
+    WarningSound = 0
+    RepairMode = 0
+}
+
+# Toggle shield on/off
+if(~Toggle & Shield:isValid()) {
+    if(Toggle) {
+        Shield["Activate", number] = 1
+        Status = "Shield Activated"
+    } else {
+        Shield["Activate", number] = 0
+        Status = "Shield Deactivated"
+    }
+}
+
+# Force recharge
+if(~Recharge & Recharge & Shield:isValid()) {
+    Shield["Recharge", number] = 1
+    Status = "Recharging..."
+    timer("rechargeComplete", 3000)
+}
+
+if(clk("rechargeComplete")) {
+    Status = "Recharge Complete"
+    timer("clearStatus", 2000)
+}
+
+# Toggle auto-repair mode
+if(~AutoRepair) {
+    RepairMode = AutoRepair
+    if(RepairMode) {
+        Status = "Auto-Repair: ON"
+    } else {
+        Status = "Auto-Repair: OFF"
+    }
+    timer("clearStatus", 2000)
+}
+
+# Monitor shield health
+if(Shield:isValid()) {
+    
+    local Health = Shield["Health", number]
+    local MaxHealth = Shield["MaxHealth", number]
+    local IsActive = Shield["Active", number]
+    
+    ShieldActive = IsActive
+    
+    # Calculate percentage
+    local HealthPercent = 0
+    if(MaxHealth > 0) {
+        HealthPercent = (Health / MaxHealth) * 100
+    }
+    
+    ShieldHealth = round(HealthPercent, 1) + "%"
+    
+    # Check for damage
+    if(Health < LastHealth & IsActive) {
+        Status = "TAKING DAMAGE! " + ShieldHealth
+        
+        # Play warning at critical health
+        if(HealthPercent < 25 & !WarningSound) {
+            soundPlay("warning", 0, "buttons/button10.wav")
+            WarningSound = 1
+            timer("resetWarning", 2000)
+        }
+        
+        # Auto-repair if enabled and health is low
+        if(RepairMode & HealthPercent < 30) {
+            Shield["Recharge", number] = 1
+            Status = "Auto-Repair Initiated!"
+        }
+    }
+    
+    # Update status based on health
+    if(!IsActive) {
+        Status = "Shield Offline"
+    } elseif(HealthPercent > 80) {
+        Status = "Shield Optimal"
+    } elseif(HealthPercent > 50) {
+        Status = "Shield Stable"
+    } elseif(HealthPercent > 25) {
+        Status = "Shield Weakening"
+    } else {
+        Status = "SHIELD CRITICAL!"
+    }
+    
+    LastHealth = Health
+    
+} else {
+    Status = "No Shield Connected"
+    ShieldHealth = "N/A"
+    ShieldActive = 0
+}
+
+if(clk("resetWarning")) {
+    WarningSound = 0
+}
+
+if(clk("clearStatus")) {
+    if(Shield:isValid()) {
+        Status = "Ready"
+    }
+}

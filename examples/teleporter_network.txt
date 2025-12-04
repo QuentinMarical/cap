@@ -1,0 +1,174 @@
+@name Ring Transporter Network
+@inputs Ring1:entity Ring2:entity Ring3:entity Ring4:entity Activate Destination
+@outputs Status:string NetworkStatus:string
+@persist Rings:array ActiveRing LastTransport
+@trigger Activate, Destination
+
+#[
+    ==========================================
+    RING TRANSPORTER NETWORK
+    ==========================================
+    
+    Creates a network of ring transporters.
+    Allows transport between multiple ring platforms.
+    
+    HOW TO USE:
+    1. Spawn 2-4 ring transporter platforms
+    2. Wire them to Ring1, Ring2, Ring3, Ring4
+    3. Wire a button to Activate
+    4. Wire a numeric pad to Destination (1-4)
+    5. Stand in source rings, select destination, activate
+    
+    WIRING:
+    - Ring1/2/3/4 (Entity) -> Ring transporter platforms
+    - Activate (Number) -> Button to trigger transport
+    - Destination (Number) -> Which ring to transport to (1-4)
+    
+    OUTPUTS:
+    - Status (String) -> Transport status
+    - NetworkStatus (String) -> Network health
+]#
+
+if(first()) {
+    # Initialize ring array
+    Rings = array()
+    Rings[1, entity] = Ring1
+    Rings[2, entity] = Ring2
+    Rings[3, entity] = Ring3
+    Rings[4, entity] = Ring4
+    
+    ActiveRing = 0
+    LastTransport = 0
+    NetworkStatus = "Initializing..."
+    timer("checkNetwork", 2000)
+}
+
+# Check network status periodically
+if(clk("checkNetwork")) {
+    local ValidRings = 0
+    
+    for(I = 1, 4) {
+        if(Rings[I, entity]:isValid()) {
+            ValidRings++
+        }
+    }
+    
+    if(ValidRings == 0) {
+        NetworkStatus = "NO RINGS CONNECTED"
+    } elseif(ValidRings == 1) {
+        NetworkStatus = "WARNING: Only 1 ring active"
+    } else {
+        NetworkStatus = "NETWORK ACTIVE: " + ValidRings + " rings"
+    }
+    
+    timer("checkNetwork", 5000)
+}
+
+# Detect which ring player is standing in
+function number findPlayerRing() {
+    
+    # Find all players
+    local Players = players()
+    
+    # Check each ring
+    for(I = 1, 4) {
+        local Ring = Rings[I, entity]
+        
+        if(Ring:isValid()) {
+            local RingPos = Ring:pos()
+            
+            # Check each player
+            foreach(K, Player:entity = Players) {
+                if(Player:isValid()) {
+                    local Distance = Player:pos():distance(RingPos)
+                    
+                    # If player is within ring radius (adjust as needed)
+                    if(Distance < 100) {
+                        return I
+                    }
+                }
+            }
+        }
+    }
+    
+    return 0 # No player found in any ring
+}
+
+# Activate transport
+if(~Activate & Activate) {
+    
+    # Cooldown check
+    if(curtime() - LastTransport < 3) {
+        Status = "COOLDOWN: Wait " + ceil(3 - (curtime() - LastTransport)) + "s"
+        timer("clearStatus", 1000)
+        exit()
+    }
+    
+    # Validate destination
+    if(Destination < 1 | Destination > 4) {
+        Status = "ERROR: Invalid destination (1-4)"
+        timer("clearStatus", 2000)
+        exit()
+    }
+    
+    local DestRing = Rings[Destination, entity]
+    if(!DestRing:isValid()) {
+        Status = "ERROR: Destination ring offline"
+        timer("clearStatus", 2000)
+        exit()
+    }
+    
+    # Find source ring (where player is standing)
+    local SourceNum = findPlayerRing()
+    
+    if(SourceNum == 0) {
+        Status = "ERROR: No player detected in rings"
+        timer("clearStatus", 2000)
+        exit()
+    }
+    
+    if(SourceNum == Destination) {
+        Status = "ERROR: Already at destination"
+        timer("clearStatus", 2000)
+        exit()
+    }
+    
+    local SourceRing = Rings[SourceNum, entity]
+    
+    # Activate transport
+    Status = "TRANSPORTING: " + SourceNum + " -> " + Destination
+    
+    # Trigger ring transporters
+    # (These depend on CAP's ring transporter implementation)
+    SourceRing["Activate", number] = 1
+    DestRing["Activate", number] = 1
+    
+    # Link them together
+    SourceRing["Target", entity] = DestRing
+    
+    LastTransport = curtime()
+    
+    timer("transportComplete", 3000)
+}
+
+if(clk("transportComplete")) {
+    Status = "TRANSPORT COMPLETE"
+    timer("clearStatus", 2000)
+}
+
+if(clk("clearStatus")) {
+    Status = "READY"
+}
+
+# Display ring status
+if(changed(Destination) & Destination >= 1 & Destination <= 4) {
+    local Ring = Rings[Destination, entity]
+    
+    if(Ring:isValid()) {
+        Status = "DESTINATION SET: Ring " + Destination
+        timer("clearStatus", 2000)
+    } else {
+        Status = "WARNING: Ring " + Destination + " offline"
+        timer("clearStatus", 2000)
+    }
+}
